@@ -34,6 +34,8 @@ export function LeaderboardPage() {
           // Transform API data to match LeaderData type
           const transformedData: LeaderData[] = data.map((item) => ({
             rank: item.rank,
+            rank_tier: item.rank_tier,
+            rank_tier_name: item.rank_tier_name,
             username: item.username,
             avatar: item.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.username)}&background=c9983a&color=fff&size=128`,
             score: item.score,

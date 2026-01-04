@@ -122,6 +122,12 @@ export const getUserProfile = () =>
     contributions_count: number;
     languages: Array<{ language: string; contribution_count: number }>;
     ecosystems: Array<{ ecosystem_name: string; contribution_count: number }>;
+    rank: {
+      position: number | null;
+      tier: string;
+      tier_name: string;
+      tier_color: string;
+    };
   }>('/profile', { requiresAuth: true });
 
 export const getProfileCalendar = () =>
@@ -208,6 +214,7 @@ export const getPublicProject = (projectId: string) =>
     created_at: string;
     updated_at: string;
     languages: Array<{ name: string; percentage: number }>;
+    readme?: string;
     repo?: {
       full_name: string;
       html_url: string;
@@ -281,6 +288,8 @@ export const getEcosystems = () =>
 export const getLeaderboard = (limit = 10) =>
   apiRequest<Array<{
     rank: number;
+    rank_tier: string;
+    rank_tier_name: string;
     username: string;
     avatar: string;
     user_id: string;

@@ -159,6 +159,12 @@ WHERE id=$1
 			}
 		}
 
+		// Fetch README content (best effort)
+		var readmeContent string
+		if readme, err := gh.GetReadme(ctx, "", fullName); err == nil {
+			readmeContent = readme
+		}
+
 		resp := fiber.Map{
 			"id":                 id.String(),
 			"github_full_name":   fullName,
@@ -175,6 +181,7 @@ WHERE id=$1
 			"created_at":         createdAt,
 			"updated_at":         updatedAt,
 			"languages":          langsOut,
+			"readme":             readmeContent,
 		}
 
 		if repoOK {

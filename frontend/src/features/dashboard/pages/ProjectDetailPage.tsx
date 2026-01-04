@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { ExternalLink, Copy, CircleDot, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
 import { getPublicProject, getPublicProjectIssues, getPublicProjectPRs } from '../../../shared/api/client';
+import { SkeletonLoader } from '../../../shared/components/SkeletonLoader';
+import ReactMarkdown from 'react-markdown';
 
 interface ProjectDetailPageProps {
   onBack?: () => void;
@@ -51,21 +53,32 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
     let cancelled = false;
 
     const load = async () => {
-      if (!projectId) return;
+      if (!projectId) {
+        console.warn('ProjectDetailPage: No projectId provided');
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(true);
       setError(null);
       try {
+        console.log('ProjectDetailPage: Fetching project data for ID:', projectId);
         const [p, i, pr] = await Promise.all([
           getPublicProject(projectId),
           getPublicProjectIssues(projectId),
           getPublicProjectPRs(projectId),
         ]);
         if (cancelled) return;
+        console.log('ProjectDetailPage: Data fetched successfully', {
+          project: p,
+          issuesCount: i?.issues?.length || 0,
+          prsCount: pr?.prs?.length || 0,
+        });
         setProject(p);
-        setIssues(i.issues || []);
-        setPRs(pr.prs || []);
+        setIssues(i?.issues || []);
+        setPRs(pr?.prs || []);
       } catch (e) {
         if (cancelled) return;
+        console.error('ProjectDetailPage: Error loading project data', e);
         setError(e instanceof Error ? e.message : 'Failed to load project');
       } finally {
         if (cancelled) return;
@@ -88,7 +101,10 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
   const ownerLogin = project?.repo?.owner_login || (project?.github_full_name?.split('/')[0] || '');
   const ownerAvatar =
     project?.repo?.owner_avatar_url ||
-    (ownerLogin ? `https://github.com/${ownerLogin}.png?size=200` : '');
+    (ownerLogin ? `https://github.com/${ownerLogin}.png?size=200` : 'https://github.com/github.png?size=200');
+  
+  // Use project avatar if available, otherwise fallback to owner avatar
+  const projectAvatar = project?.repo?.owner_avatar_url || ownerAvatar;
 
   const githubUrl = project?.repo?.html_url || (project?.github_full_name ? `https://github.com/${project.github_full_name}` : '');
   const websiteUrl = project?.repo?.homepage || '';
@@ -180,11 +196,19 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             : 'bg-white/[0.12] border-white/20'
         }`}>
           <div className="aspect-square rounded-[20px] overflow-hidden bg-gradient-to-br from-[#c9983a]/20 to-[#d4af37]/10">
-            <img 
-              src={ownerAvatar || 'https://github.com/github.png?size=200'} 
-              alt={repoName}
-              className="w-full h-full object-cover"
-            />
+            {isLoading ? (
+              <SkeletonLoader className="w-full h-full" />
+            ) : (
+              <img 
+                src={projectAvatar} 
+                alt={repoName}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback to GitHub default avatar if image fails to load
+                  (e.target as HTMLImageElement).src = 'https://github.com/github.png?size=200';
+                }}
+              />
+            )}
           </div>
         </div>
 
@@ -235,24 +259,38 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
           }`}>Languages</h3>
           <div className="space-y-3">
-            {languages.length ? languages.map((lang, idx) => (
-              <div key={idx}>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-[13px] font-semibold transition-colors ${
-                    theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
-                  }`}>{lang.name}</span>
-                  <span className="text-[12px] font-bold text-[#c9983a]">{lang.percentage}%</span>
+            {isLoading ? (
+              <>
+                {[1, 2, 3].map((i) => (
+                  <div key={i}>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <SkeletonLoader className="h-4 w-20" />
+                      <SkeletonLoader className="h-4 w-12" />
+                    </div>
+                    <SkeletonLoader className="h-2 w-full rounded-full" />
+                  </div>
+                ))}
+              </>
+            ) : languages.length ? (
+              languages.map((lang, idx) => (
+                <div key={idx}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className={`text-[13px] font-semibold transition-colors ${
+                      theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
+                    }`}>{lang.name}</span>
+                    <span className="text-[12px] font-bold text-[#c9983a]">{lang.percentage}%</span>
+                  </div>
+                  <div className="h-2 rounded-full backdrop-blur-[15px] bg-white/[0.08] border border-white/15 overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-[#c9983a] to-[#d4af37] rounded-full transition-all duration-500"
+                      style={{ width: `${lang.percentage}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-2 rounded-full backdrop-blur-[15px] bg-white/[0.08] border border-white/15 overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-[#c9983a] to-[#d4af37] rounded-full transition-all duration-500"
-                    style={{ width: `${lang.percentage}%` }}
-                  />
-                </div>
-              </div>
-            )) : (
+              ))
+            ) : (
               <div className={`text-[13px] ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
-                {isLoading ? 'Loading…' : 'No language data'}
+                No language data
               </div>
             )}
           </div>
@@ -268,16 +306,27 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
           }`}>Ecosystems</h3>
           <div className="flex flex-wrap gap-2">
-            {(project?.ecosystem_name ? [project.ecosystem_name] : []).map((eco, idx) => (
-              <span
-                key={idx}
-                className={`px-3 py-1.5 rounded-[8px] text-[12px] font-bold backdrop-blur-[20px] border border-white/25 transition-colors ${
-                  theme === 'dark' ? 'bg-white/[0.08] text-[#f5f5f5]' : 'bg-white/[0.08] text-[#2d2820]'
-                }`}
-              >
-                {eco}
+            {isLoading ? (
+              <>
+                <SkeletonLoader className="h-7 w-24 rounded-[8px]" />
+                <SkeletonLoader className="h-7 w-20 rounded-[8px]" />
+              </>
+            ) : (project?.ecosystem_name ? [project.ecosystem_name] : []).length > 0 ? (
+              (project?.ecosystem_name ? [project.ecosystem_name] : []).map((eco, idx) => (
+                <span
+                  key={idx}
+                  className={`px-3 py-1.5 rounded-[8px] text-[12px] font-bold backdrop-blur-[20px] border border-white/25 transition-colors ${
+                    theme === 'dark' ? 'bg-white/[0.08] text-[#f5f5f5]' : 'bg-white/[0.08] text-[#2d2820]'
+                  }`}
+                >
+                  {eco}
+                </span>
+              ))
+            ) : (
+              <span className={`text-[12px] ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
+                No ecosystems
               </span>
-            ))}
+            )}
           </div>
         </div>
 
@@ -291,16 +340,27 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
           }`}>Categories</h3>
           <div className="flex flex-wrap gap-2">
-            {(project?.category ? [project.category] : []).map((cat, idx) => (
-              <span
-                key={idx}
-                className={`px-3 py-1.5 rounded-[8px] text-[12px] font-bold backdrop-blur-[20px] border border-white/25 transition-colors ${
-                  theme === 'dark' ? 'bg-white/[0.08] text-[#f5f5f5]' : 'bg-white/[0.08] text-[#2d2820]'
-                }`}
-              >
-                {cat}
+            {isLoading ? (
+              <>
+                <SkeletonLoader className="h-7 w-20 rounded-[8px]" />
+                <SkeletonLoader className="h-7 w-16 rounded-[8px]" />
+              </>
+            ) : (project?.category ? [project.category] : []).length > 0 ? (
+              (project?.category ? [project.category] : []).map((cat, idx) => (
+                <span
+                  key={idx}
+                  className={`px-3 py-1.5 rounded-[8px] text-[12px] font-bold backdrop-blur-[20px] border border-white/25 transition-colors ${
+                    theme === 'dark' ? 'bg-white/[0.08] text-[#f5f5f5]' : 'bg-white/[0.08] text-[#2d2820]'
+                  }`}
+                >
+                  {cat}
+                </span>
+              ))
+            ) : (
+              <span className={`text-[12px] ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
+                No categories
               </span>
-            ))}
+            )}
           </div>
         </div>
 
@@ -314,12 +374,20 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
           }`}>Owner</h3>
           <div className="space-y-3">
-            {ownerLogin ? (
+            {isLoading ? (
+              <div className="flex items-center gap-3">
+                <SkeletonLoader variant="circle" className="w-8 h-8" />
+                <SkeletonLoader className="h-4 w-24" />
+              </div>
+            ) : ownerLogin ? (
               <div className="flex items-center gap-3">
                 <img 
                   src={ownerAvatar} 
                   alt={ownerLogin}
                   className="w-8 h-8 rounded-full border-2 border-[#c9983a]/30"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://github.com/github.png?size=80';
+                  }}
                 />
                 <span className={`text-[13px] font-semibold transition-colors ${
                   theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
@@ -327,7 +395,7 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
               </div>
             ) : (
               <div className={`text-[13px] ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
-                {isLoading ? 'Loading…' : 'Unknown'}
+                Unknown
               </div>
             )}
           </div>
@@ -343,24 +411,39 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
           }`}>Contributors</h3>
           <div className="flex items-center gap-2 mb-3">
-            <div className="flex -space-x-2">
-              {contributors.slice(0, 3).map((contributor) => (
-                <img 
-                  key={contributor.name}
-                  src={contributor.avatar} 
-                  alt={contributor.name}
-                  className="w-8 h-8 rounded-full border-2 border-[#c9983a]/30"
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="flex -space-x-2">
+                {[1, 2, 3].map((i) => (
+                  <SkeletonLoader key={i} variant="circle" className="w-8 h-8 border-2 border-[#c9983a]/30" />
+                ))}
+              </div>
+            ) : (
+              <div className="flex -space-x-2">
+                {contributors.slice(0, 3).map((contributor) => (
+                  <img 
+                    key={contributor.name}
+                    src={contributor.avatar} 
+                    alt={contributor.name}
+                    className="w-8 h-8 rounded-full border-2 border-[#c9983a]/30"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://github.com/github.png?size=80';
+                    }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-          <p className={`text-[12px] transition-colors ${
-            theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
-          }`}>
-            {contributors.length
-              ? `${contributors.slice(0, 2).map(c => c.name).join(', ')}${project?.contributors_count && project.contributors_count > 2 ? ` and ${project.contributors_count - 2} others` : ''}`
-              : (isLoading ? 'Loading…' : 'No contributors yet')}
-          </p>
+          {isLoading ? (
+            <SkeletonLoader className="h-4 w-full" />
+          ) : (
+            <p className={`text-[12px] transition-colors ${
+              theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
+            }`}>
+              {contributors.length
+                ? `${contributors.slice(0, 2).map(c => c.name).join(', ')}${project?.contributors_count && project.contributors_count > 2 ? ` and ${project.contributors_count - 2} others` : ''}`
+                : 'No contributors yet'}
+            </p>
+          )}
         </div>
       </div>
 
@@ -388,13 +471,22 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             : 'bg-white/[0.12] border-white/20'
         }`}>
           <div className="flex items-start justify-between mb-4">
-            <div>
-              <h1 className={`text-[32px] font-bold mb-2 transition-colors ${
-                theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
-              }`}>{repoName}</h1>
-              <p className={`text-[15px] transition-colors ${
-                theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
-              }`}>{description || project?.github_full_name || ''}</p>
+            <div className="flex-1">
+              {isLoading ? (
+                <>
+                  <SkeletonLoader className="h-9 w-64 mb-3" />
+                  <SkeletonLoader className="h-5 w-full max-w-md" />
+                </>
+              ) : (
+                <>
+                  <h1 className={`text-[32px] font-bold mb-2 transition-colors ${
+                    theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
+                  }`}>{repoName}</h1>
+                  <p className={`text-[15px] transition-colors ${
+                    theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
+                  }`}>{description || project?.github_full_name || 'No description available'}</p>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <button
@@ -441,11 +533,19 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
               Overview
             </h2>
           </div>
-          <p className={`text-[15px] leading-relaxed transition-colors ${
-            theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#4a3f2f]'
-          }`}>
-            {description || (isLoading ? 'Loading…' : 'No description available.')}
-          </p>
+          {isLoading ? (
+            <div className="space-y-3">
+              <SkeletonLoader className="h-4 w-full" />
+              <SkeletonLoader className="h-4 w-full" />
+              <SkeletonLoader className="h-4 w-3/4" />
+            </div>
+          ) : (
+            <p className={`text-[15px] leading-relaxed transition-colors ${
+              theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#4a3f2f]'
+            }`}>
+              {description || 'No description available.'}
+            </p>
+          )}
         </div>
 
         {/* Issues */}
@@ -460,26 +560,57 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
 
           {/* Issue Tabs */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
-            {issueTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveIssueTab(tab.id)}
-                className={`px-4 py-2 rounded-[10px] text-[13px] font-semibold transition-all ${
-                  activeIssueTab === tab.id
-                    ? 'bg-[#c9983a] text-white'
-                    : `backdrop-blur-[20px] border border-white/25 hover:bg-white/[0.2] ${
-                        theme === 'dark' ? 'bg-white/[0.08] text-[#f5f5f5]' : 'bg-white/[0.08] text-[#2d2820]'
-                      }`
-                }`}
-              >
-                {tab.label} ({tab.count})
-              </button>
-            ))}
+            {isLoading ? (
+              <>
+                <SkeletonLoader className="h-9 w-32 rounded-[10px]" />
+                <SkeletonLoader className="h-9 w-28 rounded-[10px]" />
+                <SkeletonLoader className="h-9 w-24 rounded-[10px]" />
+              </>
+            ) : (
+              issueTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveIssueTab(tab.id)}
+                  className={`px-4 py-2 rounded-[10px] text-[13px] font-semibold transition-all ${
+                    activeIssueTab === tab.id
+                      ? 'bg-[#c9983a] text-white'
+                      : `backdrop-blur-[20px] border border-white/25 hover:bg-white/[0.2] ${
+                          theme === 'dark' ? 'bg-white/[0.08] text-[#f5f5f5]' : 'bg-white/[0.08] text-[#2d2820]'
+                        }`
+                  }`}
+                >
+                  {tab.label} ({tab.count})
+                </button>
+              ))
+            )}
           </div>
 
           {/* Issue List */}
           <div className="space-y-4">
-            {filteredIssues.map((issue) => (
+            {isLoading ? (
+              <>
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className={`p-6 rounded-[16px] backdrop-blur-[25px] border border-white/25 ${
+                      theme === 'dark' ? 'bg-white/[0.08]' : 'bg-white/[0.08]'
+                    }`}
+                  >
+                    <SkeletonLoader className="h-5 w-3/4 mb-3" />
+                    <div className="flex items-center gap-2 mb-2">
+                      <SkeletonLoader className="h-6 w-16 rounded-[6px]" />
+                      <SkeletonLoader className="h-6 w-20 rounded-[6px]" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <SkeletonLoader className="h-4 w-24" />
+                      <SkeletonLoader className="h-4 w-32" />
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {filteredIssues.map((issue) => (
               <div
                 key={issue.github_issue_id}
                 className={`p-6 rounded-[16px] backdrop-blur-[25px] border border-white/25 hover:bg-white/[0.15] transition-all cursor-pointer ${
@@ -534,7 +665,9 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
                   </div>
                 </div>
               </div>
-            ))}
+                ))}
+              </>
+            )}
             {!isLoading && filteredIssues.length === 0 && (
               <div className={`p-6 rounded-[16px] border text-center ${
                 theme === 'dark' ? 'bg-white/[0.08] border-white/15 text-[#d4d4d4]' : 'bg-white/[0.15] border-white/25 text-[#7a6b5a]'
@@ -555,7 +688,26 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
             theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
           }`}>Recent Activity</h2>
           <div className="space-y-3">
-            {recentPRs.map((activity, idx) => (
+            {isLoading ? (
+              <>
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center justify-between p-4 rounded-[12px] backdrop-blur-[20px] border border-white/20 ${
+                      theme === 'dark' ? 'bg-white/[0.05]' : 'bg-white/[0.05]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      <SkeletonLoader className="h-6 w-12 rounded-[6px]" />
+                      <SkeletonLoader className="h-4 w-48" />
+                    </div>
+                    <SkeletonLoader className="h-4 w-20" />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {recentPRs.map((activity, idx) => (
               <div
                 key={idx}
                 className={`flex items-center justify-between p-4 rounded-[12px] backdrop-blur-[20px] border border-white/20 hover:bg-white/[0.15] transition-all ${
@@ -574,7 +726,9 @@ export function ProjectDetailPage({ onBack, onIssueClick, projectId: propProject
                   theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
                 }`}>{activity.date}</span>
               </div>
-            ))}
+                ))}
+              </>
+            )}
             {!isLoading && recentPRs.length === 0 && (
               <div className={`p-6 rounded-[16px] border text-center ${
                 theme === 'dark' ? 'bg-white/[0.08] border-white/15 text-[#d4d4d4]' : 'bg-white/[0.15] border-white/25 text-[#7a6b5a]'

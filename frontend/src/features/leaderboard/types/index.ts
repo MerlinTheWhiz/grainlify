@@ -3,6 +3,8 @@ export type LeaderboardType = 'contributors' | 'projects';
 
 export interface LeaderData {
   rank: number;
+  rank_tier?: string;
+  rank_tier_name?: string;
   username: string;
   avatar: string;
   score: number;

@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -108,6 +109,70 @@ func (c *Client) GetRepoLanguages(ctx context.Context, accessToken string, fullN
 		langs = map[string]int64{}
 	}
 	return langs, nil
+}
+
+// ReadmeResponse represents the GitHub API response for README content
+type ReadmeResponse struct {
+	Name    string `json:"name"`
+	Path    string `json:"path"`
+	Content string `json:"content"` // Base64 encoded
+	Encoding string `json:"encoding"`
+}
+
+// GetReadme fetches the README.md content from a GitHub repository
+func (c *Client) GetReadme(ctx context.Context, accessToken string, fullName string) (string, error) {
+	owner, repo, err := splitFullName(fullName)
+	if err != nil {
+		return "", err
+	}
+	// Try common README filenames
+	readmeFiles := []string{"README.md", "readme.md", "README", "readme"}
+	
+	for _, readmeFile := range readmeFiles {
+		u := "https://api.github.com/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo) + "/readme"
+		// Try with the specific filename as a query parameter
+		if readmeFile != "README.md" {
+			u += "?ref=HEAD"
+		}
+
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+		if err != nil {
+			continue
+		}
+		if strings.TrimSpace(accessToken) != "" {
+			req.Header.Set("Authorization", "Bearer "+accessToken)
+		}
+		req.Header.Set("Accept", "application/vnd.github+json")
+		if c.UserAgent != "" {
+			req.Header.Set("User-Agent", c.UserAgent)
+		}
+
+		resp, err := c.HTTP.Do(req)
+		if err != nil {
+			continue
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode == 200 {
+			var readme ReadmeResponse
+			if err := json.NewDecoder(resp.Body).Decode(&readme); err != nil {
+				continue
+			}
+			
+			// Decode base64 content
+			if readme.Encoding == "base64" {
+				decoded, err := base64.StdEncoding.DecodeString(readme.Content)
+				if err != nil {
+					continue
+				}
+				return string(decoded), nil
+			}
+			// If not base64, return as-is (shouldn't happen with GitHub API)
+			return readme.Content, nil
+		}
+	}
+	
+	return "", fmt.Errorf("readme not found")
 }
 
 func splitFullName(fullName string) (string, string, error) {

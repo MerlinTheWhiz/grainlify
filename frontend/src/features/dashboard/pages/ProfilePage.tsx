@@ -1,12 +1,27 @@
-import { useState } from 'react';
-import { Search, ChevronDown, Award, Briefcase, GitPullRequest, FolderGit2, Trophy, Github, Code, Globe, Sparkles, TrendingUp, Star, Users, GitFork, DollarSign, GitMerge, Calendar, ChevronRight, Filter, Circle, Eye } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, ChevronDown, Award, Briefcase, GitPullRequest, FolderGit2, Trophy, Github, Code, Globe, Sparkles, TrendingUp, Star, Users, GitFork, DollarSign, GitMerge, Calendar, ChevronRight, Filter, Circle, Eye, Crown } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
 import { useAuth } from '../../../shared/contexts/AuthContext';
+import { getUserProfile } from '../../../shared/api/client';
+
+interface ProfileData {
+  contributions_count: number;
+  languages: Array<{ language: string; contribution_count: number }>;
+  ecosystems: Array<{ ecosystem_name: string; contribution_count: number }>;
+  rank: {
+    position: number | null;
+    tier: string;
+    tier_name: string;
+    tier_color: string;
+  };
+}
 
 export function ProfilePage() {
   const { theme } = useTheme();
   const { user, userRole } = useAuth();
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedMonths, setExpandedMonths] = useState<{ [key: string]: boolean }>({
@@ -29,11 +44,50 @@ export function ProfilePage() {
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+  // Fetch profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setIsLoadingProfile(true);
+        const data = await getUserProfile();
+        setProfileData(data);
+      } catch (error) {
+        console.error('Failed to fetch profile:', error);
+      } finally {
+        setIsLoadingProfile(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
   const toggleMonth = (month: string) => {
     setExpandedMonths(prev => ({
       ...prev,
       [month]: !prev[month],
     }));
+  };
+
+  // Get rank tier icon
+  const getRankIcon = (tierName: string) => {
+    const iconClass = "w-5 h-5 text-white drop-shadow-md";
+    switch (tierName.toLowerCase()) {
+      case 'conqueror':
+        return <Crown className={iconClass} />;
+      case 'ace':
+        return <Trophy className={iconClass} />;
+      case 'crown':
+        return <Medal className={iconClass} />;
+      case 'diamond':
+        return <Sparkles className={iconClass} />;
+      case 'gold':
+        return <Award className={iconClass} />;
+      case 'silver':
+        return <Circle className={iconClass} />;
+      case 'bronze':
+        return <Eye className={iconClass} />;
+      default:
+        return <Award className={iconClass} />;
+    }
   };
 
   const projects = [
@@ -224,19 +278,45 @@ export function ProfilePage() {
                 {user?.github.login || 'Loading...'}
               </h1>
               
-              {/* Role Badge - Ultra Premium Design */}
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-[14px] backdrop-blur-[30px] bg-gradient-to-r from-[#c9983a]/30 via-[#d4af37]/25 to-[#c9983a]/20 border-[2.5px] border-[#c9983a]/50 shadow-[0_10px_30px_rgba(201,152,58,0.3),inset_0_1px_3px_rgba(255,255,255,0.4),0_0_40px_rgba(201,152,58,0.15)] mb-7 hover:shadow-[0_15px_40px_rgba(201,152,58,0.4),inset_0_1px_3px_rgba(255,255,255,0.5)] hover:scale-105 transition-all duration-300 group/badge">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#ffd700] via-[#f4c430] to-[#c9983a] flex items-center justify-center shadow-[0_3px_12px_rgba(201,152,58,0.5),inset_0_1px_2px_rgba(255,255,255,0.5)]">
-                  <Award className="w-4 h-4 text-white drop-shadow-md" />
+              {/* Role and Rank Badges */}
+              <div className="flex items-center gap-3 mb-7 flex-wrap">
+                {/* Role Badge - Ultra Premium Design */}
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-[14px] backdrop-blur-[30px] bg-gradient-to-r from-[#c9983a]/30 via-[#d4af37]/25 to-[#c9983a]/20 border-[2.5px] border-[#c9983a]/50 shadow-[0_10px_30px_rgba(201,152,58,0.3),inset_0_1px_3px_rgba(255,255,255,0.4),0_0_40px_rgba(201,152,58,0.15)] hover:shadow-[0_15px_40px_rgba(201,152,58,0.4),inset_0_1px_3px_rgba(255,255,255,0.5)] hover:scale-105 transition-all duration-300 group/badge">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#ffd700] via-[#f4c430] to-[#c9983a] flex items-center justify-center shadow-[0_3px_12px_rgba(201,152,58,0.5),inset_0_1px_2px_rgba(255,255,255,0.5)]">
+                    <Award className="w-4 h-4 text-white drop-shadow-md" />
+                  </div>
+                  <span className={`text-[16px] font-black tracking-wide capitalize transition-colors ${
+                    theme === 'dark'
+                      ? 'text-[#f5c563]'
+                      : 'bg-gradient-to-r from-[#2d2820] via-[#c9983a] to-[#2d2820] bg-clip-text text-transparent'
+                  }`}>
+                    {userRole || 'contributor'}
+                  </span>
+                  <Sparkles className="w-5 h-5 text-[#c9983a] animate-pulse drop-shadow-[0_0_8px_rgba(201,152,58,0.6)]" />
                 </div>
-                <span className={`text-[16px] font-black tracking-wide capitalize transition-colors ${
-                  theme === 'dark'
-                    ? 'text-[#f5c563]'
-                    : 'bg-gradient-to-r from-[#2d2820] via-[#c9983a] to-[#2d2820] bg-clip-text text-transparent'
-                }`}>
-                  {userRole || 'contributor'}
-                </span>
-                <Sparkles className="w-5 h-5 text-[#c9983a] animate-pulse drop-shadow-[0_0_8px_rgba(201,152,58,0.6)]" />
+
+                {/* Rank Badge */}
+                {profileData?.rank && (
+                  <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-[14px] backdrop-blur-[30px] bg-gradient-to-r from-white/[0.2] to-white/[0.15] border-[2.5px] border-white/30 shadow-[0_10px_30px_rgba(0,0,0,0.1),inset_0_1px_3px_rgba(255,255,255,0.3)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.15),inset_0_1px_3px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-300 group/rank-badge">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#c9983a] to-[#d4af37] flex items-center justify-center shadow-[0_3px_12px_rgba(201,152,58,0.5),inset_0_1px_2px_rgba(255,255,255,0.5)]">
+                      {getRankIcon(profileData.rank.tier_name)}
+                    </div>
+                    <span className={`text-[16px] font-black tracking-wide capitalize transition-colors ${
+                      theme === 'dark'
+                        ? 'text-[#f5f5f5]'
+                        : 'text-[#2d2820]'
+                    }`}>
+                      {profileData.rank.tier_name}
+                    </span>
+                    {profileData.rank.position && (
+                      <span className={`text-[14px] font-bold transition-colors ${
+                        theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
+                      }`}>
+                        #{profileData.rank.position}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Stats Grid - Inline Premium Style */}
@@ -250,7 +330,9 @@ export function ProfilePage() {
                     <div>
                       <div className={`text-[28px] font-black leading-none mb-1 drop-shadow-sm transition-colors ${
                         theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#2d2820]'
-                      }`}>165</div>
+                      }`}>
+                        {isLoadingProfile ? '...' : (profileData?.contributions_count || 0)}
+                      </div>
                       <div className={`text-[12px] font-bold uppercase tracking-wider transition-colors ${
                         theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'
                       }`}>Contributions</div>
@@ -309,11 +391,11 @@ export function ProfilePage() {
           {/* Right Section - Epic Rank Badge */}
           <div className="relative group/rank flex-shrink-0">
             {/* Outer Glow - Multi-layer */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#c9983a]/50 to-[#d4af37]/35 rounded-[28px] blur-2xl group-hover/rank:blur-3xl transition-all duration-700 opacity-80" />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#ffd700]/30 to-transparent rounded-[28px] blur-xl group-hover/rank:scale-110 transition-transform duration-700" />
+            <div className="absolute inset-0 rounded-[28px] blur-2xl group-hover/rank:blur-3xl transition-all duration-700 opacity-80 bg-gradient-to-br from-[#c9983a]/50 via-[#d4af37]/35 to-transparent" />
+            <div className="absolute inset-0 rounded-[28px] blur-xl group-hover/rank:scale-110 transition-transform duration-700 bg-gradient-to-br from-[#ffd700]/30 to-transparent" />
             
             {/* Main Badge */}
-            <div className="relative backdrop-blur-[40px] bg-gradient-to-br from-[#c9983a]/40 via-[#d4af37]/30 to-[#c9983a]/25 rounded-[28px] border-[3.5px] border-white/50 shadow-[0_15px_60px_rgba(201,152,58,0.5),inset_0_2px_4px_rgba(255,255,255,0.5),0_0_60px_rgba(255,215,0,0.2)] p-10 min-w-[200px] text-center group-hover/rank:scale-105 group-hover/rank:shadow-[0_20px_80px_rgba(201,152,58,0.6),inset_0_2px_4px_rgba(255,255,255,0.6)] transition-all duration-500">
+            <div className="relative backdrop-blur-[40px] rounded-[28px] border-[3.5px] border-white/50 shadow-[0_15px_60px_rgba(201,152,58,0.5),inset_0_2px_4px_rgba(255,255,255,0.5),0_0_60px_rgba(255,215,0,0.2)] p-10 min-w-[200px] text-center group-hover/rank:scale-105 group-hover/rank:shadow-[0_20px_80px_rgba(201,152,58,0.6),inset_0_2px_4px_rgba(255,255,255,0.6)] transition-all duration-500 bg-gradient-to-br from-[#c9983a]/40 via-[#d4af37]/30 to-[#c9983a]/25">
               {/* Decorative Elements */}
               <div className="absolute top-4 left-4 w-4 h-4 rounded-full bg-white/50 shadow-[0_0_12px_rgba(255,255,255,0.8)] animate-pulse" />
               <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-[#c9983a]/70 shadow-[0_0_10px_rgba(201,152,58,0.9)]" />
@@ -321,9 +403,22 @@ export function ProfilePage() {
               
               {/* Rank Number */}
               <div className="relative mb-3">
-                <div className="text-[64px] font-black bg-gradient-to-b from-[#1a1410] via-[#2d2820] to-[#c9983a] bg-clip-text text-transparent leading-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]" style={{ letterSpacing: '-0.02em' }}>
-                  15<span className="text-[36px] align-super">th</span>
-                </div>
+                {isLoadingProfile ? (
+                  <div className="text-[64px] font-black text-gray-400">...</div>
+                ) : profileData?.rank?.position ? (
+                  <div className="text-[64px] font-black bg-gradient-to-b from-[#1a1410] via-[#2d2820] to-[#c9983a] bg-clip-text text-transparent leading-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.2)]" style={{ letterSpacing: '-0.02em' }}>
+                    {profileData.rank.position}
+                    <span className="text-[36px] align-super">
+                      {profileData.rank.position === 1 ? 'st' :
+                       profileData.rank.position === 2 ? 'nd' :
+                       profileData.rank.position === 3 ? 'rd' : 'th'}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="text-[48px] font-black text-gray-400 leading-none">
+                    Unranked
+                  </div>
+                )}
               </div>
               
               {/* Divider */}
@@ -331,9 +426,9 @@ export function ProfilePage() {
               
               {/* Badge Label */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] bg-white/[0.3] border-2 border-[#c9983a]/50 shadow-[0_3px_12px_rgba(201,152,58,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)]">
-                <Trophy className="w-4 h-4 text-[#c9983a] drop-shadow-sm" />
+                {getRankIcon(profileData?.rank?.tier_name || 'Bronze')}
                 <span className="text-[13px] font-black text-[#c9983a] uppercase tracking-[0.15em]">
-                  Top 10%
+                  {profileData?.rank?.tier_name || 'Bronze'}
                 </span>
               </div>
               

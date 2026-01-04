@@ -363,6 +363,7 @@ export function Dashboard() {
               />
             ) : selectedProjectId ? (
               <ProjectDetailPage 
+                projectId={selectedProjectId}
                 onBack={() => setSelectedProjectId(null)}
                 onIssueClick={(id) => setSelectedIssueId(id)}
               />
