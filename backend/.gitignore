@@ -4,10 +4,10 @@
 *.dll
 *.so
 *.dylib
-api
-main
-worker
-migrate
+/api
+/main
+/worker
+/migrate
 
 # Test binary, built with `go test -c`
 *.test
