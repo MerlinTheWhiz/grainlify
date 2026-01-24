@@ -29,7 +29,7 @@ export function FiltersSection({
   showDropdown,
   onToggleDropdown,
   isLoaded,
-  ecosystems,
+  // ecosystems,
   isLoadingEcosystems = false,
 }: FiltersSectionProps) {
   const { theme } = useTheme();
