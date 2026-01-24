@@ -1,11 +1,10 @@
 #![cfg(test)]
 use soroban_sdk::{
-    log,
-    testutils::{Address as _, Ledger},
-    token, Address, Env, Vec, symbol_short, IntoVal, String
+    testutils::{Address as _},
+    token, Address, Env
 };
 use soroban_sdk::testutils::Events;
-use crate::{BountyEscrowContract, BountyEscrowContractClient, DataKey};
+use crate::{BountyEscrowContract, BountyEscrowContractClient};
 
 fn create_test_env() -> (
     Env,
@@ -34,21 +33,18 @@ fn create_token_contract<'a>(
 
 #[test]
 fn test_init_event() {
-    let (env, client, contract_id) = create_test_env();
-    let employee = Address::generate(&env);
+    let (env, client, _contract_id) = create_test_env();
+    let _employee = Address::generate(&env);
 
     let admin = Address::generate(&env);
     let token = Address::generate(&env);
-    let depositor = Address::generate(&env);
-    let bounty_id = 1;
-    let amount = 10000;
-    let deadline = 10;
+    let _depositor = Address::generate(&env);
+    let _bounty_id = 1;
 
     env.mock_all_auths();
 
     // Initialize
     client.init(&admin.clone(), &token.clone());
-
 
     // Get all events emitted
     let events = env.events().all();
@@ -59,11 +55,10 @@ fn test_init_event() {
 
 #[test]
 fn test_lock_fund() {
-    let (env, client, contract_id) = create_test_env();
-    let employee = Address::generate(&env);
+    let (env, client, _contract_id) = create_test_env();
+    let _employee = Address::generate(&env);
 
     let admin = Address::generate(&env);
-    // let token = Address::generate(&env);
     let depositor = Address::generate(&env);
     let bounty_id = 1;
     let amount = 1000;
@@ -73,7 +68,7 @@ fn test_lock_fund() {
 
     // Setup token
     let token_admin = Address::generate(&env);
-    let (token, token_client, token_admin_client) = create_token_contract(&env, &token_admin);
+    let (token, _token_client, token_admin_client) = create_token_contract(&env, &token_admin);
 
 
      // Initialize
@@ -94,8 +89,7 @@ fn test_lock_fund() {
 
 #[test]
 fn test_release_fund() {
-    let (env, client, contract_id) = create_test_env();
-    let employee = Address::generate(&env);
+    let (env, client, _contract_id) = create_test_env();
 
     let admin = Address::generate(&env);
     // let token = Address::generate(&env);
@@ -109,7 +103,7 @@ fn test_release_fund() {
 
     // Setup token
     let token_admin = Address::generate(&env);
-    let (token, token_client, token_admin_client) = create_token_contract(&env, &token_admin);
+    let (token, _token_client, token_admin_client) = create_token_contract(&env, &token_admin);
 
      // Initialize
     client.init(&admin.clone(), &token.clone());
