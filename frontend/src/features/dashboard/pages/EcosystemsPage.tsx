@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
 import { Search, Globe, Plus, ArrowUpRight, Sparkles, Send } from 'lucide-react';
 import { Modal, ModalFooter, ModalButton, ModalInput, ModalSelect } from '../../../shared/components/ui/Modal';
@@ -269,10 +269,12 @@ export function EcosystemsPage({ onEcosystemClick }: EcosystemsPageProps) {
           ))}
         </div>
       ) : filteredEcosystems.length === 0 ? (
-        <div className={`text-center py-12 ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
-          {searchQuery ? 'No ecosystems found matching your search.' : 'No ecosystems available yet.'}
+        <div className={`text-center py-8 md:py-12 px-4 ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
+          <p className={`text-[14px] md:text-[16px] ${theme === 'dark' ? 'text-[#d4d4d4]' : 'text-[#7a6b5a]'}`}>
+            {searchQuery ? 'No ecosystems found matching your search.' : 'No ecosystems available yet.'}
+          </p>
           {!isLoading && ecosystems.length > 0 && (
-            <div className="mt-2 text-xs opacity-70">
+            <div className="mt-2 text-[11px] md:text-xs opacity-70">
               (Filtered from {ecosystems.length} ecosystems)
             </div>
           )}
@@ -381,11 +383,11 @@ export function EcosystemsPage({ onEcosystemClick }: EcosystemsPageProps) {
             
             <button
               onClick={() => setShowRequestModal(true)}
-              className="group px-6 md:px-8 py-3.5 md:py-4 bg-gradient-to-br from-[#c9983a] to-[#a67c2e] text-white rounded-[14px] md:rounded-[16px] font-semibold text-[14px] md:text-[15px] shadow-[0_6px_20px_rgba(162,121,44,0.35)] hover:shadow-[0_10px_30px_rgba(162,121,44,0.5)] transition-all flex items-center gap-2 md:gap-3 mx-auto border border-white/10 hover:scale-105 active:scale-100 touch-manipulation"
+              className="group px-5 md:px-8 py-3 md:py-4 bg-gradient-to-br from-[#c9983a] to-[#a67c2e] text-white rounded-[12px] md:rounded-[16px] font-semibold text-[13px] md:text-[15px] shadow-[0_6px_20px_rgba(162,121,44,0.35)] hover:shadow-[0_10px_30px_rgba(162,121,44,0.5)] transition-all flex items-center justify-center gap-2 md:gap-3 mx-auto border border-white/10 hover:scale-105 active:scale-100 touch-manipulation min-h-[44px] w-full sm:w-auto"
             >
-              <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform" />
-              <span className="whitespace-nowrap">Request Ecosystem Addition</span>
-              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform hidden sm:block" />
+              <Plus className="w-4 h-4 md:w-5 md:h-5 group-hover:rotate-90 transition-transform flex-shrink-0" />
+              <span className="text-center">Request Ecosystem Addition</span>
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform hidden sm:block flex-shrink-0" />
             </button>
           </div>
         </div>
@@ -438,7 +440,7 @@ export function EcosystemsPage({ onEcosystemClick }: EcosystemsPageProps) {
           </div>
 
           <ModalFooter>
-            <ModalButton onClick={() => setShowAddModal(false)}>
+            <ModalButton onClick={() => setShowAddModal(false)} variant="secondary">
               Cancel
             </ModalButton>
             <ModalButton type="submit" variant="primary">
