@@ -1,11 +1,9 @@
 #![cfg(test)]
 
 use soroban_sdk::{
-    vec,
     testutils::{Address as _, Events},
-    token, Address, Env
+    token, vec, Address, Env,
 };
-
 
 use crate::{BountyEscrowContract, BountyEscrowContractClient};
 
