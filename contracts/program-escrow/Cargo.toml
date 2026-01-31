@@ -2,9 +2,10 @@
 name = "program-escrow"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 soroban-sdk = "22.0.8"

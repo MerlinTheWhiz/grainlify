@@ -1,0 +1,3860 @@
+   Compiling program-escrow v0.1.0 (/home/merlinthewhiz/Documents/grainlify/contracts/program-escrow)
+error[E0428]: the name `test` is defined multiple times
+    --> src/lib.rs:2827:1
+     |
+ 146 | mod test;
+     | --------- previous definition of the module `test` here
+...
+2827 | mod test {
+     | ^^^^^^^^ `test` redefined here
+     |
+     = note: `test` must be defined only once in the type namespace of this module
+
+error[E0432]: unresolved import `program_escrow`
+ --> tests/metadata_tests.rs:2:5
+  |
+2 | use program_escrow::{
+  |     ^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `program_escrow`
+  |
+  = help: if you wanted to use a crate named `program_escrow`, use `cargo add program_escrow` to add it to your `Cargo.toml`
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> tests/metadata_tests.rs:10:27
+   |
+10 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                           ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0308]: mismatched types
+  --> tests/metadata_tests.rs:31:13
+   |
+31 |             String::from_str(&env, "blockchain"),
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&Env`, found `String`
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> tests/metadata_tests.rs:64:27
+   |
+64 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> tests/metadata_tests.rs:100:27
+    |
+100 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> tests/metadata_tests.rs:137:27
+    |
+137 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> tests/metadata_tests.rs:156:26
+    |
+156 |         tags: vec![&env, String::from_str(&env, "simple")],
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&Env`, found `String`
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> tests/metadata_tests.rs:169:27
+    |
+169 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0308, E0432.
+For more information about an error, try `rustc --explain E0308`.
+warning: `program-escrow` (test "metadata_tests") generated 5 warnings
+error: could not compile `program-escrow` (test "metadata_tests") due to 3 previous errors; 5 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+warning: unused imports: `Vec` and `symbol_short`
+ --> src/test.rs:4:19
+  |
+4 | use soroban_sdk::{symbol_short, testutils::Address as _, Address, Env, String, Vec, vec};
+  |                   ^^^^^^^^^^^^                                                 ^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `symbol_short`
+ --> src/reentrancy_test.rs:4:41
+  |
+4 | use soroban_sdk::{Address, Env, String, symbol_short, testutils::Address as _};
+  |                                         ^^^^^^^^^^^^
+
+warning: unused import: `ReentrancyGuard`
+   --> src/lib.rs:153:34
+    |
+153 | use security::reentrancy_guard::{ReentrancyGuard, ReentrancyGuardRAII};
+    |                                  ^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `initialize_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:13:14
+    |
+ 13 |     contract.initialize_program(env, program_id.clone(), admin.clone(), token.clone());
+    |     ---------^^^^^^^^^^^^^^^^^^-------------------------------------------------------
+    |     |        |
+    |     |        this is an associated function, not a method
+    |     help: use associated function syntax instead: `ProgramEscrowContract::initialize_program(env, program_id.clone(), admin.clone(), token.clone())`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `initialize_program` not found for this struct
+    |
+    = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+   --> src/lib.rs:934:5
+    |
+934 | /     pub fn initialize_program(
+935 | |         env: Env,
+936 | |         program_id: String,
+937 | |         authorized_payout_key: Address,
+...   |
+940 | |         deadline: Option<u64>,
+941 | |     ) -> ProgramData {
+    | |____________________^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:20:14
+     |
+  20 |     contract.lock_program_funds(env, program_id.clone(), initial_amount);
+     |     ---------^^^^^^^^^^^^^^^^^^-----------------------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(env, program_id.clone(), initial_amount)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:34:27
+     |
+  34 |     let limits = contract.get_amount_limits(&env);
+     |                  ---------^^^^^^^^^^^^^^^^^------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::get_amount_limits(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2440:5
+     |
+2440 |     pub fn get_amount_limits(env: Env) -> AmountLimits {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:48:14
+     |
+  48 |     contract.update_amount_limits(&env, 200, 2000, 100, 1000);
+     |     ---------^^^^^^^^^^^^^^^^^^^^----------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 200, 2000, 100, 1000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `get_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:51:27
+     |
+  51 |     let limits = contract.get_amount_limits(&env);
+     |                  ---------^^^^^^^^^^^^^^^^^------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::get_amount_limits(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2440:5
+     |
+2440 |     pub fn get_amount_limits(env: Env) -> AmountLimits {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:66:14
+     |
+  66 |     contract.update_amount_limits(&env, -100, 1000, 50, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, -100, 1000, 50, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:77:14
+     |
+  77 |     contract.update_amount_limits(&env, 1000, 100, 50, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^--------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 1000, 100, 50, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:87:14
+     |
+  87 |     contract.update_amount_limits(&env, 100, 1000, 50, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^--------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 1000, 50, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:90:27
+     |
+  90 |     let result = contract.lock_program_funds(&env, program_id.clone(), 500);
+     |                  ---------^^^^^^^^^^^^^^^^^^-------------------------------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, program_id.clone(), 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:94:27
+     |
+  94 |     let result = contract.lock_program_funds(&env, program_id.clone(), 100);
+     |                  ---------^^^^^^^^^^^^^^^^^^-------------------------------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, program_id.clone(), 100)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:98:27
+     |
+  98 |     let result = contract.lock_program_funds(&env, program_id.clone(), 1000);
+     |                  ---------^^^^^^^^^^^^^^^^^^--------------------------------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, program_id.clone(), 1000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:110:14
+     |
+ 110 |     contract.update_amount_limits(&env, 100, 1000, 50, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^--------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 1000, 50, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:113:14
+     |
+ 113 |     contract.lock_program_funds(&env, program_id, 50);
+     |     ---------^^^^^^^^^^^^^^^^^^----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, program_id, 50)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:124:14
+     |
+ 124 |     contract.update_amount_limits(&env, 100, 1000, 50, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^--------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 1000, 50, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:127:14
+     |
+ 127 |     contract.lock_program_funds(&env, program_id, 1500);
+     |     ---------^^^^^^^^^^^^^^^^^^------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, program_id, 1500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:137:14
+     |
+ 137 |     contract.update_amount_limits(&env, 100, 2000, 100, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 2000, 100, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:142:27
+     |
+ 142 |     let result = contract.single_payout(&env, program_id.clone(), recipient.clone(), 300);
+     |                  ---------^^^^^^^^^^^^^--------------------------------------------------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, program_id.clone(), recipient.clone(), 300)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:154:14
+     |
+ 154 |     contract.update_amount_limits(&env, 100, 2000, 100, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 2000, 100, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:159:14
+     |
+ 159 |     contract.single_payout(&env, program_id, recipient, 600);
+     |     ---------^^^^^^^^^^^^^----------------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, program_id, recipient, 600)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:170:14
+     |
+ 170 |     contract.update_amount_limits(&env, 100, 2000, 100, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 2000, 100, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:175:14
+     |
+ 175 |     contract.single_payout(&env, program_id, recipient, 50);
+     |     ---------^^^^^^^^^^^^^---------------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, program_id, recipient, 50)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:185:14
+     |
+ 185 |     contract.update_amount_limits(&env, 100, 2000, 100, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 2000, 100, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:194:27
+     |
+ 194 |     let result = contract.batch_payout(&env, program_id, recipients, amounts);
+     |                  ---------^^^^^^^^^^^^---------------------------------------
+     |                  |        |
+     |                  |        this is an associated function, not a method
+     |                  help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, program_id, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `update_amount_limits` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:206:14
+     |
+ 206 |     contract.update_amount_limits(&env, 100, 2000, 100, 500);
+     |     ---------^^^^^^^^^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::update_amount_limits(&env, 100, 2000, 100, 500)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `update_amount_limits` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2404:5
+     |
+2404 | /     pub fn update_amount_limits(
+2405 | |         env: Env,
+2406 | |         min_lock_amount: i128,
+2407 | |         max_lock_amount: i128,
+2408 | |         min_payout: i128,
+2409 | |         max_payout: i128,
+2410 | |     ) {
+     | |_____^
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:215:14
+     |
+ 215 |     contract.batch_payout(&env, program_id, recipients, amounts);
+     |     ---------^^^^^^^^^^^^---------------------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, program_id, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:230:33
+    |
+230 |     let program_data = contract.init_program(&env, program_id.clone(), admin.clone(), token.clone());
+    |                                 ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:251:26
+    |
+251 |     let data1 = contract.init_program(&env, program_id1.clone(), admin1.clone(), token1.clone());
+    |                          ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:268:14
+    |
+268 |     contract.init_program(&env, program_id.clone(), admin.clone(), token.clone());
+    |              ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `all` found for struct `soroban_sdk::events::Events` in the current scope
+   --> src/test.rs:271:31
+    |
+271 |     let events = env.events().all();
+    |                               ^^^ method not found in `soroban_sdk::events::Events`
+    |
+   ::: /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/testutils.rs:403:8
+    |
+403 |     fn all(&self) -> Vec<(crate::Address, Vec<Val>, Val)>;
+    |        --- the method is available for `soroban_sdk::events::Events` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Events` which provides `all` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use soroban_sdk::testutils::Events;
+    |
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:292:14
+    |
+292 |     contract.init_program(&env, program_id.clone(), admin.clone(), token.clone());
+    |              ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:293:14
+    |
+293 |     contract.init_program(&env, program_id, admin, token); // Should panic
+    |              ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:307:14
+    |
+307 |     contract.init_program(&env, program_id.clone(), admin1, token1);
+    |              ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:308:14
+    |
+308 |     contract.init_program(&env, program_id, admin2, token2); // Should panic
+    |              ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:320:33
+     |
+ 320 |     let program_data = contract.lock_program_funds(&env, 50_000_000_000);
+     |                        ---------^^^^^^^^^^^^^^^^^^----------------------
+     |                        |        |
+     |                        |        this is an associated function, not a method
+     |                        help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 50_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:332:33
+     |
+ 332 |     let program_data = contract.lock_program_funds(&env, 25_000_000_000);
+     |                        ---------^^^^^^^^^^^^^^^^^^----------------------
+     |                        |        |
+     |                        |        this is an associated function, not a method
+     |                        help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 25_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:337:33
+     |
+ 337 |     let program_data = contract.lock_program_funds(&env, 35_000_000_000);
+     |                        ---------^^^^^^^^^^^^^^^^^^----------------------
+     |                        |        |
+     |                        |        this is an associated function, not a method
+     |                        help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 35_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:342:33
+     |
+ 342 |     let program_data = contract.lock_program_funds(&env, 15_000_000_000);
+     |                        ---------^^^^^^^^^^^^^^^^^^----------------------
+     |                        |        |
+     |                        |        this is an associated function, not a method
+     |                        help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 15_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:353:14
+     |
+ 353 |     contract.lock_program_funds(&env, lock_amount);
+     |     ---------^^^^^^^^^^^^^^^^^^-------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, lock_amount)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `all` found for struct `soroban_sdk::events::Events` in the current scope
+   --> src/test.rs:355:31
+    |
+355 |     let events = env.events().all();
+    |                               ^^^ method not found in `soroban_sdk::events::Events`
+    |
+   ::: /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/testutils.rs:403:8
+    |
+403 |     fn all(&self) -> Vec<(crate::Address, Vec<Val>, Val)>;
+    |        --- the method is available for `soroban_sdk::events::Events` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Events` which provides `all` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use soroban_sdk::testutils::Events;
+    |
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:372:14
+     |
+ 372 |     contract.lock_program_funds(&env, 100_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^-----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 100_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:375:25
+     |
+ 375 |     assert_eq!(contract.get_remaining_balance(&env), 100_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:378:14
+     |
+ 378 |     contract.lock_program_funds(&env, 50_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 50_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:379:25
+     |
+ 379 |     assert_eq!(contract.get_remaining_balance(&env), 150_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:389:33
+     |
+ 389 |     let program_data = contract.lock_program_funds(&env, max_amount);
+     |                        ---------^^^^^^^^^^^^^^^^^^------------------
+     |                        |        |
+     |                        |        this is an associated function, not a method
+     |                        help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, max_amount)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:401:14
+     |
+ 401 |     contract.lock_program_funds(&env, 0);
+     |     ---------^^^^^^^^^^^^^^^^^^---------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 0)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:410:14
+     |
+ 410 |     contract.lock_program_funds(&env, -1_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, -1_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:419:14
+     |
+ 419 |     contract.lock_program_funds(&env, 10_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 10_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:444:13
+    |
+444 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:445:37
+     |
+ 445 |         let program_data = contract.batch_payout(&env, recipients, amounts);
+     |                            ---------^^^^^^^^^^^^---------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:443:21
+     |
+ 443 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:478:13
+    |
+478 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:479:18
+     |
+ 479 |         contract.batch_payout(&env, recipients, amounts);
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `all` found for struct `soroban_sdk::events::Events` in the current scope
+   --> src/test.rs:481:35
+    |
+481 |         let events = env.events().all();
+    |                                   ^^^ method not found in `soroban_sdk::events::Events`
+    |
+   ::: /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/testutils.rs:403:8
+    |
+403 |     fn all(&self) -> Vec<(crate::Address, Vec<Val>, Val)>;
+    |        --- the method is available for `soroban_sdk::events::Events` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Events` which provides `all` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use soroban_sdk::testutils::Events;
+    |
+
+error[E0308]: mismatched types
+    --> src/test.rs:477:21
+     |
+ 477 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:504:13
+    |
+504 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:505:37
+     |
+ 505 |         let program_data = contract.batch_payout(&env, recipients, amounts);
+     |                            ---------^^^^^^^^^^^^---------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:503:21
+     |
+ 503 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:527:13
+    |
+527 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:528:37
+     |
+ 528 |         let program_data = contract.batch_payout(&env, recipients1, amounts1);
+     |                            ---------^^^^^^^^^^^^-----------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients1, amounts1)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:526:21
+     |
+ 526 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:540:13
+    |
+540 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:541:37
+     |
+ 541 |         let program_data = contract.batch_payout(&env, recipients2, amounts2);
+     |                            ---------^^^^^^^^^^^^-----------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients2, amounts2)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:539:21
+     |
+ 539 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:559:13
+    |
+559 |         env.set_invoker(&unauthorized);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:560:18
+     |
+ 560 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:558:21
+     |
+ 558 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:576:13
+    |
+576 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:577:18
+     |
+ 577 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:575:21
+     |
+ 575 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:593:13
+    |
+593 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:594:18
+     |
+ 594 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:592:21
+     |
+ 592 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:608:13
+    |
+608 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:609:18
+     |
+ 609 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:607:21
+     |
+ 607 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:625:13
+    |
+625 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:626:18
+     |
+ 626 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:624:21
+     |
+ 624 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:642:13
+    |
+642 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:643:18
+     |
+ 643 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:641:21
+     |
+ 641 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:659:13
+    |
+659 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:660:18
+     |
+ 660 |         contract.batch_payout(&env, recipients, amounts); // Should panic
+     |         ---------^^^^^^^^^^^^---------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:658:21
+     |
+ 658 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:673:14
+     |
+ 673 |     contract.batch_payout(&env, recipients, amounts);
+     |     ---------^^^^^^^^^^^^---------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, recipients, amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:689:13
+    |
+689 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:690:37
+     |
+ 690 |         let program_data = contract.single_payout(&env, recipient.clone(), payout_amount);
+     |                            ---------^^^^^^^^^^^^^----------------------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient.clone(), payout_amount)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:688:21
+     |
+ 688 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:711:13
+    |
+711 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:712:18
+     |
+ 712 |         contract.single_payout(&env, recipient.clone(), payout_amount);
+     |         ---------^^^^^^^^^^^^^----------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient.clone(), payout_amount)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `all` found for struct `soroban_sdk::events::Events` in the current scope
+   --> src/test.rs:714:35
+    |
+714 |         let events = env.events().all();
+    |                                   ^^^ method not found in `soroban_sdk::events::Events`
+    |
+   ::: /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/testutils.rs:403:8
+    |
+403 |     fn all(&self) -> Vec<(crate::Address, Vec<Val>, Val)>;
+    |        --- the method is available for `soroban_sdk::events::Events` here
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `Events` which provides `all` is implemented but not in scope; perhaps you want to import it
+    |
+  3 + use soroban_sdk::testutils::Events;
+    |
+
+error[E0308]: mismatched types
+    --> src/test.rs:710:21
+     |
+ 710 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:737:13
+    |
+737 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:740:37
+     |
+ 740 |         let program_data = contract.single_payout(&env, recipient1.clone(), 20_000_000_000);
+     |                            ---------^^^^^^^^^^^^^------------------------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient1.clone(), 20_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:745:37
+     |
+ 745 |         let program_data = contract.single_payout(&env, recipient2.clone(), 25_000_000_000);
+     |                            ---------^^^^^^^^^^^^^------------------------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient2.clone(), 25_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:750:37
+     |
+ 750 |         let program_data = contract.single_payout(&env, recipient3.clone(), 30_000_000_000);
+     |                            ---------^^^^^^^^^^^^^------------------------------------------
+     |                            |        |
+     |                            |        this is an associated function, not a method
+     |                            help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient3.clone(), 30_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:736:21
+     |
+ 736 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:764:25
+     |
+ 764 |     assert_eq!(contract.get_remaining_balance(&env), 100_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:767:13
+    |
+767 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:768:18
+     |
+ 768 |         contract.single_payout(&env, recipient, 40_000_000_000);
+     |         ---------^^^^^^^^^^^^^---------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 40_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:766:21
+     |
+ 766 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:772:25
+     |
+ 772 |     assert_eq!(contract.get_remaining_balance(&env), 60_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:785:13
+    |
+785 |         env.set_invoker(&unauthorized);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:786:18
+     |
+ 786 |         contract.single_payout(&env, recipient, 10_000_000_000); // Should panic
+     |         ---------^^^^^^^^^^^^^---------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 10_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:784:21
+     |
+ 784 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:799:13
+    |
+799 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:800:18
+     |
+ 800 |         contract.single_payout(&env, recipient, 30_000_000_000); // Should panic
+     |         ---------^^^^^^^^^^^^^---------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 30_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:798:21
+     |
+ 798 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:813:13
+    |
+813 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:814:18
+     |
+ 814 |         contract.single_payout(&env, recipient, 0); // Should panic
+     |         ---------^^^^^^^^^^^^^--------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 0)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:812:21
+     |
+ 812 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:827:13
+    |
+827 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:828:18
+     |
+ 828 |         contract.single_payout(&env, recipient, -10_000_000_000); // Should panic
+     |         ---------^^^^^^^^^^^^^----------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, -10_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:826:21
+     |
+ 826 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:839:14
+     |
+ 839 |     contract.single_payout(&env, recipient, 10_000_000_000);
+     |     ---------^^^^^^^^^^^^^---------------------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 10_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:851:25
+     |
+ 851 |     let info = contract.get_program_info(&env);
+     |                ---------^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:871:13
+    |
+871 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:872:18
+     |
+ 872 |         contract.single_payout(&env, recipient1, 25_000_000_000);
+     |         ---------^^^^^^^^^^^^^----------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient1, 25_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:873:18
+     |
+ 873 |         contract.single_payout(&env, recipient2, 35_000_000_000);
+     |         ---------^^^^^^^^^^^^^----------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient2, 35_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:870:21
+     |
+ 870 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:876:25
+     |
+ 876 |     let info = contract.get_program_info(&env);
+     |                ---------^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:891:25
+     |
+ 891 |     assert_eq!(contract.get_remaining_balance(&env), 50_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:900:25
+     |
+ 900 |     assert_eq!(contract.get_remaining_balance(&env), 0);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:903:14
+     |
+ 903 |     contract.lock_program_funds(&env, 100_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^-----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 100_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:904:25
+     |
+ 904 |     assert_eq!(contract.get_remaining_balance(&env), 100_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:909:13
+    |
+909 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:910:18
+     |
+ 910 |         contract.single_payout(&env, recipient, 30_000_000_000);
+     |         ---------^^^^^^^^^^^^^---------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 30_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:908:21
+     |
+ 908 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:912:25
+     |
+ 912 |     assert_eq!(contract.get_remaining_balance(&env), 70_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:915:14
+     |
+ 915 |     contract.lock_program_funds(&env, 50_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 50_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:916:25
+     |
+ 916 |     assert_eq!(contract.get_remaining_balance(&env), 120_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:925:14
+     |
+ 925 |     contract.get_program_info(&env);
+     |     ---------^^^^^^^^^^^^^^^^------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:934:14
+     |
+ 934 |     contract.get_remaining_balance(&env);
+     |     ---------^^^^^^^^^^^^^^^^^^^^^------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `init_program` found for struct `ProgramEscrowContract` in the current scope
+   --> src/test.rs:950:33
+    |
+950 |     let program_data = contract.init_program(&env, program_id.clone(), admin.clone(), token.clone());
+    |                                 ^^^^^^^^^^^^ method not found in `ProgramEscrowContract`
+    |
+   ::: src/lib.rs:772:1
+    |
+772 | pub struct ProgramEscrowContract;
+    | -------------------------------- method `init_program` not found for this struct
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:955:14
+     |
+ 955 |     contract.lock_program_funds(&env, 500_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^-----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 500_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:956:25
+     |
+ 956 |     assert_eq!(contract.get_remaining_balance(&env), 500_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> src/test.rs:960:9
+    |
+959 |       let recipients = vec![
+    |  ______________________-
+960 | |         Address::generate(&env),
+    | |         ^^^^^^^^^^^^^^^^^^^^^^^ expected `&Env`, found `Address`
+961 | |         Address::generate(&env),
+962 | |         Address::generate(&env),
+963 | |         Address::generate(&env),
+964 | |         Address::generate(&env),
+965 | |     ];
+    | |_____- arguments to this function are incorrect
+    |
+note: associated function defined here
+   --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/vec.rs:362:12
+    |
+362 |     pub fn from_array<const N: usize>(env: &Env, items: [T; N]) -> Vec<T> {
+    |            ^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+   --> src/test.rs:968:13
+    |
+968 |         env.set_invoker(&admin);
+    |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:971:18
+     |
+ 971 |         contract.single_payout(&env, recipients.get(0).unwrap(), 50_000_000_000);
+     |         ---------^^^^^^^^^^^^^--------------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipients.get(0).unwrap(), 50_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:972:29
+     |
+ 972 |         assert_eq!(contract.get_remaining_balance(&env), 450_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:974:18
+     |
+ 974 |         contract.single_payout(&env, recipients.get(1).unwrap(), 75_000_000_000);
+     |         ---------^^^^^^^^^^^^^--------------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipients.get(1).unwrap(), 75_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:975:29
+     |
+ 975 |         assert_eq!(contract.get_remaining_balance(&env), 375_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:980:18
+     |
+ 980 |         contract.batch_payout(&env, batch_recipients, batch_amounts);
+     |         ---------^^^^^^^^^^^^---------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, batch_recipients, batch_amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:981:29
+     |
+ 981 |         assert_eq!(contract.get_remaining_balance(&env), 195_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:984:18
+     |
+ 984 |         contract.single_payout(&env, recipients.get(4).unwrap(), 95_000_000_000);
+     |         ---------^^^^^^^^^^^^^--------------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipients.get(4).unwrap(), 95_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:985:29
+     |
+ 985 |         assert_eq!(contract.get_remaining_balance(&env), 100_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src/test.rs:967:21
+     |
+ 967 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:989:31
+     |
+ 989 |     let final_info = contract.get_program_info(&env);
+     |                      ---------^^^^^^^^^^^^^^^^------
+     |                      |        |
+     |                      |        this is an associated function, not a method
+     |                      help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `lock_program_funds` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:995:14
+     |
+ 995 |     contract.lock_program_funds(&env, 200_000_000_000);
+     |     ---------^^^^^^^^^^^^^^^^^^-----------------------
+     |     |        |
+     |     |        this is an associated function, not a method
+     |     help: use associated function syntax instead: `ProgramEscrowContract::lock_program_funds(&env, 200_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `lock_program_funds` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1150:5
+     |
+1150 |     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:996:25
+     |
+ 996 |     assert_eq!(contract.get_remaining_balance(&env), 300_000_000_000);
+     |                ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:997:31
+     |
+ 997 |     let final_info = contract.get_program_info(&env);
+     |                      ---------^^^^^^^^^^^^^^^^------
+     |                      |        |
+     |                      |        this is an associated function, not a method
+     |                      help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+    --> src/test.rs:1011:13
+     |
+1011 |         env.set_invoker(&admin);
+     |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1014:18
+     |
+1014 |         contract.single_payout(&env, recipient1, 60_000_000_000);
+     |         ---------^^^^^^^^^^^^^----------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient1, 60_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1015:29
+     |
+1015 |         assert_eq!(contract.get_remaining_balance(&env), 40_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1017:18
+     |
+1017 |         contract.single_payout(&env, recipient2, 40_000_000_000);
+     |         ---------^^^^^^^^^^^^^----------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient2, 40_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1018:29
+     |
+1018 |         assert_eq!(contract.get_remaining_balance(&env), 0);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src/test.rs:1010:21
+     |
+1010 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1021:25
+     |
+1021 |     let info = contract.get_program_info(&env);
+     |                ---------^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src/test.rs:1037:9
+     |
+1036 |       let recipients = vec![
+     |  ______________________-
+1037 | |         Address::generate(&env),
+     | |         ^^^^^^^^^^^^^^^^^^^^^^^ expected `&Env`, found `Address`
+1038 | |         Address::generate(&env),
+1039 | |         Address::generate(&env),
+1040 | |         Address::generate(&env),
+1041 | |     ];
+     | |_____- arguments to this function are incorrect
+     |
+note: associated function defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/vec.rs:362:12
+     |
+ 362 |     pub fn from_array<const N: usize>(env: &Env, items: [T; N]) -> Vec<T> {
+     |            ^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+    --> src/test.rs:1044:13
+     |
+1044 |         env.set_invoker(&admin);
+     |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1049:18
+     |
+1049 |         contract.batch_payout(&env, batch_recipients, batch_amounts);
+     |         ---------^^^^^^^^^^^^---------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, batch_recipients, batch_amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1050:29
+     |
+1050 |         assert_eq!(contract.get_remaining_balance(&env), 190_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1053:18
+     |
+1053 |         contract.single_payout(&env, recipients.get(2).unwrap(), 70_000_000_000);
+     |         ---------^^^^^^^^^^^^^--------------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipients.get(2).unwrap(), 70_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1054:29
+     |
+1054 |         assert_eq!(contract.get_remaining_balance(&env), 120_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1059:18
+     |
+1059 |         contract.batch_payout(&env, batch_recipients2, batch_amounts2);
+     |         ---------^^^^^^^^^^^^-----------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, batch_recipients2, batch_amounts2)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_remaining_balance` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1060:29
+     |
+1060 |         assert_eq!(contract.get_remaining_balance(&env), 40_000_000_000);
+     |                    ---------^^^^^^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_remaining_balance(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_remaining_balance` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2322:5
+     |
+2322 |     pub fn get_remaining_balance(env: Env, program_id: String) -> i128 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src/test.rs:1043:21
+     |
+1043 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+    --> src/test.rs:1074:13
+     |
+1074 |         env.set_invoker(&admin);
+     |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1079:22
+     |
+1079 |             contract.single_payout(&env, recipient, 10_000_000_000);
+     |             ---------^^^^^^^^^^^^^---------------------------------
+     |             |        |
+     |             |        this is an associated function, not a method
+     |             help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient, 10_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:1073:21
+     |
+1073 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1083:25
+     |
+1083 |     let info = contract.get_program_info(&env);
+     |                ---------^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+    --> src/test.rs:1098:13
+     |
+1098 |         env.set_invoker(&admin);
+     |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1101:18
+     |
+1101 |         contract.single_payout(&env, recipient1.clone(), 25_000_000_000);
+     |         ---------^^^^^^^^^^^^^------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient1.clone(), 25_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `set_timestamp` found for struct `soroban_sdk::ledger::Ledger` in the current scope
+    --> src/test.rs:1105:22
+     |
+1105 |         env.ledger().set_timestamp(first_timestamp + 3600); // +1 hour
+     |                      ^^^^^^^^^^^^^
+     |
+    ::: /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/testutils.rs:263:8
+     |
+ 263 |     fn set_timestamp(&self, timestamp: u64);
+     |        ------------- the method is available for `soroban_sdk::ledger::Ledger` here
+     |
+     = help: items from traits can only be used if the trait is in scope
+help: there is a method `timestamp` with a similar name, but with different arguments
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/ledger.rs:87:5
+     |
+  87 |     pub fn timestamp(&self) -> u64 {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: trait `Ledger` which provides `set_timestamp` is implemented but not in scope; perhaps you want to import it
+     |
+   3 + use soroban_sdk::testutils::Ledger;
+     |
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1106:18
+     |
+1106 |         contract.single_payout(&env, recipient2.clone(), 30_000_000_000);
+     |         ---------^^^^^^^^^^^^^------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient2.clone(), 30_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1109:29
+     |
+1109 |         let info = contract.get_program_info(&env);
+     |                    ---------^^^^^^^^^^^^^^^^------
+     |                    |        |
+     |                    |        this is an associated function, not a method
+     |                    help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src/test.rs:1097:21
+     |
+1097 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `set_invoker` found for struct `Env` in the current scope
+    --> src/test.rs:1129:13
+     |
+1129 |         env.set_invoker(&admin);
+     |             ^^^^^^^^^^^ method not found in `Env`
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1132:18
+     |
+1132 |         contract.single_payout(&env, recipient1.clone(), 25_000_000_000);
+     |         ---------^^^^^^^^^^^^^------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient1.clone(), 25_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `batch_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1136:18
+     |
+1136 |         contract.batch_payout(&env, batch_recipients, batch_amounts);
+     |         ---------^^^^^^^^^^^^---------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::batch_payout(&env, batch_recipients, batch_amounts)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `batch_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1325:5
+     |
+1325 | /     pub fn batch_payout(
+1326 | |         env: Env,
+1327 | |         program_id: String,
+1328 | |         recipients: Vec<Address>,
+1329 | |         amounts: Vec<i128>,
+1330 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0599]: no method named `single_payout` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1138:18
+     |
+1138 |         contract.single_payout(&env, recipient1.clone(), 15_000_000_000); // Same recipient again
+     |         ---------^^^^^^^^^^^^^------------------------------------------
+     |         |        |
+     |         |        this is an associated function, not a method
+     |         help: use associated function syntax instead: `ProgramEscrowContract::single_payout(&env, recipient1.clone(), 15_000_000_000)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `single_payout` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:1570:5
+     |
+1570 | /     pub fn single_payout(
+1571 | |         env: Env,
+1572 | |         program_id: String,
+1573 | |         recipient: Address,
+1574 | |         amount: i128,
+1575 | |     ) -> ProgramData {
+     | |____________________^
+
+error[E0308]: mismatched types
+    --> src/test.rs:1128:21
+     |
+1128 |     env.as_contract(&contract, || {
+     |         ----------- ^^^^^^^^^ expected `&Address`, found `&ProgramEscrowContract`
+     |         |
+     |         arguments to this method are incorrect
+     |
+     = note: expected reference `&soroban_sdk::Address`
+                found reference `&ProgramEscrowContract`
+note: method defined here
+    --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-22.0.9/src/env.rs:1520:12
+     |
+1520 |     pub fn as_contract<T>(&self, id: &Address, f: impl FnOnce() -> T) -> T {
+     |            ^^^^^^^^^^^
+
+error[E0599]: no method named `get_program_info` found for struct `ProgramEscrowContract` in the current scope
+    --> src/test.rs:1141:25
+     |
+1141 |     let info = contract.get_program_info(&env);
+     |                ---------^^^^^^^^^^^^^^^^------
+     |                |        |
+     |                |        this is an associated function, not a method
+     |                help: use associated function syntax instead: `ProgramEscrowContract::get_program_info(&env)`
+     |
+    ::: src/lib.rs:772:1
+     |
+ 772 | pub struct ProgramEscrowContract;
+     | -------------------------------- method `get_program_info` not found for this struct
+     |
+     = note: found the following associated functions; to be used as methods, functions must have a `self` parameter
+note: the candidate is defined in an impl for the type `ProgramEscrowContract`
+    --> src/lib.rs:2304:5
+     |
+2304 |     pub fn get_program_info(env: Env, program_id: String) -> ProgramData {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/reentrancy_test.rs:11:27
+   |
+11 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                           ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+ --> src/pause_tests.rs:7:24
+  |
+7 |         let addr = env.register_stellar_asset_contract(admin.clone());
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:15:31
+   |
+15 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:27:31
+   |
+27 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:43:31
+   |
+43 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:55:31
+   |
+55 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:72:31
+   |
+72 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+ --> src/claim_tests.rs:8:27
+  |
+8 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+  |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> src/claim_tests.rs:15:26
+   |
+15 |     let token_addr = env.register_stellar_asset_contract(admin.clone());
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+    --> src/lib.rs:2836:33
+     |
+2836 |         let token_address = env.register_stellar_asset_contract(admin.clone());
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2883:31
+     |
+2883 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2925:31
+     |
+2925 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2990:31
+     |
+2990 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3046:31
+     |
+3046 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3091:31
+     |
+3091 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3167:31
+     |
+3167 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3254:31
+     |
+3254 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3280:31
+     |
+3280 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3325:31
+     |
+3325 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3343:31
+     |
+3343 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3357:31
+     |
+3357 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3374:31
+     |
+3374 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3398:31
+     |
+3398 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3435:31
+     |
+3435 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3458:31
+     |
+3458 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3480:31
+     |
+3480 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3503:31
+     |
+3503 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3522:31
+     |
+3522 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3568:31
+     |
+3568 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3604:31
+     |
+3604 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3643:31
+     |
+3643 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3676:31
+     |
+3676 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3695:31
+     |
+3695 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+error[E0061]: this method takes 5 arguments but 3 arguments were supplied
+    --> src/lib.rs:3707:16
+     |
+3707 |         client.initialize_program(&String::from_str(&env, "P1"), &backend, &token);
+     |                ^^^^^^^^^^^^^^^^^^------------------------------------------------- two arguments of type `&soroban_sdk::Address` and `&core::option::Option<u64>` are missing
+     |
+note: method defined here
+    --> src/lib.rs:934:12
+     |
+ 934 |     pub fn initialize_program(
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 939 |         organizer: Address,
+     |         ------------------
+ 940 |         deadline: Option<u64>,
+     |         ---------------------
+help: provide the arguments
+     |
+3707 |         client.initialize_program(&String::from_str(&env, "P1"), &backend, &token, /* &soroban_sdk::Address */, /* &core::option::Option<u64> */);
+     |                                                                                  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3724:31
+     |
+3724 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+error[E0061]: this method takes 5 arguments but 3 arguments were supplied
+    --> src/lib.rs:3736:16
+     |
+3736 |         client.initialize_program(&String::from_str(&env, "P1"), &backend, &token);
+     |                ^^^^^^^^^^^^^^^^^^------------------------------------------------- two arguments of type `&soroban_sdk::Address` and `&core::option::Option<u64>` are missing
+     |
+note: method defined here
+    --> src/lib.rs:934:12
+     |
+ 934 |     pub fn initialize_program(
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 939 |         organizer: Address,
+     |         ------------------
+ 940 |         deadline: Option<u64>,
+     |         ---------------------
+help: provide the arguments
+     |
+3736 |         client.initialize_program(&String::from_str(&env, "P1"), &backend, &token, /* &soroban_sdk::Address */, /* &core::option::Option<u64> */);
+     |                                                                                  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3752:31
+     |
+3752 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+error[E0061]: this method takes 5 arguments but 3 arguments were supplied
+    --> src/lib.rs:3765:16
+     |
+3765 |         client.initialize_program(&prog1, &backend, &token);
+     |                ^^^^^^^^^^^^^^^^^^-------------------------- two arguments of type `&soroban_sdk::Address` and `&core::option::Option<u64>` are missing
+     |
+note: method defined here
+    --> src/lib.rs:934:12
+     |
+ 934 |     pub fn initialize_program(
+     |            ^^^^^^^^^^^^^^^^^^
+...
+ 939 |         organizer: Address,
+     |         ------------------
+ 940 |         deadline: Option<u64>,
+     |         ---------------------
+help: provide the arguments
+     |
+3765 |         client.initialize_program(&prog1, &backend, &token, /* &soroban_sdk::Address */, /* &core::option::Option<u64> */);
+     |                                                           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Some errors have detailed explanations: E0061, E0308, E0428, E0599.
+For more information about an error, try `rustc --explain E0061`.
+warning: `program-escrow` (lib test) generated 38 warnings
+error: could not compile `program-escrow` (lib test) due to 187 previous errors; 38 warnings emitted

@@ -547,6 +547,14 @@
                       },
                       {
                         "key": {
+                          "symbol": "RE_GUARD"
+                        },
+                        "val": {
+                          "u32": 0
+                        }
+                      },
+                      {
+                        "key": {
                           "vec": [
                             {
                               "symbol": "NextClaimId"

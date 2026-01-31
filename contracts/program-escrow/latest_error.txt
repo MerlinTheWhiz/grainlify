@@ -1,0 +1,198 @@
+   Compiling program-escrow v0.1.0 (/home/merlinthewhiz/Documents/grainlify/contracts/program-escrow)
+error[E0433]: failed to resolve: use of undeclared type `ReentrancyGuardRAII`
+    --> src/lib.rs:1151:22
+     |
+1151 |         let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+     |                      ^^^^^^^^^^^^^^^^^^^ use of undeclared type `ReentrancyGuardRAII`
+     |
+help: consider importing this struct
+     |
+ 155 + use crate::security::reentrancy_guard::ReentrancyGuardRAII;
+     |
+
+error[E0433]: failed to resolve: use of undeclared type `ReentrancyGuardRAII`
+    --> src/lib.rs:1331:22
+     |
+1331 |         let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+     |                      ^^^^^^^^^^^^^^^^^^^ use of undeclared type `ReentrancyGuardRAII`
+     |
+help: consider importing this struct
+     |
+ 155 + use crate::security::reentrancy_guard::ReentrancyGuardRAII;
+     |
+
+error[E0433]: failed to resolve: use of undeclared type `ReentrancyGuardRAII`
+    --> src/lib.rs:1576:22
+     |
+1576 |         let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+     |                      ^^^^^^^^^^^^^^^^^^^ use of undeclared type `ReentrancyGuardRAII`
+     |
+help: consider importing this struct
+     |
+ 155 + use crate::security::reentrancy_guard::ReentrancyGuardRAII;
+     |
+
+error[E0433]: failed to resolve: use of undeclared type `ReentrancyGuardRAII`
+    --> src/lib.rs:1889:22
+     |
+1889 |         let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+     |                      ^^^^^^^^^^^^^^^^^^^ use of undeclared type `ReentrancyGuardRAII`
+     |
+help: consider importing this struct
+     |
+ 155 + use crate::security::reentrancy_guard::ReentrancyGuardRAII;
+     |
+
+error[E0433]: failed to resolve: use of undeclared type `ReentrancyGuardRAII`
+    --> src/lib.rs:2016:22
+     |
+2016 |         let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+     |                      ^^^^^^^^^^^^^^^^^^^ use of undeclared type `ReentrancyGuardRAII`
+     |
+help: consider importing this struct
+     |
+ 155 + use crate::security::reentrancy_guard::ReentrancyGuardRAII;
+     |
+
+error[E0433]: failed to resolve: use of undeclared type `ReentrancyGuardRAII`
+    --> src/lib.rs:2159:22
+     |
+2159 |         let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+     |                      ^^^^^^^^^^^^^^^^^^^ use of undeclared type `ReentrancyGuardRAII`
+     |
+help: consider importing this struct
+     |
+ 155 + use crate::security::reentrancy_guard::ReentrancyGuardRAII;
+     |
+
+warning: unused imports: `Vec` and `symbol_short`
+ --> src/test.rs:4:19
+  |
+4 | use soroban_sdk::{symbol_short, testutils::Address as _, Address, Env, String, Vec, vec, token};
+  |                   ^^^^^^^^^^^^                                                 ^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `symbol_short`
+ --> src/reentrancy_test.rs:4:41
+  |
+4 | use soroban_sdk::{Address, Env, String, symbol_short, testutils::Address as _};
+  |                                         ^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+ --> src/test.rs:9:29
+  |
+9 |     let token_address = env.register_stellar_asset_contract(admin.clone());
+  |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/test.rs:15:27
+   |
+15 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/test.rs:27:27
+   |
+27 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> src/test.rs:119:27
+    |
+119 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> src/test.rs:291:27
+    |
+291 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> src/test.rs:327:27
+    |
+327 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+   --> src/test.rs:406:27
+    |
+406 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+    |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/reentrancy_test.rs:11:27
+   |
+11 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+ --> src/pause_tests.rs:7:24
+  |
+7 |         let addr = env.register_stellar_asset_contract(admin.clone());
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:15:31
+   |
+15 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:27:31
+   |
+27 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:43:31
+   |
+43 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:55:31
+   |
+55 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:72:31
+   |
+72 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+ --> src/claim_tests.rs:8:27
+  |
+8 |     let contract_id = env.register_contract(None, ProgramEscrowContract);
+  |                           ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> src/claim_tests.rs:15:26
+   |
+15 |     let token_addr = env.register_stellar_asset_contract(admin.clone());
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused variable: `admin`
+  --> src/test.rs:67:18
+   |
+67 |     let (client, admin, _token, _program_id) = setup_program(&env);
+   |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_admin`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `admin`
+   --> src/test.rs:155:18
+    |
+155 |     let (client, admin, _, program_id) = setup_program(&env);
+    |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_admin`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `program-escrow` (lib) due to 6 previous errors
+warning: build failed, waiting for other jobs to finish...
+warning: `program-escrow` (lib test) generated 20 warnings
+error: could not compile `program-escrow` (lib test) due to 6 previous errors; 20 warnings emitted

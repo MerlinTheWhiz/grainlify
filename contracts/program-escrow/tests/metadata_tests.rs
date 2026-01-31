@@ -2,7 +2,7 @@
 use program_escrow::{
     ProgramEscrowContract, ProgramEscrowContractClient, DataKey, ProgramMetadata, Error
 };
-use soroban_sdk::{map, testutils::Address as _, Address, Env, String, Vec};
+use soroban_sdk::{map, testutils::Address as _, Address, Env, String, Vec, vec};
 
 #[test]
 fn test_program_metadata_basic_operations() {
