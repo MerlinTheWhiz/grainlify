@@ -180,6 +180,14 @@ pub struct FeeConfig {
     pub fee_enabled: bool,      // Global fee enable/disable flag
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+#[contracttype]
+pub struct AmountLimits {
+    pub min_lock_amount: i128,
+    pub max_lock_amount: i128,
+    pub min_payout: i128,
+    pub max_payout: i128,
+}
 #[contracttype]
 #[derive(Clone, Debug)]
 pub struct UpdateAdminEvent {
@@ -725,6 +733,9 @@ pub struct ProgramData {
 pub enum DataKey {
     Program(String),              // program_id -> ProgramData
     ReleaseSchedule(String, u64), // program_id, schedule_id -> ProgramReleaseSchedule
+    ReleaseHistory(String), // program_id -> Vec<ProgramReleaseHistory>
+    NextScheduleId(String), // program_id -> next schedule_id
+    AmountLimits, // Amount limits configuration
     ReleaseHistory(String),       // program_id -> Vec<ProgramReleaseHistory>
     NextScheduleId(String),       // program_id -> next schedule_id
     IsPaused,                     // Global contract pause state
@@ -1141,6 +1152,13 @@ impl ProgramEscrowContract {
             panic!("Amount must be greater than zero");
         }
 
+        // Check amount limits
+        let limits = Self::get_amount_limits(env.clone());
+        if amount < limits.min_lock_amount || amount > limits.max_lock_amount {
+            monitoring::track_operation(&env, symbol_short!("lock"), caller.clone(), false);
+            panic!("Amount violates configured limits");
+        }
+
         // Get program data
         let program_key = DataKey::Program(program_id.clone());
         let mut program_data: ProgramData = env
@@ -1329,11 +1347,27 @@ impl ProgramEscrowContract {
 
         // Calculate total with overflow protection
         let mut total_payout: i128 = 0;
+        let fee_config = Self::get_fee_config_internal(&env);
+        let limits = Self::get_amount_limits(env.clone());
+        
         for i in 0..amounts.len() {
             let amount = amounts.get(i as u32).unwrap();
             if amount <= 0 {
                 panic!("All amounts must be greater than zero");
             }
+            
+            // Check payout amount limits (considering fees)
+            let fee_amount = if fee_config.fee_enabled && fee_config.payout_fee_rate > 0 {
+                Self::calculate_fee(amount, fee_config.payout_fee_rate)
+            } else {
+                0
+            };
+            let net_amount = amount - fee_amount;
+            
+            if net_amount < limits.min_payout || net_amount > limits.max_payout {
+                panic!("Payout amount violates configured limits");
+            }
+            
             total_payout = total_payout
                 .checked_add(amount)
                 .unwrap_or_else(|| panic!("Payout amount overflow"));
@@ -1501,6 +1535,20 @@ impl ProgramEscrowContract {
         // Validate amount
         if amount <= 0 {
             panic!("Invalid amount");
+        }
+
+        // Check payout amount limits (considering fees)
+        let fee_config = Self::get_fee_config_internal(&env);
+        let fee_amount = if fee_config.fee_enabled && fee_config.payout_fee_rate > 0 {
+            Self::calculate_fee(amount, fee_config.payout_fee_rate)
+        } else {
+            0
+        };
+        let net_amount = amount - fee_amount;
+        
+        let limits = Self::get_amount_limits(env.clone());
+        if net_amount < limits.min_payout || net_amount > limits.max_payout {
+            panic!("Payout amount violates configured limits");
         }
 
         // Validate balance
@@ -2132,6 +2180,55 @@ impl ProgramEscrowContract {
     /// Get current fee configuration (view function)
     pub fn get_fee_config(env: Env) -> FeeConfig {
         Self::get_fee_config_internal(&env)
+    }
+
+    /// Update amount limits configuration (admin only)
+    pub fn update_amount_limits(
+        env: Env,
+        min_lock_amount: i128,
+        max_lock_amount: i128,
+        min_payout: i128,
+        max_payout: i128,
+    ) {
+        // Get admin and require authorization
+        let admin = anti_abuse::get_admin(&env).expect("Admin not set");
+        admin.require_auth();
+
+        // Validate limits
+        if min_lock_amount < 0 || max_lock_amount < 0 || min_payout < 0 || max_payout < 0 {
+            panic!("Invalid amount: amounts cannot be negative");
+        }
+        if min_lock_amount > max_lock_amount || min_payout > max_payout {
+            panic!("Invalid amount: minimum cannot exceed maximum");
+        }
+
+        let limits = AmountLimits {
+            min_lock_amount,
+            max_lock_amount,
+            min_payout,
+            max_payout,
+        };
+
+        env.storage().instance().set(&DataKey::AmountLimits, &limits);
+
+        // Emit event
+        env.events().publish(
+            (symbol_short!("amt_lmt"),),
+            (min_lock_amount, max_lock_amount, min_payout, max_payout),
+        );
+    }
+
+    /// Get current amount limits configuration (view function)
+    pub fn get_amount_limits(env: Env) -> AmountLimits {
+        env.storage()
+            .instance()
+            .get(&DataKey::AmountLimits)
+            .unwrap_or(AmountLimits {
+                min_lock_amount: 1,
+                max_lock_amount: i128::MAX,
+                min_payout: 1,
+                max_payout: i128::MAX,
+            })
     }
 
     /// Gets the total number of programs registered.
