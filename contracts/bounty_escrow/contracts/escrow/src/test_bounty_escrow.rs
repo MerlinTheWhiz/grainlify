@@ -882,3 +882,81 @@ fn test_expire_event_emission() {
     let events = env.events().all();
     assert!(events.len() > 0);
 }
+
+#[test]
+fn test_claim_flow_success() {
+    let (env, client, _contract_id) = create_test_env();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let depositor = Address::generate(&env);
+    let contributor = Address::generate(&env);
+    let (token_address, token_client, token_admin) = create_token_contract(&env, &admin);
+
+    client.init(&admin, &token_address);
+    token_admin.mint(&depositor, &5000i128);
+
+    // Set claim window to 100 ledgers
+    client.set_claim_config(&100);
+
+    let bounty_id = 1u64;
+    client.lock_funds(&depositor, &bounty_id, &5000i128, &1000u64);
+
+    // Release funds (this should create a pending claim)
+    client.release_funds(&bounty_id, &contributor);
+
+    // In a real environment, we'd check state via a view function
+    // For now, we'll verify it by attempting to claim
+    client.claim(&bounty_id);
+
+    assert_eq!(token_client.balance(&contributor), 5000i128);
+}
+
+#[test]
+#[should_panic(expected = "Error(Contract, #22)")] // ClaimExpired
+fn test_claim_flow_expired() {
+    let (env, client, _contract_id) = create_test_env();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let depositor = Address::generate(&env);
+    let contributor = Address::generate(&env);
+    let (token_address, _token_client, token_admin) = create_token_contract(&env, &admin);
+
+    client.init(&admin, &token_address);
+    token_admin.mint(&depositor, &5000i128);
+
+    client.set_claim_config(&10);
+    client.lock_funds(&depositor, &1u64, &5000i128, &1000u64);
+    client.release_funds(&1u64, &contributor);
+
+    // Advance ledger sequence past expiry
+    env.ledger().with_mut(|l| l.sequence_number = 20);
+
+    client.claim(&1);
+}
+
+#[test]
+fn test_claim_flow_cancelled() {
+    let (env, client, _contract_id) = create_test_env();
+    env.mock_all_auths();
+
+    let admin = Address::generate(&env);
+    let depositor = Address::generate(&env);
+    let contributor = Address::generate(&env);
+    let (token_address, _token_client, token_admin) = create_token_contract(&env, &admin);
+
+    client.init(&admin, &token_address);
+    token_admin.mint(&depositor, &5000i128);
+
+    client.set_claim_config(&100);
+    client.lock_funds(&depositor, &1u64, &5000i128, &1000u64);
+    client.release_funds(&1u64, &contributor);
+
+    // Admin cancels claim
+    client.cancel_pending_claim(&1);
+
+    // Should be able to release again after cancellation
+    client.release_funds(&1, &contributor);
+    client.claim(&1);
+}

@@ -344,6 +344,14 @@
                             },
                             {
                               "key": {
+                                "symbol": "claim_validity_ledgers"
+                              },
+                              "val": {
+                                "u32": 0
+                              }
+                            },
+                            {
+                              "key": {
                                 "symbol": "deadline"
                               },
                               "val": "void"
@@ -424,6 +432,14 @@
                               },
                               "val": {
                                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M"
+                              }
+                            },
+                            {
+                              "key": {
+                                "symbol": "claim_validity_ledgers"
+                              },
+                              "val": {
+                                "u32": 0
                               }
                             },
                             {

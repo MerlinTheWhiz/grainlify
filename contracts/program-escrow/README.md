@@ -12,12 +12,14 @@ A Soroban smart contract for managing program-level escrow funds for hackathons 
 - **Authorization**: Only authorized payout key can trigger payouts
 - **Event Emission**: All operations emit events for off-chain tracking
 - **Payout History**: Maintains a complete history of all payouts
+- **Optional Claim Window**: Configurable validity period for payouts (ledgers), requiring beneficiaries to explicitly claim funds
 
 ## Contract Structure
 
 ### Storage
 
 The contract stores a single `ProgramData` structure containing:
+
 - `program_id`: Unique identifier for the program/hackathon
 - `total_funds`: Total amount of funds locked
 - `remaining_balance`: Current available balance
@@ -32,6 +34,7 @@ The contract stores a single `ProgramData` structure containing:
 Initialize a new program escrow.
 
 **Parameters:**
+
 - `program_id`: String identifier for the program
 - `authorized_payout_key`: Address that can trigger payouts
 - `token_address`: Address of the token contract to use
@@ -45,6 +48,7 @@ Initialize a new program escrow.
 Lock funds into the escrow. Updates both `total_funds` and `remaining_balance`.
 
 **Parameters:**
+
 - `amount`: i128 amount to lock (must be > 0)
 
 **Returns:** Updated `ProgramData`
@@ -56,6 +60,7 @@ Lock funds into the escrow. Updates both `total_funds` and `remaining_balance`.
 Transfer funds to a single recipient. Requires authorization.
 
 **Parameters:**
+
 - `recipient`: Address of the recipient
 - `amount`: i128 amount to transfer (must be > 0)
 
@@ -64,6 +69,7 @@ Transfer funds to a single recipient. Requires authorization.
 **Events:** `Payout`
 
 **Validation:**
+
 - Only `authorized_payout_key` can call this function
 - Amount must be > 0
 - Sufficient balance must be available
@@ -73,6 +79,7 @@ Transfer funds to a single recipient. Requires authorization.
 Transfer funds to multiple recipients in a single transaction. Requires authorization.
 
 **Parameters:**
+
 - `recipients`: Vec<Address> of recipient addresses
 - `amounts`: Vec<i128> of amounts (must match recipients length)
 
@@ -81,6 +88,7 @@ Transfer funds to multiple recipients in a single transaction. Requires authoriz
 **Events:** `BatchPayout`
 
 **Validation:**
+
 - Only `authorized_payout_key` can call this function
 - Recipients and amounts vectors must have same length
 - All amounts must be > 0
@@ -99,30 +107,97 @@ View function to get the current remaining balance.
 
 **Returns:** i128
 
+#### `set_program_claim_config(program_id, claim_window_ledgers)`
+
+Configure an optional claim window for the program. If set, payouts will create a `PendingClaim` instead of transferring funds immediately.
+
+**Parameters:**
+
+- `program_id`: String identifier for the program
+- `claim_window_ledgers`: u32 number of ledgers the claim remains valid
+
+#### `claim_payout(program_id, claim_id)`
+
+Beneficiary claims a pending payout within the valid window.
+
+**Parameters:**
+
+- `program_id`: String identifier for the program
+- `claim_id`: u64 ID of the pending payout
+
+**Returns:** Updated `ProgramData`
+
+**Events:** `Claimed`
+
+#### `cancel_payout_claim(program_id, claim_id)`
+
+Authorized key cancels an expired pending claim, returning funds to the program pool.
+
+**Parameters:**
+
+- `program_id`: String identifier for the program
+- `claim_id`: u64 ID of the pending payout
+
+**Returns:** Updated `ProgramData`
+
+**Events:** `ClaimCancelled`
+
 ## Events
 
 ### ProgramInitialized
+
 Emitted when a program is initialized.
+
 ```
 (ProgramInit, program_id, authorized_payout_key, token_address, total_funds)
 ```
 
 ### FundsLocked
+
 Emitted when funds are locked into the escrow.
+
 ```
 (FundsLocked, program_id, amount, remaining_balance)
 ```
 
 ### Payout
+
 Emitted when a single payout is executed.
+
 ```
 (Payout, program_id, recipient, amount, remaining_balance)
 ```
 
 ### BatchPayout
+
 Emitted when a batch payout is executed.
+
 ```
 (BatchPayout, program_id, recipient_count, total_amount, remaining_balance)
+```
+
+### ClaimCreated
+
+Emitted when a payout is issued with a claim window active.
+
+```
+(ClaimCreated, program_id, claim_id, recipient, amount, expiry_ledger)
+```
+
+### Claimed
+
+Emitted when a beneficiary successfully claims their payout.
+
+```
+(Claimed, program_id, claim_id, recipient, amount)
+```
+
+### ClaimCancelled
+
+Emitted when an expired claim is cancelled by the admin.
+
+```
+(ClaimCancelled, program_id, claim_id, recipient, amount)
 ```
 
 ## Usage Flow
@@ -143,6 +218,7 @@ Emitted when a batch payout is executed.
 ## Testing
 
 Run tests with:
+
 ```bash
 cargo test --target wasm32-unknown-unknown
 ```
@@ -150,6 +226,7 @@ cargo test --target wasm32-unknown-unknown
 ## Building
 
 Build the contract with:
+
 ```bash
 soroban contract build
 ```
@@ -157,6 +234,7 @@ soroban contract build
 ## Deployment
 
 Deploy using Soroban CLI:
+
 ```bash
 soroban contract deploy \
   --wasm target/wasm32-unknown-unknown/release/program_escrow.wasm \
@@ -167,6 +245,7 @@ soroban contract deploy \
 ## Integration with Backend
 
 The backend should:
+
 1. Initialize the contract with the backend's authorized key
 2. Monitor events for program state changes
 3. Call `batch_payout()` after computing final scores and verifying KYC
@@ -193,4 +272,15 @@ contract.batch_payout(&env, recipients, amounts);
 
 // Check remaining balance
 let balance = contract.get_remaining_balance(&env);
+
+// --- Optional Claim Flow ---
+
+// 1. Configure Claim Window (e.g. 100 ledgers)
+contract.set_program_claim_config(&env, program_id.clone(), 100);
+
+// 2. Issue Payout (creates PendingClaim)
+contract.single_payout(&env, recipient_addr, 500_000_000);
+
+// 3. Beneficiary claims funds
+contract.claim_payout(&env, program_id, claim_id);
 ```

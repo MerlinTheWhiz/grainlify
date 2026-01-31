@@ -1,0 +1,542 @@
+warning: unused import: `query_functions::*`
+  --> contracts/escrow/src/indexed/mod.rs:11:9
+   |
+11 | pub use query_functions::*;
+   |         ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Vec`
+  --> contracts/escrow/src/test_fuzz_properties.rs:12:31
+   |
+12 |     token, vec, Address, Env, Vec,
+   |                               ^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> contracts/escrow/src/test_fuzz_properties.rs:23:30
+   |
+23 |     let contract_address = e.register_stellar_asset_contract(admin.clone());
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> contracts/escrow/src/test_edge_cases.rs:18:30
+   |
+18 |     let contract_address = e.register_stellar_asset_contract(admin.clone());
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> contracts/escrow/src/test_invalid_inputs.rs:19:30
+   |
+19 |     let contract_address = e.register_stellar_asset_contract(admin.clone());
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+ --> contracts/escrow/src/pause_tests.rs:7:24
+  |
+7 |         let addr = env.register_stellar_asset_contract(admin.clone());
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: value assigned to `total_count` is never read
+  --> contracts/escrow/src/indexed/query_functions.rs:86:32
+   |
+86 |     let mut total_count: u32 = 0;
+   |                                ^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: irrefutable `if let` pattern
+   --> contracts/escrow/src/indexed/query_functions.rs:115:8
+    |
+115 |     if let status = &filter.status {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this pattern will always match, so the `if let` is useless
+    = help: consider replacing the `if let` with a `let`
+    = note: `#[warn(irrefutable_let_patterns)]` on by default
+
+warning: irrefutable `if let` pattern
+   --> contracts/escrow/src/indexed/query_functions.rs:192:8
+    |
+192 |     if let ref status = filter.status {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this pattern will always match, so the `if let` is useless
+    = help: consider replacing the `if let` with a `let`
+
+warning: unused variable: `contract_id`
+   --> contracts/escrow/src/test_bounty_escrow.rs:660:23
+    |
+660 |     let (env, client, contract_id) = create_test_env();
+    |                       ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_contract_id`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `token_client`
+   --> contracts/escrow/src/test_bounty_escrow.rs:666:25
+    |
+666 |     let (token_address, token_client, token_admin) = create_token_contract(&env, &admin);
+    |                         ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_token_client`
+
+warning: unused variable: `token_admin`
+   --> contracts/escrow/src/test_bounty_escrow.rs:666:39
+    |
+666 |     let (token_address, token_client, token_admin) = create_token_contract(&env, &admin);
+    |                                       ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_token_admin`
+
+warning: unused variable: `env`
+   --> contracts/escrow/src/lib.rs:742:27
+    |
+742 | fn validate_metadata_size(env: &Env, metadata: &EscrowMetadata) -> bool {
+    |                           ^^^ help: if this is intentional, prefix it with an underscore: `_env`
+
+warning: unused variable: `result`
+   --> contracts/escrow/src/test_edge_cases.rs:478:9
+    |
+478 |     let result = setup.escrow.try_release_funds(&bounty_id, &contract_address);
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_result`
+
+warning: unused variable: `setup`
+   --> contracts/escrow/src/test_edge_cases.rs:566:9
+    |
+566 |     let setup = EdgeCaseTestSetup::new();
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_setup`
+
+warning: unused variable: `escrow`
+   --> contracts/escrow/src/test_edge_cases.rs:570:9
+    |
+570 |     let escrow = create_escrow_contract(&env);
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_escrow`
+
+warning: unused variable: `token`
+  --> contracts/escrow/src/test_invalid_inputs.rs:84:10
+   |
+84 |     let (token, token_admin) = create_token_contract(&env, &admin);
+   |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+warning: function `validate_metadata_size` is never used
+   --> contracts/escrow/src/lib.rs:742:4
+    |
+742 | fn validate_metadata_size(env: &Env, metadata: &EscrowMetadata) -> bool {
+    |    ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `update_bounty_amount` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:119:8
+    |
+119 | pub fn update_bounty_amount(env: &Env, bounty_id: u64, new_amount: i128) {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `update_bounty_deadline` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:142:8
+    |
+142 | pub fn update_bounty_deadline(env: &Env, bounty_id: u64, new_deadline: u64) {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `remove_bounty` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:152:8
+    |
+152 | pub fn remove_bounty(env: &Env, bounty_id: u64) {
+    |        ^^^^^^^^^^^^^
+
+warning: function `bounty_exists` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:176:8
+    |
+176 | pub fn bounty_exists(env: &Env, bounty_id: u64) -> bool {
+    |        ^^^^^^^^^^^^^
+
+warning: function `get_depositor_bounty_ids` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:182:8
+    |
+182 | pub fn get_depositor_bounty_ids(env: &Env, depositor: &Address) -> Vec<u64> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `get_status_bounty_ids` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:196:8
+    |
+196 | pub fn get_status_bounty_ids(env: &Env, status: &BountyStatus) -> Vec<u64> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `BountyStats` is never constructed
+   --> contracts/escrow/src/indexed/query_functions.rs:378:12
+    |
+378 | pub struct BountyStats {
+    |            ^^^^^^^^^^^
+
+warning: function `get_bounty_stats` is never used
+   --> contracts/escrow/src/indexed/query_functions.rs:396:8
+    |
+396 | pub fn get_bounty_stats(env: &Env) -> BountyStats {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: function `get_depositor_stats` is never used
+   --> contracts/escrow/src/indexed/query_functions.rs:451:8
+    |
+451 | pub fn get_depositor_stats(env: &Env, depositor: &Address) -> DepositorStats {
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `DepositorStats` is never constructed
+   --> contracts/escrow/src/indexed/query_functions.rs:494:12
+    |
+494 | pub struct DepositorStats {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `get_time_series_data` is never used
+   --> contracts/escrow/src/indexed/query_functions.rs:514:8
+    |
+514 | pub fn get_time_series_data(env: &Env, from: u64, to: u64, interval: u64) -> Vec<TimeSeriesPoint> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `create_escrow_contract` is never used
+   --> contracts/escrow/src/test_bounty_escrow.rs:121:4
+    |
+121 | fn create_escrow_contract<'a>(e: &Env) -> BountyEscrowContractClient<'a> {
+    |    ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `bounty-escrow` (lib test) generated 30 warnings (run `cargo fix --lib -p bounty-escrow --tests` to apply 10 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running unittests src/lib.rs (/home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/target/debug/deps/bounty_escrow-1593404e11cae2c7)
+
+running 160 tests
+test pause_tests::pause_tests::test_pause ... ok
+test pause_tests::pause_tests::test_pause_state_persists ... ok
+test pause_tests::pause_tests::test_emergency_withdraw ... ok
+test pause_tests::pause_tests::test_unpause ... ok
+test test::test_batch_lock_funds_success ... ok
+test test::test_batch_lock_funds_empty - should panic ... ok
+test pause_tests::pause_tests::test_lock_blocked_when_paused - should panic ... ok
+test test::test_batch_lock_funds_duplicate_in_batch - should panic ... ok
+test test::test_batch_lock_funds_duplicate_bounty_id - should panic ... ok
+test test::test_batch_release_funds_empty - should panic ... ok
+test test::test_batch_operations_atomicity - should panic ... ok
+test test::test_batch_release_funds_not_found - should panic ... ok
+test test::test_batch_release_funds_duplicate_in_batch - should panic ... ok
+test test::test_batch_release_funds_already_released - should panic ... ok
+test test::test_extend_refund_deadline_not_greater - should panic ... ok
+test test::test_extend_refund_deadline_after_release - should panic ... ok
+test test::test_extend_refund_deadline_shorter - should panic ... ok
+test test::test_extend_refund_deadline_multiple_times ... ok
+test test::test_extend_refund_deadline_success ... ok
+test test::test_get_balance ... ok
+test test::test_get_escrow_info ... ok
+test test::test_extend_refund_deadline_with_partially_refunded ... ok
+test test::test_refund_approval_non_admin ... ignored
+test test::test_lock_funds_duplicate - should panic ... ok
+test test::test_batch_release_funds_success ... ok
+test test::test_lock_funds_negative_amount - should panic ... ok
+test test::test_get_refund_eligibility ... ok
+test test::test_lock_funds_success ... ok
+test test::test_refund_approval_mismatch - should panic ... ok
+test test::test_refund_approval_workflow ... ok
+test test::test_batch_operations_large_batch ... ok
+test test::test_refund_custom_after_deadline ... ok
+test test::test_refund_custom_missing_recipient - should panic ... ok
+test test::test_refund_custom_missing_amount - should panic ... ok
+test test::test_refund_custom_before_deadline_without_approval - should panic ... ok
+test test::test_refund_full_before_deadline - should panic ... ok
+test test::test_refund_full_after_deadline ... ok
+test test::test_refund_invalid_amount_exceeds_remaining - should panic ... ok
+test test::test_refund_partial_before_deadline - should panic ... ok
+test test::test_refund_invalid_amount_zero - should panic ... ok
+test test::test_refund_history_tracking ... ok
+test test::test_refund_history_with_custom_recipients ... ok
+test test::test_refund_partial_multiple_times ... ok
+test test::test_refund_partial_after_deadline ... ok
+test test::test_release_funds_not_found - should panic ... ok
+test test_bounty_escrow::test_batch_lock_duplicate_bounty_id - should panic ... ok
+test test::test_release_funds_success ... ok
+test test_bounty_escrow::test_batch_lock_event_emission ... ok
+test test_bounty_escrow::test_batch_lock_existing_bounty - should panic ... ok
+test test::test_release_funds_already_released - should panic ... ok
+test test_bounty_escrow::test_claim_flow_expired - should panic ... ok
+test test_bounty_escrow::test_batch_lock_funds ... ok
+test test_bounty_escrow::test_claim_flow_cancelled ... ok
+test test_bounty_escrow::test_claim_flow_success ... ok
+test test_bounty_escrow::test_batch_release_event_emission ... ok
+test test_bounty_escrow::test_batch_release_funds ... ok
+test test_bounty_escrow::test_emergency_withdraw ... ok
+test test_bounty_escrow::test_complete_bounty_workflow_lock_refund ... ok
+test test_bounty_escrow::test_expire_nonexistent_bounty - should panic ... ok
+test test_bounty_escrow::test_init_event ... ok
+test test_bounty_escrow::test_complete_bounty_workflow_lock_release ... ok
+test test_bounty_escrow::test_expire_before_deadline - should panic ... ok
+test test_bounty_escrow::test_expire_after_deadline ... ok
+test test_bounty_escrow::test_lock_fund_invalid_amount - should panic ... ok
+test test_bounty_escrow::test_expire_event_emission ... ok
+test test_bounty_escrow::test_lock_fund_invalid_deadline - should panic ... ok
+test test_bounty_escrow::test_expire_already_released - should panic ... ok
+test test_bounty_escrow::test_lock_fund ... ok
+test test_bounty_escrow::test_pause_functionality ... ok
+test test_bounty_escrow::test_release_after_deadline - should panic ... ok
+test test_edge_cases::test_edge_custom_refund_without_amount ... ok
+test test_edge_cases::test_edge_double_init ... ok
+test test_edge_cases::test_edge_duplicate_bounty_id_across_batches ... ok
+test test_edge_cases::test_edge_custom_refund_without_recipient ... ok
+test test_edge_cases::test_edge_batch_amount_overflow ... ok
+test test_edge_cases::test_edge_empty_batch_lock ... ok
+test test_bounty_escrow::test_release_fund ... ok
+test test_edge_cases::test_edge_duplicate_bounty_id_in_batch ... ok
+test test_edge_cases::test_edge_init_with_zero_address ... ok
+test test_edge_cases::test_edge_empty_batch_release ... ok
+test test_edge_cases::test_edge_max_u64_bounty_id ... ok
+test test_edge_cases::test_edge_max_i128_amount ... ok
+test test_edge_cases::test_edge_max_u64_deadline ... ok
+test test_edge_cases::test_edge_negative_amount_lock ... ok
+test test_edge_cases::test_edge_negative_partial_refund ... ok
+test test_edge_cases::test_edge_partial_refund_exceeds_remaining ... ok
+test test_edge_cases::test_edge_partial_refund_one_more_than_remaining ... ok
+test test_edge_cases::test_edge_refund_one_second_before_deadline ... ok
+test test_edge_cases::test_edge_release_to_contract_address ... ok
+test test_edge_cases::test_edge_refund_exactly_at_deadline ... ok
+test test_edge_cases::test_edge_refund_after_partial_release ... ok
+test test_edge_cases::test_edge_multiple_partial_refunds_exact ... ok
+test test_edge_cases::test_edge_partial_refund_sum_overflow ... ok
+test test_edge_cases::test_edge_single_item_batch ... ok
+test test_edge_cases::test_edge_batch_size_exceeds_limit ... ok
+test test_edge_cases::test_edge_zero_deadline_offset ... ok
+test test_edge_cases::test_edge_zero_amount_lock ... ok
+test test_edge_cases::test_edge_release_to_same_address_as_depositor ... ok
+test test_edge_cases::test_edge_zero_bounty_id ... ok
+test test_edge_cases::test_edge_zero_partial_refund ... ok
+test test_edge_cases::test_edge_very_long_deadline ... ok
+test test_fuzz_properties::test_property_batch_lock_atomicity ... ok
+test test_fuzz_properties::test_property_balance_conservation ... ok
+test test_fuzz_properties::test_property_amount_consistency_full_release ... ok
+test test_fuzz_properties::test_property_bounty_id_uniqueness - should panic ... ok
+test test_fuzz_properties::test_property_balance_view_accuracy ... ok
+test test_fuzz_properties::test_property_deadline_enforcement_full_refund ... ok
+test test_fuzz_properties::test_property_batch_release_atomicity ... ok
+test test_fuzz_properties::test_property_deadline_enforcement_partial_refund ... ok
+test test_fuzz_properties::test_property_lock_requires_depositor_auth ... ok
+test test_fuzz_properties::test_property_negative_amount_rejected ... ok
+test test_fuzz_properties::test_property_large_amount_handling ... ok
+test test_fuzz_properties::test_property_amount_consistency_partial_refunds ... ok
+test test_fuzz_properties::test_property_fund_conservation_single_lock_release ... ok
+test test_fuzz_properties::test_property_nonexistent_bounty_error ... ok
+test test_fuzz_properties::test_property_past_deadline_rejected ... ok
+test test_fuzz_properties::test_property_no_transition_from_refunded - should panic ... ok
+test test_fuzz_properties::test_property_no_transition_from_released - should panic ... ok
+test test_fuzz_properties::test_property_refund_approval_single_use ... ok
+test test_fuzz_properties::test_property_release_requires_admin ... ok
+test test_fuzz_properties::test_property_zero_amount_rejected ... ok
+test test_invalid_inputs::test_invalid_approval_nonexistent_bounty ... ok
+test test_fuzz_properties::test_property_view_function_consistency ... ok
+test test_invalid_inputs::test_invalid_batch_lock_empty ... ok
+test test_invalid_inputs::test_invalid_approval_exceeds_remaining ... ok
+test test_invalid_inputs::test_invalid_batch_lock_with_past_deadline ... ok
+test test_invalid_inputs::test_invalid_approval_already_released ... ok
+test test_invalid_inputs::test_invalid_approval_zero_amount ... ok
+test test_invalid_inputs::test_invalid_batch_lock_with_zero_amount ... ok
+test test_fuzz_properties::test_property_valid_state_transitions ... ok
+test test_invalid_inputs::test_invalid_batch_lock_with_existing_bounty ... ok
+test test_invalid_inputs::test_invalid_batch_release_empty ... ok
+test test_invalid_inputs::test_invalid_init_different_admin ... ok
+test test_invalid_inputs::test_invalid_init_already_initialized ... ok
+test test_invalid_inputs::test_invalid_batch_release_nonexistent_bounty ... ok
+test test_invalid_inputs::test_invalid_batch_release_already_released ... ok
+test test_invalid_inputs::test_invalid_lock_exact_balance ... ok
+test test_invalid_inputs::test_invalid_lock_duplicate_bounty_id_variations ... ok
+test test_invalid_inputs::test_invalid_batch_lock_exceeds_max_size ... ok
+test test_invalid_inputs::test_invalid_lock_insufficient_balance ... ok
+test test_invalid_inputs::test_invalid_lock_zero_amount_variations ... ok
+test test_invalid_inputs::test_invalid_lock_uninitialized_contract ... ok
+test test_invalid_inputs::test_invalid_lock_past_deadline_variations ... ok
+test test_invalid_inputs::test_invalid_refund_before_deadline_partial ... ok
+test test_invalid_inputs::test_invalid_refund_custom_without_approval ... ok
+test test_invalid_inputs::test_invalid_refund_nonexistent_bounty ... ok
+test test_invalid_inputs::test_invalid_refund_before_deadline_full ... ok
+test test_invalid_inputs::test_invalid_refund_custom_missing_fields ... ok
+test test_invalid_inputs::test_invalid_refund_negative_amount ... ok
+test test_invalid_inputs::test_invalid_refund_exceeds_remaining ... ok
+test test_invalid_inputs::test_invalid_view_nonexistent_escrow ... ok
+test test_invalid_inputs::test_invalid_release_nonexistent_bounty ... ok
+test test_invalid_inputs::test_invalid_release_unauthorized ... ok
+test test_invalid_inputs::test_invalid_release_already_released ... ok
+test test_invalid_inputs::test_invalid_refund_zero_amount ... ok
+test test_invalid_inputs::test_invalid_release_partially_refunded ... ok
+test test_invalid_inputs::test_invalid_view_refund_eligibility_nonexistent ... ok
+test test_invalid_inputs::test_invalid_view_refund_history_nonexistent ... ok
+test test_invalid_inputs::test_invalid_release_already_refunded ... ok
+
+thread 'test_edge_cases::test_edge_very_large_batch' (60896) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-21.2.1/src/host.rs:768:9:
+HostError: Error(Budget, ExceededLimit)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Budget, ExceededLimit)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Budget, ExceededLimit)], data:["contract try_call failed", batch_lock_funds, [[{amount: 100, bounty_id: 0, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 1, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 2, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 3, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 4, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 5, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 6, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 7, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 8, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 9, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 10, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 11, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 12, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 13, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 14, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 15, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 16, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 17, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 18, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 19, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 20, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 21, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 22, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 23, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 24, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 25, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 26, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 27, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 28, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 29, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 30, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 31, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 32, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 33, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 34, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 35, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 36, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 37, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 38, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 39, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 40, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 41, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 42, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 43, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 44, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 45, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 46, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 47, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 48, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 49, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 50, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 51, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 52, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 53, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 54, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 55, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 56, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 57, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 58, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 59, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 60, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 61, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 62, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 63, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 64, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 65, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 66, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 67, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 68, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 69, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 70, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 71, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 72, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 73, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 74, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 75, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 76, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 77, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 78, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 79, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 80, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 81, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 82, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 83, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 84, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 85, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 86, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 87, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 88, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 89, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 90, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 91, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 92, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 93, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 94, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 95, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 96, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 97, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 98, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 99, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}]]]
+   2: [Diagnostic Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[error, Error(WasmVm, InvalidAction)], data:"caught error from function"
+   3: [Diagnostic Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[log], data:["caught panic 'called `Result::unwrap()` on an `Err` value: HostError: Error(Budget, ExceededLimit)\nDebugInfo not available\n' from contract function 'Symbol(obj#679)'", [{amount: 100, bounty_id: 0, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 1, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 2, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 3, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 4, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 5, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 6, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 7, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 8, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 9, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 10, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 11, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 12, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 13, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 14, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 15, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 16, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 17, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 18, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 19, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 20, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 21, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 22, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 23, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 24, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 25, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 26, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 27, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 28, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 29, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 30, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 31, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 32, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 33, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 34, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 35, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 36, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 37, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 38, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 39, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 40, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 41, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 42, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 43, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 44, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 45, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 46, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 47, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 48, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 49, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 50, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 51, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 52, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 53, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 54, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 55, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 56, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 57, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 58, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 59, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 60, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 61, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 62, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 63, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 64, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 65, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 66, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 67, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 68, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 69, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 70, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 71, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 72, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 73, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 74, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 75, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 76, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 77, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 78, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 79, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 80, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 81, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 82, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 83, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 84, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 85, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 86, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 87, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 88, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 89, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 90, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 91, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 92, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 93, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 94, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 95, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 96, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 97, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 98, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}, {amount: 100, bounty_id: 99, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4}]]
+   4: [Diagnostic Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[fn_return, transfer], data:Void
+   5: [Contract Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[transfer, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJXFF"], data:100
+   6: [Diagnostic Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[fn_call, Bytes(8011bbf4cdf04e5bc6ac886935b99aa4b2c0cabde133f9d7fb3e656799f0a896), transfer], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, 100]
+   7: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[activity, 62, [Locked]], data:{activity_type: [Locked], actor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, amount: 100, bounty_id: 62, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   8: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[f_lock, 62], data:{amount: 100, bounty_id: 62, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   9: [Diagnostic Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[fn_return, transfer], data:Void
+   10: [Contract Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[transfer, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJXFF"], data:100
+   11: [Diagnostic Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[fn_call, Bytes(8011bbf4cdf04e5bc6ac886935b99aa4b2c0cabde133f9d7fb3e656799f0a896), transfer], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, 100]
+   12: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[activity, 61, [Locked]], data:{activity_type: [Locked], actor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, amount: 100, bounty_id: 61, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   13: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[f_lock, 61], data:{amount: 100, bounty_id: 61, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   14: [Diagnostic Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[fn_return, transfer], data:Void
+   15: [Contract Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[transfer, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJXFF"], data:100
+   16: [Diagnostic Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[fn_call, Bytes(8011bbf4cdf04e5bc6ac886935b99aa4b2c0cabde133f9d7fb3e656799f0a896), transfer], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, 100]
+   17: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[activity, 60, [Locked]], data:{activity_type: [Locked], actor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, amount: 100, bounty_id: 60, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   18: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[f_lock, 60], data:{amount: 100, bounty_id: 60, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   19: [Diagnostic Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[fn_return, transfer], data:Void
+   20: [Contract Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[transfer, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJXFF"], data:100
+   21: [Diagnostic Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[fn_call, Bytes(8011bbf4cdf04e5bc6ac886935b99aa4b2c0cabde133f9d7fb3e656799f0a896), transfer], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, 100]
+   22: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[activity, 59, [Locked]], data:{activity_type: [Locked], actor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, amount: 100, bounty_id: 59, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   23: [Contract Event] contract:CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK3IM, topics:[f_lock, 59], data:{amount: 100, bounty_id: 59, deadline: 10000, depositor: CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, metadata: {block_number: 0, transaction_hash: "", version: 1}, timestamp: 0}
+   24: [Diagnostic Event] contract:CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN, topics:[fn_return, transfer], data:Void
+   25: ... 314 events elided ...
+
+Backtrace (newest first):
+   0: <soroban_env_host::host::Host as soroban_env_common::env::EnvBase>::escalate_error_to_panic
+             at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-21.2.1/src/host.rs:767:31
+   1: soroban_sdk::env::internal::reject_err::{{closure}}
+             at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:52:27
+   2: core::result::Result<T,E>::map_err
+             at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/result.rs:968:27
+   3: soroban_sdk::env::internal::reject_err
+             at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:52:11
+   4: <soroban_sdk::env::Env as soroban_env_common::env::Env>::try_call
+             at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:1667:13
+   5: soroban_sdk::env::Env::try_invoke_contract
+             at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:404:18
+   6: bounty_escrow::BountyEscrowContractClient::try_batch_lock_funds
+             at /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/lib.rs:795:1
+   7: bounty_escrow::test_edge_cases::test_edge_very_large_batch
+             at /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/test_edge_cases.rs:203:31
+   8: bounty_escrow::test_edge_cases::test_edge_very_large_batch::{{closure}}
+             at /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/test_edge_cases.rs:185:32
+   9: core::ops::function::FnOnce::call_once
+             at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ops/function.rs:250:5
+
+
+
+thread 'test_edge_cases::test_edge_very_large_batch' (60896) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:1344:54:
+called `Result::unwrap()` on an `Err` value: HostError: Error(Budget, ExceededLimit)
+DebugInfo not available
+
+stack backtrace:
+   0:     0x55add4f8d232 - std::backtrace_rs::backtrace::libunwind::trace::hb205086d0f49ee01
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/../../backtrace/src/backtrace/libunwind.rs:117:9
+   1:     0x55add4f8d232 - std::backtrace_rs::backtrace::trace_unsynchronized::hf58c8c4e68ae35b1
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/../../backtrace/src/backtrace/mod.rs:66:14
+   2:     0x55add4f8d232 - std::sys::backtrace::_print_fmt::hd679781eca293d6d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/sys/backtrace.rs:66:9
+   3:     0x55add4f8d232 - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::hd59005ce7ce2c1bf
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/sys/backtrace.rs:39:26
+   4:     0x55add4f9de0f - core::fmt::rt::Argument::fmt::hbe868187d886307e
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/fmt/rt.rs:173:76
+   5:     0x55add4f9de0f - core::fmt::write::h50f37fe26c0fb95d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/fmt/mod.rs:1469:25
+   6:     0x55add4f5f873 - std::io::default_write_fmt::h565771c26af36066
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/io/mod.rs:639:11
+   7:     0x55add4f5f873 - std::io::Write::write_fmt::h84c732e43b396c07
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/io/mod.rs:1954:13
+   8:     0x55add4f6adc2 - std::sys::backtrace::BacktraceLock::print::hf09604b044aa24d9
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/sys/backtrace.rs:42:9
+   9:     0x55add4f6f85c - std::panicking::default_hook::{{closure}}::h117e3e641189d1ad
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:301:27
+  10:     0x55add4f6f6ee - std::panicking::default_hook::h84262e9cba305d0d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:325:9
+  11:     0x55add48103ee - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::haa94514c2cb7c63d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/boxed.rs:2019:9
+  12:     0x55add48103ee - test::test_main_with_exit_callback::{{closure}}::h1ec992e82a5b6f48
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/test/src/lib.rs:145:21
+  13:     0x55add4a59643 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::hf7e3dbfae88c44e9
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/boxed.rs:2019:9
+  14:     0x55add4a7b080 - soroban_env_host::testutils::call_with_suppressed_panic_hook::{{closure}}::{{closure}}::he49b727a6875d433
+                               at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-21.2.1/src/testutils.rs:46:17
+  15:     0x55add4f6fe6f - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::hd6f0f624e3e9801d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/boxed.rs:2019:9
+  16:     0x55add4f6fe6f - std::panicking::panic_with_hook::heaa76de7f0d63b3f
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:842:13
+  17:     0x55add4f6fcca - std::panicking::panic_handler::{{closure}}::h95dc640812a76c03
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:707:13
+  18:     0x55add4f6af09 - std::sys::backtrace::__rust_end_short_backtrace::hc354407a9e996cb5
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/sys/backtrace.rs:174:18
+  19:     0x55add4f53b6d - __rustc[27653a885966a36a]::rust_begin_unwind
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:698:5
+  20:     0x55add47448e0 - core::panicking::panic_fmt::h1e92813c37e3c53d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/panicking.rs:80:14
+  21:     0x55add47441c6 - core::result::unwrap_failed::h6b5e67dc6e3e0650
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/result.rs:1862:5
+  22:     0x55add483db3e - core::result::Result<T,E>::unwrap::h545c8779ae909b89
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/result.rs:1233:23
+  23:     0x55add483db3e - soroban_sdk::env::Env::to_ledger_snapshot::h2b93aaa53a5bc747
+                               at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:1344:54
+  24:     0x55add483b78e - soroban_sdk::env::Env::to_snapshot::h58681535ac0d8b8a
+                               at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:1298:26
+  25:     0x55add483dcfb - soroban_sdk::env::Env::to_test_snapshot_file::ha290566efd1eb4b3
+                               at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:1422:29
+  26:     0x55add48426b2 - <soroban_sdk::env::Env as core::ops::drop::Drop>::drop::hd69d18039b00a440
+                               at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/env.rs:1385:18
+  27:     0x55add4841077 - core::ptr::drop_in_place<soroban_sdk::env::Env>::hab98aad058ccc85f
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ptr/mod.rs:805:1
+  28:     0x55add484152f - core::ptr::drop_in_place<soroban_sdk::address::Address>::h4097964de0c71c43
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ptr/mod.rs:805:1
+  29:     0x55add47689d0 - core::ptr::drop_in_place<bounty_escrow::BountyEscrowContractClient>::hce96914021b718f5
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ptr/mod.rs:805:1
+  30:     0x55add4768e67 - core::ptr::drop_in_place<bounty_escrow::test_edge_cases::EdgeCaseTestSetup>::h4a41234fb9632430
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ptr/mod.rs:805:1
+  31:     0x55add47dddfc - bounty_escrow::test_edge_cases::test_edge_very_large_batch::h627d947c86108fe9
+                               at /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/test_edge_cases.rs:205:1
+  32:     0x55add4784197 - bounty_escrow::test_edge_cases::test_edge_very_large_batch::{{closure}}::hb8b2f2a537f59d8d
+                               at /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/test_edge_cases.rs:185:32
+  33:     0x55add47653e6 - core::ops::function::FnOnce::call_once::h41ae3dbb2e8e76a4
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ops/function.rs:250:5
+  34:     0x55add481023b - core::ops::function::FnOnce::call_once::hdf6b0871be3d79cc
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ops/function.rs:250:5
+  35:     0x55add481023b - test::__rust_begin_short_backtrace::h614b0359b688620a
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/test/src/lib.rs:663:18
+  36:     0x55add4824858 - test::run_test_in_process::{{closure}}::h1fb4474396de5d15
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/test/src/lib.rs:686:74
+  37:     0x55add4824858 - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::hcf4a66d54d3855fa
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/panic/unwind_safe.rs:274:9
+  38:     0x55add4824858 - std::panicking::catch_unwind::do_call::h453969145cc94415
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:590:40
+  39:     0x55add4824858 - std::panicking::catch_unwind::hdb2a8899479db462
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:553:19
+  40:     0x55add4824858 - std::panic::catch_unwind::h2596061d022153b8
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panic.rs:359:14
+  41:     0x55add4824858 - test::run_test_in_process::h9b341ac7d56567b6
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/test/src/lib.rs:686:27
+  42:     0x55add4824858 - test::run_test::{{closure}}::hc356af633c7e5c68
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/test/src/lib.rs:607:43
+  43:     0x55add47fd904 - test::run_test::{{closure}}::h58c90fbfa10a5bf3
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/test/src/lib.rs:637:41
+  44:     0x55add47fd904 - std::sys::backtrace::__rust_begin_short_backtrace::he959afa4af9d5ec2
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/sys/backtrace.rs:158:18
+  45:     0x55add480106a - std::thread::Builder::spawn_unchecked_::{{closure}}::{{closure}}::hb33c1bdda28d9557
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/thread/mod.rs:562:17
+  46:     0x55add480106a - <core::panic::unwind_safe::AssertUnwindSafe<F> as core::ops::function::FnOnce<()>>::call_once::h31f884747a2b195d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/panic/unwind_safe.rs:274:9
+  47:     0x55add480106a - std::panicking::catch_unwind::do_call::h6dcfcf67c716af0e
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:590:40
+  48:     0x55add480106a - std::panicking::catch_unwind::h9c9b54510f7c4802
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panicking.rs:553:19
+  49:     0x55add480106a - std::panic::catch_unwind::hbb866aab9ecd4e18
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/panic.rs:359:14
+  50:     0x55add480106a - std::thread::Builder::spawn_unchecked_::{{closure}}::hb3a639da5966f4be
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/thread/mod.rs:560:30
+  51:     0x55add480106a - core::ops::function::FnOnce::call_once{{vtable.shim}}::hdfe9e9f67e848a4b
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/core/src/ops/function.rs:250:5
+  52:     0x55add4f661ef - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h795b6fa8a001fa4d
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/boxed.rs:2005:9
+  53:     0x55add4f661ef - std::sys::thread::unix::Thread::new::thread_start::hafd1725dff990fdc
+                               at /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/std/src/sys/thread/unix.rs:126:17
+  54:     0x7f8c2ead6464 - start_thread
+  55:     0x7f8c2eb595ac - __clone3
+  56:                0x0 - <unknown>
+
+thread 'test_edge_cases::test_edge_very_large_batch' (60896) panicked at library/core/src/panicking.rs:238:5:
+panic in a destructor during cleanup
+thread caused non-unwinding panic. aborting.
+error: test failed, to rerun pass `-p bounty-escrow --lib`
+
+Caused by:
+  process didn't exit successfully: `/home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/target/debug/deps/bounty_escrow-1593404e11cae2c7` (signal: 6, SIGABRT: process abort signal)

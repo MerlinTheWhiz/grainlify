@@ -480,6 +480,14 @@ pub enum Error {
     InvalidDeadlineExtension = 19,
     /// Returned when metadata exceeds size limits
     MetadataTooLarge = 20,
+    /// Returned when claim is not found or in wrong state
+    ClaimNotFound = 21,
+    /// Returned when claim has expired based on ledger sequence
+    ClaimExpired = 22,
+    /// Returned when caller is not the authorized beneficiary
+    NotBeneficiary = 23,
+    /// Returned when attempting to cancel a claim that is not pending
+    NoPendingClaim = 24,
 }
 
 // ============================================================================
@@ -510,6 +518,7 @@ pub enum EscrowStatus {
     Released,
     Refunded,
     PartiallyRefunded,
+    PendingClaim,
 }
 
 #[contracttype]
@@ -570,6 +579,8 @@ pub struct Escrow {
     pub deadline: u64,
     pub refund_history: Vec<RefundRecord>,
     pub remaining_amount: i128,
+    pub recipient: Option<Address>,
+    pub claim_expiry_ledger: Option<u32>,
 }
 
 /// Metadata structure for enhanced escrow indexing and categorization.
@@ -684,6 +695,12 @@ pub struct FeeConfig {
     pub fee_enabled: bool,   // Global fee enable/disable flag
 }
 
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ClaimConfig {
+    pub validity_ledgers: u32, // Number of ledgers a claim remains valid
+}
+
 // Fee rate is stored in basis points (1 basis point = 0.01%)
 // Example: 100 basis points = 1%, 1000 basis points = 10%
 const BASIS_POINTS: i128 = 10_000;
@@ -698,7 +715,8 @@ pub enum DataKey {
     FeeConfig,           // Fee configuration
     RefundApproval(u64), // bounty_id -> RefundApproval
     ReentrancyGuard,
-    IsPaused, // Contract pause state
+    IsPaused,    // Contract pause state
+    ClaimConfig, // Claim window configuration
 }
 
 // ============================================================================
@@ -938,11 +956,20 @@ impl BountyEscrowContract {
         env.storage()
             .instance()
             .get(&DataKey::FeeConfig)
-            .unwrap_or_else(|| FeeConfig {
+            .unwrap_or(FeeConfig {
                 lock_fee_rate: 0,
                 release_fee_rate: 0,
-                fee_recipient: env.storage().instance().get(&DataKey::Admin).unwrap(),
+                fee_recipient: env.current_contract_address(),
                 fee_enabled: false,
+            })
+    }
+
+    fn get_claim_config_internal(env: &Env) -> ClaimConfig {
+        env.storage()
+            .instance()
+            .get(&DataKey::ClaimConfig)
+            .unwrap_or(ClaimConfig {
+                validity_ledgers: 0,
             })
     }
 
@@ -1265,6 +1292,8 @@ impl BountyEscrowContract {
             deadline,
             refund_history: vec![&env],
             remaining_amount: amount,
+            recipient: None,
+            claim_expiry_ledger: None,
         };
 
         // Store in persistent storage with extended TTL
@@ -1282,6 +1311,8 @@ impl BountyEscrowContract {
         //         deadline,
         //     },
         // );
+
+        // Emit individual event for each locked bounty
         on_funds_locked(&env, bounty_id, amount, &depositor, deadline);
 
         env.storage().instance().remove(&DataKey::ReentrancyGuard);
@@ -1447,6 +1478,7 @@ impl BountyEscrowContract {
 
         // Verify admin authorization
         let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        let now = env.ledger().timestamp();
 
         // Check if contract is paused
         if Self::is_paused_internal(&env) {
@@ -1480,20 +1512,44 @@ impl BountyEscrowContract {
             return Err(Error::FundsNotLocked);
         }
 
-        let now = env.ledger().timestamp();
         if now >= escrow.deadline {
             monitoring::track_operation(&env, symbol_short!("release"), admin.clone(), false);
             env.storage().instance().remove(&DataKey::ReentrancyGuard);
             return Err(Error::DeadlineNotPassed);
         }
 
+        // Check if claim window is enabled
+        let claim_config = Self::get_claim_config_internal(&env);
+        if claim_config.validity_ledgers > 0 {
+            escrow.status = EscrowStatus::PendingClaim;
+            escrow.recipient = Some(contributor.clone());
+            escrow.claim_expiry_ledger = Some(
+                env.ledger()
+                    .sequence()
+                    .saturating_add(claim_config.validity_ledgers),
+            );
+
+            env.storage()
+                .persistent()
+                .set(&DataKey::Escrow(bounty_id), &escrow);
+
+            events::emit_claim_created(
+                &env,
+                events::ClaimCreated {
+                    bounty_id,
+                    recipient: contributor,
+                    expiry_ledger: escrow.claim_expiry_ledger.unwrap(),
+                    timestamp: env.ledger().timestamp(),
+                },
+            );
+
+            env.storage().instance().remove(&DataKey::ReentrancyGuard);
+            return Ok(());
+        }
+
         // Transfer funds to contributor
         let token_addr: Address = env.storage().instance().get(&DataKey::Token).unwrap();
         let client = token::Client::new(&env, &token_addr);
-        escrow.status = EscrowStatus::Released;
-        env.storage()
-            .persistent()
-            .set(&DataKey::Escrow(bounty_id), &escrow);
 
         // Calculate and collect fee if enabled
         let fee_config = Self::get_fee_config_internal(&env);
@@ -2238,12 +2294,153 @@ impl BountyEscrowContract {
             || escrow.status == EscrowStatus::PartiallyRefunded)
             && (deadline_passed || approval.is_some());
 
-        Ok((
-            can_refund,
-            deadline_passed,
-            escrow.remaining_amount,
-            approval,
-        ))
+        Ok((can_refund, deadline_passed, escrow.remaining_amount, approval))
+    }
+
+    pub fn set_claim_config(env: Env, validity_ledgers: u32) -> Result<(), Error> {
+        if !env.storage().instance().has(&DataKey::Admin) {
+            return Err(Error::NotInitialized);
+        }
+        let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        admin.require_auth();
+
+        env.storage()
+            .instance()
+            .set(&DataKey::ClaimConfig, &ClaimConfig { validity_ledgers });
+        Ok(())
+    }
+
+    pub fn claim(env: Env, bounty_id: u64) -> Result<(), Error> {
+        if env.storage().instance().has(&DataKey::ReentrancyGuard) {
+            panic!("Reentrancy detected");
+        }
+        env.storage()
+            .instance()
+            .set(&DataKey::ReentrancyGuard, &true);
+
+        let res = Self::claim_internal(&env, bounty_id);
+
+        env.storage().instance().remove(&DataKey::ReentrancyGuard);
+        res
+    }
+
+    fn claim_internal(env: &Env, bounty_id: u64) -> Result<(), Error> {
+        if !env.storage().persistent().has(&DataKey::Escrow(bounty_id)) {
+            return Err(Error::BountyNotFound);
+        }
+
+        let mut escrow: Escrow = env
+            .storage()
+            .persistent()
+            .get(&DataKey::Escrow(bounty_id))
+            .unwrap();
+
+        if escrow.status != EscrowStatus::PendingClaim {
+            return Err(Error::ClaimNotFound);
+        }
+
+        let recipient = escrow.recipient.as_ref().ok_or(Error::ClaimNotFound)?;
+        recipient.require_auth();
+
+        if let Some(expiry) = escrow.claim_expiry_ledger {
+            if env.ledger().sequence() > expiry {
+                return Err(Error::ClaimExpired);
+            }
+        }
+
+        // Checks-Effects-Interactions
+        escrow.status = EscrowStatus::Released;
+        let amount_to_transfer = escrow.remaining_amount;
+        escrow.remaining_amount = 0;
+        env.storage()
+            .persistent()
+            .set(&DataKey::Escrow(bounty_id), &escrow);
+
+        // Transfer funds
+        let token_addr: Address = env.storage().instance().get(&DataKey::Token).unwrap();
+        let client = token::Client::new(env, &token_addr);
+
+        // Calculate and collect fee if enabled
+        let fee_config = Self::get_fee_config_internal(env);
+        let fee_amount = if fee_config.fee_enabled && fee_config.release_fee_rate > 0 {
+            Self::calculate_fee(escrow.amount, fee_config.release_fee_rate)
+        } else {
+            0
+        };
+        let net_amount = amount_to_transfer - fee_amount;
+
+        client.transfer(&env.current_contract_address(), recipient, &net_amount);
+
+        if fee_amount > 0 {
+            client.transfer(
+                &env.current_contract_address(),
+                &fee_config.fee_recipient,
+                &fee_amount,
+            );
+            events::emit_fee_collected(
+                env,
+                events::FeeCollected {
+                    operation_type: events::FeeOperationType::Release,
+                    amount: fee_amount,
+                    fee_rate: fee_config.release_fee_rate,
+                    recipient: fee_config.fee_recipient.clone(),
+                    timestamp: env.ledger().timestamp(),
+                },
+            );
+        }
+
+        events::emit_claimed(
+            env,
+            events::Claimed {
+                bounty_id,
+                recipient: recipient.clone(),
+                amount: net_amount,
+                timestamp: env.ledger().timestamp(),
+            },
+        );
+
+        Ok(())
+    }
+
+    pub fn cancel_pending_claim(env: Env, bounty_id: u64) -> Result<(), Error> {
+        if !env.storage().instance().has(&DataKey::Admin) {
+            return Err(Error::NotInitialized);
+        }
+        let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        admin.require_auth();
+
+        let mut escrow: Escrow = env
+            .storage()
+            .persistent()
+            .get(&DataKey::Escrow(bounty_id))
+            .ok_or(Error::BountyNotFound)?;
+
+        if escrow.status != EscrowStatus::PendingClaim {
+            return Err(Error::NoPendingClaim);
+        }
+
+        let recipient = escrow.recipient.clone().unwrap();
+
+        // Reset to Locked
+        escrow.status = EscrowStatus::Locked;
+        escrow.recipient = None;
+        escrow.claim_expiry_ledger = None;
+
+        env.storage()
+            .persistent()
+            .set(&DataKey::Escrow(bounty_id), &escrow);
+
+        events::emit_claim_cancelled(
+            &env,
+            events::ClaimCancelled {
+                bounty_id,
+                recipient,
+                cancelled_by: admin,
+                timestamp: env.ledger().timestamp(),
+            },
+        );
+
+        Ok(())
     }
 
     /// Batch lock funds for multiple bounties in a single transaction.
@@ -2345,6 +2542,8 @@ impl BountyEscrowContract {
                 deadline: item.deadline,
                 refund_history: vec![&env],
                 remaining_amount: item.amount,
+                recipient: None,
+                claim_expiry_ledger: None,
             };
 
             // Store escrow

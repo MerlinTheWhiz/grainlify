@@ -475,3 +475,49 @@ pub fn emit_escrow_expired(env: &Env, event: EscrowExpired) {
     let topics = (symbol_short!("expired"), event.bounty_id);
     env.events().publish(topics, event.clone());
 }
+
+// ============================================================================
+// Claim Events
+// ============================================================================
+
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct ClaimCreated {
+    pub bounty_id: u64,
+    pub recipient: Address,
+    pub expiry_ledger: u32,
+    pub timestamp: u64,
+}
+
+pub fn emit_claim_created(env: &Env, event: ClaimCreated) {
+    let topics = (symbol_short!("c_create"), event.bounty_id);
+    env.events().publish(topics, event.clone());
+}
+
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct Claimed {
+    pub bounty_id: u64,
+    pub recipient: Address,
+    pub amount: i128,
+    pub timestamp: u64,
+}
+
+pub fn emit_claimed(env: &Env, event: Claimed) {
+    let topics = (symbol_short!("claimed"), event.bounty_id);
+    env.events().publish(topics, event.clone());
+}
+
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct ClaimCancelled {
+    pub bounty_id: u64,
+    pub recipient: Address,
+    pub cancelled_by: Address,
+    pub timestamp: u64,
+}
+
+pub fn emit_claim_cancelled(env: &Env, event: ClaimCancelled) {
+    let topics = (symbol_short!("c_cancel"), event.bounty_id);
+    env.events().publish(topics, event.clone());
+}

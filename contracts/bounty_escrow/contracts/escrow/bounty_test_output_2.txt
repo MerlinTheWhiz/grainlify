@@ -1,0 +1,362 @@
+   Compiling bounty-escrow v0.0.0 (/home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow)
+warning: unused import: `query_functions::*`
+  --> contracts/escrow/src/indexed/mod.rs:11:9
+   |
+11 | pub use query_functions::*;
+   |         ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `Vec`
+  --> contracts/escrow/src/test_fuzz_properties.rs:12:31
+   |
+12 |     token, vec, Address, Env, Vec,
+   |                               ^^^
+
+warning: value assigned to `total_count` is never read
+  --> contracts/escrow/src/indexed/query_functions.rs:86:32
+   |
+86 |     let mut total_count: u32 = 0;
+   |                                ^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: irrefutable `if let` pattern
+   --> contracts/escrow/src/indexed/query_functions.rs:115:8
+    |
+115 |     if let status = &filter.status {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this pattern will always match, so the `if let` is useless
+    = help: consider replacing the `if let` with a `let`
+    = note: `#[warn(irrefutable_let_patterns)]` on by default
+
+warning: irrefutable `if let` pattern
+   --> contracts/escrow/src/indexed/query_functions.rs:192:8
+    |
+192 |     if let ref status = filter.status {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this pattern will always match, so the `if let` is useless
+    = help: consider replacing the `if let` with a `let`
+
+warning: unused variable: `env`
+   --> contracts/escrow/src/lib.rs:742:27
+    |
+742 | fn validate_metadata_size(env: &Env, metadata: &EscrowMetadata) -> bool {
+    |                           ^^^ help: if this is intentional, prefix it with an underscore: `_env`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `validate_metadata_size` is never used
+   --> contracts/escrow/src/lib.rs:742:4
+    |
+742 | fn validate_metadata_size(env: &Env, metadata: &EscrowMetadata) -> bool {
+    |    ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `update_bounty_amount` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:119:8
+    |
+119 | pub fn update_bounty_amount(env: &Env, bounty_id: u64, new_amount: i128) {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `update_bounty_deadline` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:142:8
+    |
+142 | pub fn update_bounty_deadline(env: &Env, bounty_id: u64, new_deadline: u64) {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `remove_bounty` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:152:8
+    |
+152 | pub fn remove_bounty(env: &Env, bounty_id: u64) {
+    |        ^^^^^^^^^^^^^
+
+warning: function `bounty_exists` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:176:8
+    |
+176 | pub fn bounty_exists(env: &Env, bounty_id: u64) -> bool {
+    |        ^^^^^^^^^^^^^
+
+warning: function `get_depositor_bounty_ids` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:182:8
+    |
+182 | pub fn get_depositor_bounty_ids(env: &Env, depositor: &Address) -> Vec<u64> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `get_status_bounty_ids` is never used
+   --> contracts/escrow/src/indexed/indexed_storage.rs:196:8
+    |
+196 | pub fn get_status_bounty_ids(env: &Env, status: &BountyStatus) -> Vec<u64> {
+    |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `BountyStats` is never constructed
+   --> contracts/escrow/src/indexed/query_functions.rs:378:12
+    |
+378 | pub struct BountyStats {
+    |            ^^^^^^^^^^^
+
+warning: function `get_bounty_stats` is never used
+   --> contracts/escrow/src/indexed/query_functions.rs:396:8
+    |
+396 | pub fn get_bounty_stats(env: &Env) -> BountyStats {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: function `get_depositor_stats` is never used
+   --> contracts/escrow/src/indexed/query_functions.rs:451:8
+    |
+451 | pub fn get_depositor_stats(env: &Env, depositor: &Address) -> DepositorStats {
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `DepositorStats` is never constructed
+   --> contracts/escrow/src/indexed/query_functions.rs:494:12
+    |
+494 | pub struct DepositorStats {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `get_time_series_data` is never used
+   --> contracts/escrow/src/indexed/query_functions.rs:514:8
+    |
+514 | pub fn get_time_series_data(env: &Env, from: u64, to: u64, interval: u64) -> Vec<TimeSeriesPoint> {
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+error[E0609]: no field `sequence` on type `&mut LedgerInfo`
+   --> contracts/escrow/src/test_bounty_escrow.rs:934:33
+    |
+934 |     env.ledger().with_mut(|l| l.sequence = 20);
+    |                                 ^^^^^^^^ unknown field
+    |
+    = note: available fields are: `protocol_version`, `sequence_number`, `timestamp`, `network_id`, `base_reserve` ... and 3 others
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> contracts/escrow/src/test_fuzz_properties.rs:23:30
+   |
+23 |     let contract_address = e.register_stellar_asset_contract(admin.clone());
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> contracts/escrow/src/test_edge_cases.rs:18:30
+   |
+18 |     let contract_address = e.register_stellar_asset_contract(admin.clone());
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+  --> contracts/escrow/src/test_invalid_inputs.rs:19:30
+   |
+19 |     let contract_address = e.register_stellar_asset_contract(admin.clone());
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+ --> contracts/escrow/src/pause_tests.rs:7:24
+  |
+7 |         let addr = env.register_stellar_asset_contract(admin.clone());
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `bounty-escrow` (lib) generated 17 warnings (1 duplicate) (run `cargo fix --lib -p bounty-escrow` to apply 1 suggestion)
+warning: unused import: `DataKey`
+ --> contracts/escrow/tests/metadata_tests.rs:3:55
+  |
+3 |     BountyEscrowContract, BountyEscrowContractClient, DataKey, EscrowMetadata, EscrowStatus, Error
+  |                                                       ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0308]: mismatched types
+  --> contracts/escrow/tests/metadata_tests.rs:33:13
+   |
+33 |             String::from_str(&env, "priority-high"),
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&Env`, found `String`
+
+error[E0308]: mismatched types
+  --> contracts/escrow/tests/metadata_tests.rs:53:36
+   |
+53 |     assert_eq!(retrieved_metadata, Some(metadata));
+   |                                    ^^^^^^^^^^^^^^ expected `EscrowMetadata`, found `Option<EscrowMetadata>`
+   |
+   = note: expected struct `bounty_escrow::EscrowMetadata`
+                found enum `std::option::Option<bounty_escrow::EscrowMetadata>`
+
+error[E0599]: no method named `unwrap` found for struct `EscrowWithMetadata` in the current scope
+  --> contracts/escrow/tests/metadata_tests.rs:56:72
+   |
+56 |     let escrow_with_meta = client.get_escrow_with_metadata(&bounty_id).unwrap();
+   |                                                                        ^^^^^^ method not found in `EscrowWithMetadata`
+   |
+help: some of the expressions' fields have a method of the same name
+   |
+56 |     let escrow_with_meta = client.get_escrow_with_metadata(&bounty_id).escrow.recipient.unwrap();
+   |                                                                        +++++++++++++++++
+56 |     let escrow_with_meta = client.get_escrow_with_metadata(&bounty_id).metadata.repo_id.unwrap();
+   |                                                                        +++++++++++++++++
+
+error[E0308]: mismatched types
+  --> contracts/escrow/tests/metadata_tests.rs:87:15
+   |
+87 |         tags: vec![&env],
+   |               ^^^^^^^^^^ expected `Vec<String>`, found `Vec<&Env>`
+   |
+   = note: `std::vec::Vec<&Env>` and `soroban_sdk::Vec<soroban_sdk::String>` have similar names, but are actually distinct types
+note: `std::vec::Vec<&Env>` is defined in crate `alloc`
+  --> /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/vec/mod.rs:434:1
+note: `soroban_sdk::Vec<soroban_sdk::String>` is defined in crate `soroban_sdk`
+  --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/vec.rs:88:1
+   |
+88 | pub struct Vec<T> {
+   | ^^^^^^^^^^^^^^^^^
+   = note: this error originates in the macro `vec` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0061]: this method takes 2 arguments but 3 arguments were supplied
+    --> contracts/escrow/tests/metadata_tests.rs:92:25
+     |
+  92 |     let result = client.try_set_escrow_metadata(&other_user, &bounty_id, &metadata);
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^ ----------- unexpected argument #1 of type `&soroban_sdk::Address`
+     |
+note: method defined here
+    --> /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/lib.rs:1369:12
+     |
+1369 |     pub fn set_escrow_metadata(
+     |            ^^^^^^^^^^^^^^^^^^^
+help: remove the extra argument
+     |
+  92 -     let result = client.try_set_escrow_metadata(&other_user, &bounty_id, &metadata);
+  92 +     let result = client.try_set_escrow_metadata(&bounty_id, &metadata);
+     |
+
+error[E0061]: this method takes 2 arguments but 3 arguments were supplied
+    --> contracts/escrow/tests/metadata_tests.rs:130:25
+     |
+ 130 |     let result = client.try_set_escrow_metadata(&depositor, &bounty_id, &oversized_metadata);
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^ ---------- unexpected argument #1 of type `&soroban_sdk::Address`
+     |
+note: method defined here
+    --> /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/lib.rs:1369:12
+     |
+1369 |     pub fn set_escrow_metadata(
+     |            ^^^^^^^^^^^^^^^^^^^
+help: remove the extra argument
+     |
+ 130 -     let result = client.try_set_escrow_metadata(&depositor, &bounty_id, &oversized_metadata);
+ 130 +     let result = client.try_set_escrow_metadata(&bounty_id, &oversized_metadata);
+     |
+
+error[E0308]: mismatched types
+   --> contracts/escrow/tests/metadata_tests.rs:159:15
+    |
+159 |         tags: vec![&env],
+    |               ^^^^^^^^^^ expected `Vec<String>`, found `Vec<&Env>`
+    |
+    = note: `std::vec::Vec<&Env>` and `soroban_sdk::Vec<soroban_sdk::String>` have similar names, but are actually distinct types
+note: `std::vec::Vec<&Env>` is defined in crate `alloc`
+   --> /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/vec/mod.rs:434:1
+note: `soroban_sdk::Vec<soroban_sdk::String>` is defined in crate `soroban_sdk`
+   --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/vec.rs:88:1
+    |
+ 88 | pub struct Vec<T> {
+    | ^^^^^^^^^^^^^^^^^
+    = note: this error originates in the macro `vec` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0308]: mismatched types
+   --> contracts/escrow/tests/metadata_tests.rs:166:27
+    |
+166 |     assert_eq!(retrieved, Some(partial_metadata));
+    |                           ^^^^^^^^^^^^^^^^^^^^^^ expected `EscrowMetadata`, found `Option<EscrowMetadata>`
+    |
+    = note: expected struct `bounty_escrow::EscrowMetadata`
+                 found enum `std::option::Option<bounty_escrow::EscrowMetadata>`
+
+error[E0308]: mismatched types
+   --> contracts/escrow/tests/metadata_tests.rs:190:15
+    |
+190 |         tags: vec![&env],
+    |               ^^^^^^^^^^ expected `Vec<String>`, found `Vec<&Env>`
+    |
+    = note: `std::vec::Vec<&Env>` and `soroban_sdk::Vec<soroban_sdk::String>` have similar names, but are actually distinct types
+note: `std::vec::Vec<&Env>` is defined in crate `alloc`
+   --> /builddir/build/BUILD/rust-1.92.0-build/rustc-1.92.0-src/library/alloc/src/vec/mod.rs:434:1
+note: `soroban_sdk::Vec<soroban_sdk::String>` is defined in crate `soroban_sdk`
+   --> /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-sdk-21.7.7/src/vec.rs:88:1
+    |
+ 88 | pub struct Vec<T> {
+    | ^^^^^^^^^^^^^^^^^
+    = note: this error originates in the macro `vec` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0061]: this method takes 2 arguments but 3 arguments were supplied
+    --> contracts/escrow/tests/metadata_tests.rs:194:25
+     |
+ 194 |     let result = client.try_set_escrow_metadata(&Address::generate(&env), &999u64, &metadata);
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^ ------------------------ unexpected argument #1 of type `&soroban_sdk::Address`
+     |
+note: method defined here
+    --> /home/merlinthewhiz/Documents/grainlify/contracts/bounty_escrow/contracts/escrow/src/lib.rs:1369:12
+     |
+1369 |     pub fn set_escrow_metadata(
+     |            ^^^^^^^^^^^^^^^^^^^
+help: remove the extra argument
+     |
+ 194 -     let result = client.try_set_escrow_metadata(&Address::generate(&env), &999u64, &metadata);
+ 194 +     let result = client.try_set_escrow_metadata(&999u64, &metadata);
+     |
+
+Some errors have detailed explanations: E0061, E0308, E0599.
+For more information about an error, try `rustc --explain E0061`.
+warning: `bounty-escrow` (test "metadata_tests") generated 1 warning
+error: could not compile `bounty-escrow` (test "metadata_tests") due to 10 previous errors; 1 warning emitted
+warning: build failed, waiting for other jobs to finish...
+warning: unused variable: `contract_id`
+   --> contracts/escrow/src/test_bounty_escrow.rs:660:23
+    |
+660 |     let (env, client, contract_id) = create_test_env();
+    |                       ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_contract_id`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `token_client`
+   --> contracts/escrow/src/test_bounty_escrow.rs:666:25
+    |
+666 |     let (token_address, token_client, token_admin) = create_token_contract(&env, &admin);
+    |                         ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_token_client`
+
+warning: unused variable: `token_admin`
+   --> contracts/escrow/src/test_bounty_escrow.rs:666:39
+    |
+666 |     let (token_address, token_client, token_admin) = create_token_contract(&env, &admin);
+    |                                       ^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_token_admin`
+
+warning: unused variable: `env`
+   --> contracts/escrow/src/lib.rs:742:27
+    |
+742 | fn validate_metadata_size(env: &Env, metadata: &EscrowMetadata) -> bool {
+    |                           ^^^ help: if this is intentional, prefix it with an underscore: `_env`
+
+warning: unused variable: `result`
+   --> contracts/escrow/src/test_edge_cases.rs:478:9
+    |
+478 |     let result = setup.escrow.try_release_funds(&bounty_id, &contract_address);
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_result`
+
+warning: unused variable: `setup`
+   --> contracts/escrow/src/test_edge_cases.rs:566:9
+    |
+566 |     let setup = EdgeCaseTestSetup::new();
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_setup`
+
+warning: unused variable: `escrow`
+   --> contracts/escrow/src/test_edge_cases.rs:570:9
+    |
+570 |     let escrow = create_escrow_contract(&env);
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_escrow`
+
+warning: unused variable: `token`
+  --> contracts/escrow/src/test_invalid_inputs.rs:84:10
+   |
+84 |     let (token, token_admin) = create_token_contract(&env, &admin);
+   |          ^^^^^ help: if this is intentional, prefix it with an underscore: `_token`
+
+For more information about this error, try `rustc --explain E0609`.
+warning: `bounty-escrow` (lib test) generated 17 warnings (3 duplicates)
+error: could not compile `bounty-escrow` (lib test) due to 1 previous error; 17 warnings emitted

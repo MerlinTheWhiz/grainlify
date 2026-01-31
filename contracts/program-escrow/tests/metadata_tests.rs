@@ -1,5 +1,7 @@
 #![cfg(test)]
-use super::*;
+use program_escrow::{
+    ProgramEscrowContract, ProgramEscrowContractClient, DataKey, ProgramMetadata, Error
+};
 use soroban_sdk::{map, testutils::Address as _, Address, Env, String, Vec};
 
 #[test]

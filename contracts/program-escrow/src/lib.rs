@@ -140,6 +140,7 @@
 
 #![no_std]
 mod pause_tests;
+mod claim_tests;
 
 use soroban_sdk::{
     contract, contracterror, contractimpl, contracttype, symbol_short, token, vec, Address, Env, String, Symbol,
@@ -680,6 +681,17 @@ pub struct ProgramData {
     pub token_address: Address,
     pub deadline: Option<u64>,
     pub organizer: Address,
+    pub claim_validity_ledgers: u32,
+}
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PendingClaim {
+    pub program_id: String,
+    pub claim_id: u64,
+    pub recipient: Address,
+    pub amount: i128,
+    pub expiry_ledger: u32,
 }
 
 /// Storage key type for individual programs
@@ -691,6 +703,8 @@ pub enum DataKey {
     ReleaseHistory(String),       // program_id -> Vec<ProgramReleaseHistory>
     NextScheduleId(String),       // program_id -> next schedule_id
     IsPaused,                     // Global contract pause state
+    PendingClaim(String, u64),    // program_id, claim_id -> PendingClaim
+    NextClaimId(String),          // program_id -> next claim_id
 }
 
 // ============================================================================
@@ -909,6 +923,7 @@ impl ProgramEscrowContract {
             token_address: token_address.clone(),
             deadline,
             organizer: organizer.clone(),
+            claim_validity_ledgers: 0,
         };
 
         let fee_config = FeeConfig {
@@ -1315,6 +1330,54 @@ impl ProgramEscrowContract {
         let contract_address = env.current_contract_address();
         let token_client = token::Client::new(&env, &program_data.token_address);
 
+        // Check for claim window
+        if program_data.claim_validity_ledgers > 0 {
+            let mut updated_data = program_data.clone();
+            let current_sequence = env.ledger().sequence();
+            let expiry = current_sequence.saturating_add(program_data.claim_validity_ledgers);
+
+            for i in 0..recipients.len() {
+                let recipient = recipients.get(i as u32).unwrap();
+                let amount = amounts.get(i as u32).unwrap();
+
+                // Get next claim_id
+                let claim_id_key = DataKey::NextClaimId(program_id.clone());
+                let claim_id: u64 = env.storage().instance().get(&claim_id_key).unwrap_or(0);
+                env.storage().instance().set(&claim_id_key, &(claim_id + 1));
+
+                let pending_claim = PendingClaim {
+                    program_id: program_id.clone(),
+                    claim_id,
+                    recipient: recipient.clone(),
+                    amount,
+                    expiry_ledger: expiry,
+                };
+
+                env.storage().instance().set(
+                    &DataKey::PendingClaim(program_id.clone(), claim_id),
+                    &pending_claim,
+                );
+
+                updated_data.remaining_balance -= amount;
+
+                // Emit individual claim created event
+                env.events().publish(
+                    (symbol_short!("c_create"), program_id.clone(), claim_id),
+                    (recipient, amount, expiry),
+                );
+            }
+
+            env.storage().instance().set(&program_key, &updated_data);
+
+            // Emit batch claim created event
+            env.events().publish(
+                (symbol_short!("b_claim"), program_id.clone()),
+                (recipients.len(), total_payout),
+            );
+
+            return updated_data;
+        }
+
         for i in 0..recipients.len() {
             let recipient = recipients.get(i as u32).unwrap();
             let amount = amounts.get(i as u32).unwrap();
@@ -1479,6 +1542,43 @@ impl ProgramEscrowContract {
         };
         let net_amount = amount - fee_amount;
 
+        // Check for claim window
+        if program_data.claim_validity_ledgers > 0 {
+            let current_sequence = env.ledger().sequence();
+            let expiry = current_sequence.saturating_add(program_data.claim_validity_ledgers);
+
+            // Get next claim_id
+            let claim_id_key = DataKey::NextClaimId(program_id.clone());
+            let claim_id: u64 = env.storage().instance().get(&claim_id_key).unwrap_or(0);
+            env.storage().instance().set(&claim_id_key, &(claim_id + 1));
+
+            let pending_claim = PendingClaim {
+                program_id: program_id.clone(),
+                claim_id,
+                recipient: recipient.clone(),
+                amount,
+                expiry_ledger: expiry,
+            };
+
+            env.storage().instance().set(
+                &DataKey::PendingClaim(program_id.clone(), claim_id),
+                &pending_claim,
+            );
+
+            // Update program data
+            let mut updated_data = program_data.clone();
+            updated_data.remaining_balance -= amount;
+            env.storage().instance().set(&program_key, &updated_data);
+
+            // Emit claim created event
+            env.events().publish(
+                (symbol_short!("c_create"), program_id.clone(), claim_id),
+                (recipient, amount, expiry),
+            );
+
+            return updated_data;
+        }
+
         // Transfer net amount to recipient
         // Transfer tokens
         let contract_address = env.current_contract_address();
@@ -1531,6 +1631,124 @@ impl ProgramEscrowContract {
         );
 
         updated_data
+    }
+
+    pub fn set_program_claim_config(
+        env: Env,
+        program_id: String,
+        claim_validity_ledgers: u32,
+    ) -> ProgramData {
+        let program_key = DataKey::Program(program_id.clone());
+        let mut program_data: ProgramData = env
+            .storage()
+            .instance()
+            .get(&program_key)
+            .unwrap_or_else(|| panic!("Program not found"));
+
+        program_data.organizer.require_auth();
+
+        program_data.claim_validity_ledgers = claim_validity_ledgers;
+
+        env.storage().instance().set(&program_key, &program_data);
+
+        program_data
+    }
+
+    pub fn claim_payout(env: Env, program_id: String, claim_id: u64) -> ProgramData {
+        let program_key = DataKey::Program(program_id.clone());
+        let mut program_data: ProgramData = env
+            .storage()
+            .instance()
+            .get(&program_key)
+            .unwrap_or_else(|| panic!("Program not found"));
+
+        let claim_key = DataKey::PendingClaim(program_id.clone(), claim_id);
+        let pending_claim: PendingClaim = env
+            .storage()
+            .instance()
+            .get(&claim_key)
+            .unwrap_or_else(|| panic!("Claim not found"));
+
+        pending_claim.recipient.require_auth();
+
+        if env.ledger().sequence() > pending_claim.expiry_ledger {
+            panic!("Claim expired");
+        }
+
+        // Calculate and collect fee if enabled
+        let fee_config = Self::get_fee_config_internal(&env);
+        let fee_amount = if fee_config.fee_enabled && fee_config.payout_fee_rate > 0 {
+            Self::calculate_fee(pending_claim.amount, fee_config.payout_fee_rate)
+        } else {
+            0
+        };
+        let net_amount = pending_claim.amount - fee_amount;
+
+        // Transfer funds
+        let contract_address = env.current_contract_address();
+        let token_client = token::Client::new(&env, &program_data.token_address);
+        token_client.transfer(&contract_address, &pending_claim.recipient, &net_amount);
+
+        if fee_amount > 0 {
+            token_client.transfer(&contract_address, &fee_config.fee_recipient, &fee_amount);
+        }
+
+        // Record payout
+        let payout_record = PayoutRecord {
+            recipient: pending_claim.recipient.clone(),
+            amount: net_amount,
+            timestamp: env.ledger().timestamp(),
+        };
+        program_data.payout_history.push_back(payout_record);
+
+        // Remove pending claim
+        env.storage().instance().remove(&claim_key);
+
+        // Update program data
+        env.storage().instance().set(&program_key, &program_data);
+
+        // Emit events
+        env.events().publish(
+            (symbol_short!("claimed"), program_id, claim_id),
+            (pending_claim.recipient, net_amount),
+        );
+
+        program_data
+    }
+
+    pub fn cancel_payout_claim(env: Env, program_id: String, claim_id: u64) -> ProgramData {
+        let program_key = DataKey::Program(program_id.clone());
+        let mut program_data: ProgramData = env
+            .storage()
+            .instance()
+            .get(&program_key)
+            .unwrap_or_else(|| panic!("Program not found"));
+
+        program_data.organizer.require_auth();
+
+        let claim_key = DataKey::PendingClaim(program_id.clone(), claim_id);
+        let pending_claim: PendingClaim = env
+            .storage()
+            .instance()
+            .get(&claim_key)
+            .unwrap_or_else(|| panic!("Claim not found"));
+
+        // Return funds to remaining balance
+        program_data.remaining_balance += pending_claim.amount;
+
+        // Remove pending claim
+        env.storage().instance().remove(&claim_key);
+
+        // Update program data
+        env.storage().instance().set(&program_key, &program_data);
+
+        // Emit events
+        env.events().publish(
+            (symbol_short!("c_cancel"), program_id, claim_id),
+            (pending_claim.recipient, pending_claim.amount),
+        );
+
+        program_data
     }
 
     // ========================================================================

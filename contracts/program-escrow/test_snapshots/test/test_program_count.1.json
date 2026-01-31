@@ -325,6 +325,14 @@
                             },
                             {
                               "key": {
+                                "symbol": "claim_validity_ledgers"
+                              },
+                              "val": {
+                                "u32": 0
+                              }
+                            },
+                            {
+                              "key": {
                                 "symbol": "deadline"
                               },
                               "val": "void"
@@ -409,6 +417,14 @@
                             },
                             {
                               "key": {
+                                "symbol": "claim_validity_ledgers"
+                              },
+                              "val": {
+                                "u32": 0
+                              }
+                            },
+                            {
+                              "key": {
                                 "symbol": "deadline"
                               },
                               "val": "void"
@@ -489,6 +505,14 @@
                               },
                               "val": {
                                 "address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4"
+                              }
+                            },
+                            {
+                              "key": {
+                                "symbol": "claim_validity_ledgers"
+                              },
+                              "val": {
+                                "u32": 0
                               }
                             },
                             {

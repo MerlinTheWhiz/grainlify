@@ -1,0 +1,315 @@
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+ --> src/pause_tests.rs:7:24
+  |
+7 |         let addr = env.register_stellar_asset_contract(admin.clone());
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:15:31
+   |
+15 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:27:31
+   |
+27 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:43:31
+   |
+43 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:55:31
+   |
+55 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+  --> src/pause_tests.rs:72:31
+   |
+72 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+   |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_stellar_asset_contract`: use [Env::register_stellar_asset_contract_v2]
+    --> src/lib.rs:2620:33
+     |
+2620 |         let token_address = env.register_stellar_asset_contract(admin.clone());
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2667:31
+     |
+2667 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2709:31
+     |
+2709 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2774:31
+     |
+2774 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2830:31
+     |
+2830 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2875:31
+     |
+2875 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:2951:31
+     |
+2951 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3038:31
+     |
+3038 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3064:31
+     |
+3064 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3109:31
+     |
+3109 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3127:31
+     |
+3127 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3141:31
+     |
+3141 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3158:31
+     |
+3158 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3182:31
+     |
+3182 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3219:31
+     |
+3219 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3242:31
+     |
+3242 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3264:31
+     |
+3264 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3287:31
+     |
+3287 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3306:31
+     |
+3306 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3334:31
+     |
+3334 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3358:31
+     |
+3358 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3379:31
+     |
+3379 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated method `soroban_sdk::Env::register_contract`: use `register`
+    --> src/lib.rs:3400:31
+     |
+3400 |         let contract_id = env.register_contract(None, ProgramEscrowContract);
+     |                               ^^^^^^^^^^^^^^^^^
+
+warning: constant `PROGRAM_METADATA` is never used
+   --> src/lib.rs:514:7
+    |
+514 | const PROGRAM_METADATA: Symbol = symbol_short!("ProgMeta");
+    |       ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `program-escrow` (lib test) generated 30 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running unittests src/lib.rs (target/debug/deps/program_escrow-9c39280d478e2300)
+
+running 27 tests
+test pause_tests::pause_tests::test_pause_state_persists ... ok
+test pause_tests::pause_tests::test_pause ... ok
+test pause_tests::pause_tests::test_unpause ... ok
+test test::test_anti_abuse_config_update ... ok
+test test::test_duplicate_program_registration - should panic ... ok
+test test::test_anti_abuse_limit_panic - should panic ... ok
+test pause_tests::pause_tests::test_emergency_withdraw ... ok
+test test::test_get_nonexistent_program - should panic ... ok
+test test::test_batch_payout_insufficient_balance - should panic ... ok
+test test::test_empty_program_id - should panic ... ok
+test pause_tests::pause_tests::test_lock_blocked_when_paused - should panic ... ok
+test test::test_anti_abuse_cooldown_panic - should panic ... ok
+test test::test_batch_payout_mismatched_lengths - should panic ... ok
+test test::test_multiple_program_release_schedules ... FAILED
+test test::test_anti_abuse_whitelist ... ok
+test test::test_lock_zero_funds - should panic ... ok
+test test::test_lock_funds_cumulative ... ok
+test test::test_lock_funds_single_program ... ok
+test test::test_lock_funds_multiple_programs_isolation ... ok
+test test::test_program_count ... ok
+test test::test_register_single_program ... ok
+test test::test_multiple_programs_isolation ... ok
+test test::test_program_overlapping_schedules ... FAILED
+test test::test_program_manual_trigger_before_after_timestamp ... FAILED
+test test::test_program_automatic_release_at_timestamp ... FAILED
+test test::test_single_program_release_schedule ... FAILED
+test test::test_verify_program_schedule_tracking_and_history ... FAILED
+
+failures:
+
+---- test::test_multiple_program_release_schedules stdout ----
+
+thread 'test::test_multiple_program_release_schedules' (60524) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-22.1.3/src/host.rs:847:9:
+HostError: Error(Context, InternalError)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"Current context has no contract ID"
+   2: [Diagnostic Event] contract:CACMVW2KK4H5FZDFF2AUCAKQTEJMZZWJUIZF23XMRVYQBSXYLHZ6BKWN, topics:[fn_return, mint], data:Void
+   3: [Contract Event] contract:CACMVW2KK4H5FZDFF2AUCAKQTEJMZZWJUIZF23XMRVYQBSXYLHZ6BKWN, topics:[mint, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANHUF"], data:10000000000
+   4: [Diagnostic Event] topics:[fn_call, CACMVW2KK4H5FZDFF2AUCAKQTEJMZZWJUIZF23XMRVYQBSXYLHZ6BKWN, mint], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, 10000000000]
+
+Writing test snapshot file for test "test::test_multiple_program_release_schedules" to "test_snapshots/test/test_multiple_program_release_schedules.1.json".
+
+---- test::test_program_overlapping_schedules stdout ----
+
+thread 'test::test_program_overlapping_schedules' (60529) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-22.1.3/src/host.rs:847:9:
+HostError: Error(Context, InternalError)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"Current context has no contract ID"
+   2: [Diagnostic Event] contract:CDS3FDGQ4JA2V3F26Y4BMWWJEC5TT26RJBN7KIQKUMVO2MAOCMDTSZ7A, topics:[fn_return, mint], data:Void
+   3: [Contract Event] contract:CDS3FDGQ4JA2V3F26Y4BMWWJEC5TT26RJBN7KIQKUMVO2MAOCMDTSZ7A, topics:[mint, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPP4V"], data:10000000000
+   4: [Diagnostic Event] topics:[fn_call, CDS3FDGQ4JA2V3F26Y4BMWWJEC5TT26RJBN7KIQKUMVO2MAOCMDTSZ7A, mint], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, 10000000000]
+
+Writing test snapshot file for test "test::test_program_overlapping_schedules" to "test_snapshots/test/test_program_overlapping_schedules.1.json".
+
+---- test::test_program_manual_trigger_before_after_timestamp stdout ----
+
+thread 'test::test_program_manual_trigger_before_after_timestamp' (60528) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-22.1.3/src/host.rs:847:9:
+HostError: Error(Context, InternalError)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"Current context has no contract ID"
+   2: [Diagnostic Event] contract:CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, topics:[fn_return, mint], data:Void
+   3: [Contract Event] contract:CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, topics:[mint, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL7NV"], data:10000000000
+   4: [Diagnostic Event] topics:[fn_call, CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, mint], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, 10000000000]
+
+Writing test snapshot file for test "test::test_program_manual_trigger_before_after_timestamp" to "test_snapshots/test/test_program_manual_trigger_before_after_timestamp.1.json".
+
+---- test::test_program_automatic_release_at_timestamp stdout ----
+
+thread 'test::test_program_automatic_release_at_timestamp' (60526) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-22.1.3/src/host.rs:847:9:
+HostError: Error(Context, InternalError)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"Current context has no contract ID"
+   2: [Diagnostic Event] contract:CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, topics:[fn_return, mint], data:Void
+   3: [Contract Event] contract:CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, topics:[mint, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL7NV"], data:10000000000
+   4: [Diagnostic Event] topics:[fn_call, CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, mint], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, 10000000000]
+
+Writing test snapshot file for test "test::test_program_automatic_release_at_timestamp" to "test_snapshots/test/test_program_automatic_release_at_timestamp.1.json".
+
+---- test::test_single_program_release_schedule stdout ----
+
+thread 'test::test_single_program_release_schedule' (60531) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-22.1.3/src/host.rs:847:9:
+HostError: Error(Context, InternalError)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"Current context has no contract ID"
+   2: [Diagnostic Event] contract:CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, topics:[fn_return, mint], data:Void
+   3: [Contract Event] contract:CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, topics:[mint, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL7NV"], data:10000000000
+   4: [Diagnostic Event] topics:[fn_call, CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG, mint], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, 10000000000]
+
+Writing test snapshot file for test "test::test_single_program_release_schedule" to "test_snapshots/test/test_single_program_release_schedule.1.json".
+
+---- test::test_verify_program_schedule_tracking_and_history stdout ----
+
+thread 'test::test_verify_program_schedule_tracking_and_history' (60532) panicked at /home/merlinthewhiz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-host-22.1.3/src/host.rs:847:9:
+HostError: Error(Context, InternalError)
+
+Event log (newest first):
+   0: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"escalating error to panic"
+   1: [Diagnostic Event] topics:[error, Error(Context, InternalError)], data:"Current context has no contract ID"
+   2: [Diagnostic Event] contract:CACMVW2KK4H5FZDFF2AUCAKQTEJMZZWJUIZF23XMRVYQBSXYLHZ6BKWN, topics:[fn_return, mint], data:Void
+   3: [Contract Event] contract:CACMVW2KK4H5FZDFF2AUCAKQTEJMZZWJUIZF23XMRVYQBSXYLHZ6BKWN, topics:[mint, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, "aaa:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANHUF"], data:10000000000
+   4: [Diagnostic Event] topics:[fn_call, CACMVW2KK4H5FZDFF2AUCAKQTEJMZZWJUIZF23XMRVYQBSXYLHZ6BKWN, mint], data:[CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4, 10000000000]
+
+Writing test snapshot file for test "test::test_verify_program_schedule_tracking_and_history" to "test_snapshots/test/test_verify_program_schedule_tracking_and_history.1.json".
+
+
+failures:
+    test::test_multiple_program_release_schedules
+    test::test_program_automatic_release_at_timestamp
+    test::test_program_manual_trigger_before_after_timestamp
+    test::test_program_overlapping_schedules
+    test::test_single_program_release_schedule
+    test::test_verify_program_schedule_tracking_and_history
+
+test result: FAILED. 21 passed; 6 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+error: test failed, to rerun pass `-p program-escrow --lib`
