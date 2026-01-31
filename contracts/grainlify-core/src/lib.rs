@@ -143,12 +143,12 @@
 //!
 //! ## Common Pitfalls
 //!
-//! - ❌ Not testing upgrades on testnet
-//! - ❌ Losing admin private key
-//! - ❌ Breaking state compatibility between versions
-//! - ❌ Not documenting migration steps
-//! - ❌ Upgrading without proper testing
-//! - ❌ Not having a rollback plan
+//! -  Not testing upgrades on testnet
+//! -  Losing admin private key
+//! -  Breaking state compatibility between versions
+//! -  Not documenting migration steps
+//! -  Upgrading without proper testing
+//! -  Not having a rollback plan
 
 
 
@@ -157,6 +157,8 @@
 #![no_std]
 
 mod multisig;
+mod state_verifier;
+mod test_audit;
 mod governance;
 pub mod security {
     pub mod reentrancy_guard;
@@ -166,6 +168,7 @@ mod test;
 #[cfg(test)]
 mod reentrancy_tests;
 use multisig::MultiSig;
+use grainlify_common::AuditReport;
 pub use governance::{
     Error as GovError, Proposal, ProposalStatus, VoteType, VotingScheme, GovernanceConfig, Vote
 };
@@ -493,7 +496,7 @@ pub struct MigrationEvent {
     /// contract.init(&env, &admin);
     ///
     /// // Subsequent init attempts will panic
-    /// // contract.init(&env, &another_admin); // ❌ Panics!
+    /// // contract.init(&env, &another_admin); // Panics!
     /// ```
     ///
     /// # Gas Cost
@@ -989,6 +992,17 @@ impl GrainlifyContract {
         monitoring::get_performance_stats(&env, function_name)
     }
 
+    /// Returns an audit report of the contract state.
+    ///
+    /// # Arguments
+    /// * `env` - The contract environment
+    ///
+    /// # Returns
+    /// * `AuditReport` - Detailed report of state integrity
+    pub fn audit_state(env: Env) -> AuditReport {
+        state_verifier::audit_global_state(&env)
+    }
+
     // ========================================================================
     // State Migration System
     // ========================================================================
@@ -1192,6 +1206,7 @@ fn migrate_v1_to_v2(_env: &Env) {
 fn migrate_v2_to_v3(_env: &Env) {
     // Future migration logic here
     // This will be implemented when v3 is released
+>>>>>>> origin/master
 }
 
 
