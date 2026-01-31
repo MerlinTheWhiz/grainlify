@@ -67,10 +67,13 @@ export function Dashboard() {
   const [selectedEventName, setSelectedEventName] = useState<string | null>(
     null,
   );
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < 1100 : false);
+    typeof window !== "undefined" ? window.innerWidth < 1100 : false,
+  );
   const [activeRole, setActiveRole] = useState<
     "contributor" | "maintainer" | "admin"
   >("contributor");
@@ -84,8 +87,8 @@ export function Dashboard() {
       setIsMobile(window.innerWidth < 1024);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
   // ******************************************
 
@@ -141,8 +144,6 @@ export function Dashboard() {
     localStorage.setItem("dashboardTab", currentPage);
   }, [currentPage]);
 
-
-
   // Keyboard shortcut for search (Cmd+K / Ctrl+K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -170,14 +171,10 @@ export function Dashboard() {
     }
   };
 
-
-
   const openAdminAuthModal = (target: "nav" | "role") => {
     setPendingAdminTarget(target);
     setShowAdminPasswordModal(true);
   };
-
-
 
   const handleAdminPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -262,24 +259,27 @@ export function Dashboard() {
 
   return (
     <div
-      className={`min-h-screen relative overflow-x-hidden transition-colors ${darkTheme
-        ? "bg-gradient-to-br from-[#1a1512] via-[#231c17] to-[#2d241d]"
-        : "bg-gradient-to-br from-[#c4b5a0] via-[#b8a590] to-[#a89780]"
-        }`}
+      className={`min-h-screen relative overflow-x-hidden transition-colors ${
+        darkTheme
+          ? "bg-gradient-to-br from-[#1a1512] via-[#231c17] to-[#2d241d]"
+          : "bg-gradient-to-br from-[#c4b5a0] via-[#b8a590] to-[#a89780]"
+      }`}
     >
       {/* Subtle Background Texture */}
       <div className="fixed inset-0 opacity-40">
         <div
-          className={`absolute top-0 left-0 w-[800px] h-[800px] bg-gradient-radial blur-[100px] ${darkTheme
-            ? "from-[#c9983a]/10 to-transparent"
-            : "from-[#d4c4b0]/30 to-transparent"
-            }`}
+          className={`absolute top-0 left-0 w-[800px] h-[800px] bg-gradient-radial blur-[100px] ${
+            darkTheme
+              ? "from-[#c9983a]/10 to-transparent"
+              : "from-[#d4c4b0]/30 to-transparent"
+          }`}
         />
         <div
-          className={`absolute bottom-0 right-0 w-[900px] h-[900px] bg-gradient-radial blur-[120px] ${darkTheme
-            ? "from-[#c9983a]/5 to-transparent"
-            : "from-[#b8a898]/20 to-transparent"
-            }`}
+          className={`absolute bottom-0 right-0 w-[900px] h-[900px] bg-gradient-radial blur-[120px] ${
+            darkTheme
+              ? "from-[#c9983a]/5 to-transparent"
+              : "from-[#b8a898]/20 to-transparent"
+          }`}
         />
       </div>
 
@@ -293,19 +293,30 @@ export function Dashboard() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-2 left-2 bottom-2 z-[101] transition-all duration-300 ${isMobile
-          ? mobileMenuOpen ? "translate-x-0 w-64" : "-translate-x-[110%] w-64"
-          : isSidebarCollapsed ? "w-[65px]" : "w-56"
-          }`}
+        className={`fixed top-2 left-2 bottom-2 z-[101] transition-all duration-300 ${
+          isMobile
+            ? mobileMenuOpen
+              ? "translate-x-0 w-64"
+              : "-translate-x-[110%] w-64"
+            : isSidebarCollapsed
+              ? "w-[65px]"
+              : "w-56"
+        }`}
       >
         {/* Toggle Arrow Button - positioned at top of sidebar aligned with header */}
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          className={`absolute z-[100] backdrop-blur-[90px] rounded-full border-[0.5px] w-6 h-6 shadow-md hover:shadow-lg transition-all flex items-center justify-center ${isMobile ? "hidden" : isSidebarCollapsed ? "-right-3 top-[60px]" : "-right-3 top-[60px]"
-            } ${darkTheme
+          className={`absolute z-[100] backdrop-blur-[90px] rounded-full border-[0.5px] w-6 h-6 shadow-md hover:shadow-lg transition-all flex items-center justify-center ${
+            isMobile
+              ? "hidden"
+              : isSidebarCollapsed
+                ? "-right-3 top-[60px]"
+                : "-right-3 top-[60px]"
+          } ${
+            darkTheme
               ? "bg-[#2d2820]/[0.85] border-[rgba(201,152,58,0.2)]"
               : "bg-white/[0.85] border-[rgba(245,239,235,0.32)]"
-            }`}
+          }`}
         >
           <ChevronRight
             className={`w-3 h-3 text-[#c9983a] transition-transform duration-300 ${isSidebarCollapsed ? "" : "rotate-180"}`}
@@ -313,17 +324,21 @@ export function Dashboard() {
         </button>
 
         <div
-          className={`h-full backdrop-blur-[90px] rounded-[29px] border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] relative overflow-y-auto scrollbar-hide transition-colors ${darkTheme
-            ? "bg-[#2d2820]/[0.4] border-white/10"
-            : "bg-white/[0.35] border-white/20"
-            }`}
+          className={`h-full backdrop-blur-[90px] rounded-[29px] border shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] relative overflow-y-auto scrollbar-hide transition-colors ${
+            darkTheme
+              ? "bg-[#2d2820]/[0.4] border-white/10"
+              : "bg-white/[0.35] border-white/20"
+          }`}
         >
           {/* Mobile Close Button */}
           {isMobile && (
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className={`absolute top-4 right-4 p-2 rounded-full transition-colors z-50 ${darkTheme ? "bg-white/5 hover:bg-white/10" : "bg-black/5 hover:bg-black/10"
-                }`}
+              className={`absolute top-4 right-4 p-2 rounded-full transition-colors z-50 ${
+                darkTheme
+                  ? "bg-white/5 hover:bg-white/10"
+                  : "bg-black/5 hover:bg-black/10"
+              }`}
             >
               <X className="w-5 h-5 text-[#c9983a]" />
             </button>
@@ -348,8 +363,9 @@ export function Dashboard() {
                     className="w-12 h-12 grainlify-logo"
                   />
                   <span
-                    className={`text-[20px] font-bold transition-colors ${darkTheme ? "text-[#f5efe5]" : "text-[#2d2820]"
-                      }`}
+                    className={`text-[20px] font-bold transition-colors ${
+                      darkTheme ? "text-[#f5efe5]" : "text-[#2d2820]"
+                    }`}
                   >
                     Grainlify
                   </span>
@@ -378,33 +394,37 @@ export function Dashboard() {
                   <button
                     key={item.id}
                     onClick={() => handleNavigation(item.id)}
-                    className={`group w-full flex items-center rounded-[12px] transition-all duration-300 ${isSidebarCollapsed
-                      ? "justify-center px-0 h-[49px]"
-                      : "justify-start px-3 py-2.5"
-                      } ${isActive
+                    className={`group w-full flex items-center rounded-[12px] transition-all duration-300 ${
+                      isSidebarCollapsed
+                        ? "justify-center px-0 h-[49px]"
+                        : "justify-start px-3 py-2.5"
+                    } ${
+                      isActive
                         ? "bg-[#c9983a] shadow-[inset_0px_0px_4px_0px_rgba(255,255,255,0.25)] border-[0.5px] border-[rgba(245,239,235,0.16)]"
                         : darkTheme
                           ? "hover:bg-white/[0.08]"
                           : "hover:bg-white/[0.1]"
-                      }`}
+                    }`}
                     title={isSidebarCollapsed ? item.label : ""}
                   >
                     <Icon
-                      className={`w-6 h-6 transition-colors ${isSidebarCollapsed ? "" : "flex-shrink-0"} ${isActive
-                        ? "text-white"
-                        : darkTheme
-                          ? "text-[#e8c77f]"
-                          : "text-[#a2792c]"
-                        }`}
+                      className={`w-6 h-6 transition-colors ${isSidebarCollapsed ? "" : "flex-shrink-0"} ${
+                        isActive
+                          ? "text-white"
+                          : darkTheme
+                            ? "text-[#e8c77f]"
+                            : "text-[#a2792c]"
+                      }`}
                     />
                     {(!isSidebarCollapsed || isMobile) && (
                       <span
-                        className={`ml-3 font-medium text-[14px] ${isActive
-                          ? "text-white"
-                          : darkTheme
-                            ? "text-[#d4c5b0]"
-                            : "text-[#6b5d4d]"
-                          }`}
+                        className={`ml-3 font-medium text-[14px] ${
+                          isActive
+                            ? "text-white"
+                            : darkTheme
+                              ? "text-[#d4c5b0]"
+                              : "text-[#6b5d4d]"
+                        }`}
                       >
                         {item.label}
                       </span>
@@ -418,7 +438,10 @@ export function Dashboard() {
             {isMobile && (
               <div className="mt-auto px-2 pb-4 w-full">
                 <div className="h-[0.5px] opacity-[0.24] mb-6 bg-gradient-to-r from-transparent via-[#432c2c] to-transparent w-full" />
-                <UserProfileDropdown onPageChange={handleNavigation} showMobileNav={true} />
+                <UserProfileDropdown
+                  onPageChange={handleNavigation}
+                  showMobileNav={true}
+                />
               </div>
             )}
           </div>
@@ -432,25 +455,27 @@ export function Dashboard() {
         <div className="max-w-[1400px] mx-auto">
           {/* Premium Pill-Style Header - Greatest of All Time */}
           <div
-            className={`fixed top-2 right-2 z-[9999] flex items-center gap-1 md:gap-2 lg:gap-3 lg:h-[52px] py-3 rounded-[26px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[90px] border transition-all duration-300 ${isMobile
-              ? "left-2 w-[calc(100vw-16px)]"
-              : isSidebarCollapsed
-                ? "left-[81px] w-[calc(100vw-81px-16px)]"
-                : "left-[240px] w-[calc(100vw-240px-16px)]"
-              } ${darkTheme
+            className={`fixed top-2 right-2 z-[9999] flex items-center gap-1 md:gap-2 lg:gap-3 lg:h-[52px] py-3 rounded-[26px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[90px] border transition-all duration-300 ${
+              isMobile
+                ? "left-2 w-[calc(100vw-16px)]"
+                : isSidebarCollapsed
+                  ? "left-[81px] w-[calc(100vw-81px-16px)]"
+                  : "left-[240px] w-[calc(100vw-240px-16px)]"
+            } ${
+              darkTheme
                 ? "bg-[#2d2820]/[0.4] border-white/10 shadow-[inset_0px_0px_9px_0px_rgba(201,152,58,0.1)]"
                 : "bg-white/[0.35] border-white shadow-[inset_0px_0px_9px_0px_rgba(255,255,255,0.5)]"
-              } 
+            } 
           `}
           >
-
             {/* Menu button on the far left for mobile */}
             {isMobile && (
               <button
-                className={`lg:hidden transition-all ml-4 mr-2 p-2 rounded-xl border ${darkTheme
-                  ? 'text-[#e8dfd0] bg-white/5 border-white/10 hover:bg-white/10'
-                  : 'text-[#2d2820] bg-black/5 border-black/10 hover:bg-black/10'
-                  }`}
+                className={`lg:hidden transition-all ml-4 mr-2 p-2 rounded-xl border ${
+                  darkTheme
+                    ? "text-[#e8dfd0] bg-white/5 border-white/10 hover:bg-white/10"
+                    : "text-[#2d2820] bg-black/5 border-black/10 hover:bg-black/10"
+                }`}
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Toggle navigation"
               >
@@ -460,31 +485,42 @@ export function Dashboard() {
 
             {/* Search - Premium Pill Style / Mobile Icon */}
             <button
-              onClick={() => { setCurrentPage("search"); closeMobileNav(); }}
-              className={`relative h-[46px] rounded-[23px] overflow-visible backdrop-blur-[40px] shadow-[0px_6px_6.5px_-1px_rgba(0,0,0,0.36),0px_0px_4.2px_0px_rgba(0,0,0,0.69)] ml-[3px] transition-all hover:scale-[1.01] cursor-pointer ${darkTheme ? "bg-[#2d2820]" : "bg-[#d4c5b0]"
-                } ${isMobile ? 'w-[46px] flex items-center justify-center' : 'lg:flex-1 lg:flex hidden'}
+              onClick={() => {
+                setCurrentPage("search");
+                closeMobileNav();
+              }}
+              className={`relative h-[46px] rounded-[23px] overflow-visible backdrop-blur-[40px] shadow-[0px_6px_6.5px_-1px_rgba(0,0,0,0.36),0px_0px_4.2px_0px_rgba(0,0,0,0.69)] ml-[3px] transition-all hover:scale-[1.01] cursor-pointer ${
+                darkTheme ? "bg-[#2d2820]" : "bg-[#d4c5b0]"
+              } ${isMobile ? "w-[46px] flex items-center justify-center" : "lg:flex-1 lg:flex hidden"}
               `}
             >
               <div
-                className={`absolute inset-0 pointer-events-none rounded-[23px] ${darkTheme
-                  ? "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.5),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.11)]"
-                  : "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.15),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.35)]"
-                  }`}
+                className={`absolute inset-0 pointer-events-none rounded-[23px] ${
+                  darkTheme
+                    ? "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.5),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.11)]"
+                    : "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.15),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.35)]"
+                }`}
               />
-              <div className={`relative h-full flex items-center ${isMobile ? 'justify-center w-full' : 'px-2 lg:px-5 justify-between'}`}>
-                <div className={`flex items-center ${isMobile ? '' : 'flex-1'}`}>
+              <div
+                className={`relative h-full flex items-center ${isMobile ? "justify-center w-full" : "px-2 lg:px-5 justify-between"}`}
+              >
+                <div
+                  className={`flex items-center ${isMobile ? "" : "flex-1"}`}
+                >
                   <Search
-                    className={`w-4 h-4 flex-shrink-0 transition-colors ${darkTheme
-                      ? "text-[rgba(255,255,255,0.69)]"
-                      : "text-[rgba(45,40,32,0.75)]"
-                      } ${isMobile ? '' : 'mr-3'}`}
+                    className={`w-4 h-4 flex-shrink-0 transition-colors ${
+                      darkTheme
+                        ? "text-[rgba(255,255,255,0.69)]"
+                        : "text-[rgba(45,40,32,0.75)]"
+                    } ${isMobile ? "" : "mr-3"}`}
                   />
                   {!isMobile && (
                     <span
-                      className={`text-[13px] transition-colors ${darkTheme
-                        ? "text-[rgba(255,255,255,0.5)]"
-                        : "text-[rgba(45,40,32,0.5)]"
-                        }`}
+                      className={`text-[13px] transition-colors ${
+                        darkTheme
+                          ? "text-[rgba(255,255,255,0.5)]"
+                          : "text-[rgba(45,40,32,0.5)]"
+                      }`}
                     >
                       <span className="sm:hidden">Search</span>
                       <span className="hidden sm:inline md:hidden">
@@ -535,7 +571,6 @@ export function Dashboard() {
               </div>
             </button>
 
-
             {/* Role Switcher */}
             <RoleSwitcher
               currentRole={activeRole}
@@ -549,36 +584,41 @@ export function Dashboard() {
             {/* Theme Toggle - Separate Pill Button */}
             <button
               onClick={() => {
-                toggleTheme()
+                toggleTheme();
                 closeMobileNav();
               }}
-              className={`h-[46px] lg:w-[46px] overflow-clip relative items-center justify-center backdrop-blur-[40px] transition-all hover:scale-105 shadow-[0px_6px_6.5px_-1px_rgba(0,0,0,0.36),0px_0px_4.2px_0px_rgba(0,0,0,0.69)] ${darkTheme ? "bg-[#2d2820] text-[#e8dfd0]" : "bg-[#d4c5b0] text-[#2d2820]"
-                }
-              ${isMobile ? ' flex rounded-full w-[46px] ' : ' hidden lg:flex rounded-full '}`}
+              className={`h-[46px] lg:w-[46px] overflow-clip relative items-center justify-center backdrop-blur-[40px] transition-all hover:scale-105 shadow-[0px_6px_6.5px_-1px_rgba(0,0,0,0.36),0px_0px_4.2px_0px_rgba(0,0,0,0.69)] ${
+                darkTheme
+                  ? "bg-[#2d2820] text-[#e8dfd0]"
+                  : "bg-[#d4c5b0] text-[#2d2820]"
+              }
+              ${isMobile ? " flex rounded-full w-[46px] " : " hidden lg:flex rounded-full "}`}
               title={darkTheme ? "Switch to light mode" : "Switch to dark mode"}
             >
               <div
-                className={`absolute inset-0 pointer-events-none ${darkTheme
-                  ? "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.5),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.11)]"
-                  : "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.15),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.35)]"
-                  } ${mobileMenuOpen && isMobile ? 'rounded-sm' : 'rounded-full'}`}
+                className={`absolute inset-0 pointer-events-none ${
+                  darkTheme
+                    ? "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.5),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.11)]"
+                    : "shadow-[inset_1px_-1px_1px_0px_rgba(0,0,0,0.15),inset_-2px_2px_1px_-1px_rgba(255,255,255,0.35)]"
+                } ${mobileMenuOpen && isMobile ? "rounded-sm" : "rounded-full"}`}
               />
               {darkTheme ? (
                 <Sun
-                  className={`w-4 h-4 relative z-10 transition-colors ${darkTheme
-                    ? "text-[rgba(255,255,255,0.69)]"
-                    : "text-[rgba(45,40,32,0.75)]"
-                    }`}
+                  className={`w-4 h-4 relative z-10 transition-colors ${
+                    darkTheme
+                      ? "text-[rgba(255,255,255,0.69)]"
+                      : "text-[rgba(45,40,32,0.75)]"
+                  }`}
                 />
               ) : (
                 <Moon
-                  className={`w-4 h-4 relative z-10 transition-colors ${darkTheme
-                    ? "text-[rgba(255,255,255,0.69)]"
-                    : "text-[rgba(45,40,32,0.75)]"
-                    }`}
+                  className={`w-4 h-4 relative z-10 transition-colors ${
+                    darkTheme
+                      ? "text-[rgba(255,255,255,0.69)]"
+                      : "text-[rgba(45,40,32,0.75)]"
+                  }`}
                 />
               )}
-
             </button>
 
             {/* Notifications Dropdown */}
@@ -662,8 +702,12 @@ export function Dashboard() {
                       onProjectClick={(id) => setSelectedProjectId(id)}
                     />
                   )}
-                {currentPage === "contributors" && <ContributorsPage onNavigate={handleNavigation} />}
-                {currentPage === "maintainers" && <MaintainersPage onNavigate={handleNavigation} />}
+                {currentPage === "contributors" && (
+                  <ContributorsPage onNavigate={handleNavigation} />
+                )}
+                {currentPage === "maintainers" && (
+                  <MaintainersPage onNavigate={handleNavigation} />
+                )}
                 {currentPage === "profile" && (
                   <ProfilePage
                     viewingUserId={viewingUserId}
@@ -695,10 +739,11 @@ export function Dashboard() {
                 {currentPage === "admin" && !adminAuthenticated && (
                   <div className="flex items-center justify-center min-h-[60vh]">
                     <div
-                      className={`text-center p-8 rounded-[24px] backdrop-blur-[40px] border ${darkTheme
-                        ? "bg-white/[0.08] border-white/10 text-[#d4d4d4]"
-                        : "bg-white/[0.15] border-white/25 text-[#7a6b5a]"
-                        }`}
+                      className={`text-center p-8 rounded-[24px] backdrop-blur-[40px] border ${
+                        darkTheme
+                          ? "bg-white/[0.08] border-white/10 text-[#d4d4d4]"
+                          : "bg-white/[0.15] border-white/25 text-[#7a6b5a]"
+                      }`}
                     >
                       <Shield className="w-16 h-16 mx-auto mb-4 text-[#c9983a]" />
                       <h2
