@@ -139,11 +139,19 @@
 //! 6. **Token Approval**: Ensure contract has token allowance before locking funds
 
 #![no_std]
+pub mod security {
+    pub mod reentrancy_guard;
+}
+#[cfg(test)]
+mod reentrancy_test;
+#[cfg(test)]
 mod pause_tests;
 
+use security::reentrancy_guard::{ReentrancyGuard, ReentrancyGuardRAII};
+
 use soroban_sdk::{
-    contract, contracterror, contractimpl, contracttype, symbol_short, token, vec, Address, Env, String, Symbol,
-    Vec,
+    contract, contracterror, contractimpl, contracttype, symbol_short, token, vec, Address, Env,
+    String, Symbol, Vec,
 };
 
 // Event types
@@ -162,6 +170,7 @@ const FEE_CONFIG: Symbol = symbol_short!("FeeCfg");
 const BASIS_POINTS: i128 = 10_000;
 const MAX_FEE_RATE: i128 = 1_000; // Maximum 10% fee
 
+const ADMIN_UPDATE_TIMELOCK: u64 = 1 * 24 * 60 * 60;
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FeeConfig {
@@ -179,6 +188,32 @@ pub struct AmountLimits {
     pub min_payout: i128,
     pub max_payout: i128,
 }
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct UpdateAdminEvent {
+    pub admin: Address,
+    pub new_admin: Address,
+    pub timestamp: u64,
+}
+
+pub fn emit_update_admin(env: &Env, event: UpdateAdminEvent) {
+    let topics = (symbol_short!("upd_adm"),);
+    env.events().publish(topics, event.clone());
+}
+
+#[contracttype]
+#[derive(Clone, Debug)]
+pub struct UpdateAuthorizedKeyEvent {
+    pub old_authorized_payout_key: Address,
+    pub new_authorized_payout_key: Address,
+    pub timestamp: u64,
+}
+
+pub fn emit_update_authorized_key(env: &Env, event: UpdateAuthorizedKeyEvent) {
+    let topics = (symbol_short!("upd_apk"),);
+    env.events().publish(topics, event.clone());
+}
+
 // ==================== MONITORING MODULE ====================
 mod monitoring {
     use soroban_sdk::{contracttype, symbol_short, Address, Env, String, Symbol};
@@ -395,6 +430,7 @@ mod anti_abuse {
         State(Address),
         Whitelist(Address),
         Admin,
+        LastAdminUpdate,
     }
 
     pub fn get_config(env: &Env) -> AntiAbuseConfig {
@@ -1097,6 +1133,7 @@ impl ProgramEscrowContract {
     /// -  Locking amount that exceeds actual contract balance
     /// -  Not verifying contract received the tokens
     pub fn lock_program_funds(env: Env, program_id: String, amount: i128) -> ProgramData {
+        let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
         // Apply rate limiting
         anti_abuse::check_rate_limit(&env, env.current_contract_address());
 
@@ -1276,11 +1313,12 @@ impl ProgramEscrowContract {
         recipients: Vec<Address>,
         amounts: Vec<i128>,
     ) -> ProgramData {
+        let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
+
         // Check if contract is paused
         if Self::is_paused_internal(&env) {
             panic!("Contract is paused");
         }
-
         // Apply rate limiting to the contract itself or the program
         // We can't easily get the caller here without getting program data first
 
@@ -1472,11 +1510,10 @@ impl ProgramEscrowContract {
         recipient: Address,
         amount: i128,
     ) -> ProgramData {
-        // Check if contract is paused
+        let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
         if Self::is_paused_internal(&env) {
             panic!("Contract is paused");
         }
-
         // Get program data
         let program_key = DataKey::Program(program_id.clone());
         let program_data: ProgramData = env
@@ -1631,12 +1668,11 @@ impl ProgramEscrowContract {
         release_timestamp: u64,
         recipient: Address,
     ) -> ProgramData {
-        let start = env.ledger().timestamp();
-
-        // Check if contract is paused
+        let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
         if Self::is_paused_internal(&env) {
             panic!("Contract is paused");
         }
+        let start = env.ledger().timestamp();
 
         // Get program data
         let program_key = DataKey::Program(program_id.clone());
@@ -1754,7 +1790,12 @@ impl ProgramEscrowContract {
     /// // Anyone can call this after the timestamp
     /// escrow_client.release_program_schedule_automatic(&"Hackathon2024", &1);
     /// ```
-    pub fn release_prog_schedule_automatic(env: Env, program_id: String, schedule_id: u64) {
+    pub fn release_prog_schedule_automatic(
+        env: Env,
+        program_id: String,
+        schedule_id: u64,
+    ) {
+        let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
         let start = env.ledger().timestamp();
         let caller = env.current_contract_address();
 
@@ -1892,7 +1933,12 @@ impl ProgramEscrowContract {
     /// // Authorized key can release early
     /// escrow_client.release_program_schedule_manual(&"Hackathon2024", &1);
     /// ```
-    pub fn release_program_schedule_manual(env: Env, program_id: String, schedule_id: u64) {
+    pub fn release_program_schedule_manual(
+        env: Env,
+        program_id: String,
+        schedule_id: u64,
+    ) {
+        let _guard = ReentrancyGuardRAII::new(&env).expect("Reentrancy detected");
         let start = env.ledger().timestamp();
 
         // Get program data
@@ -2236,6 +2282,10 @@ impl ProgramEscrowContract {
         anti_abuse::set_admin(&env, new_admin);
     }
 
+    pub fn get_admin(env: Env) -> Option<Address> {
+        anti_abuse::get_admin(&env)
+    }
+
     /// Updates the rate limit configuration.
     /// Only the admin can call this.
     pub fn update_rate_limit_config(
@@ -2451,6 +2501,73 @@ impl ProgramEscrowContract {
                 program_data.organizer,
                 now,
             ),
+        );
+    }
+    // ========================================================================
+    // Admin Functions
+    // ========================================================================
+
+    /// Update Admin
+    ///
+    /// # Arguments
+    /// * `new_admin` - New Admin address
+    /// Admin Require Auth
+    pub fn update_admin(env: Env, new_admin: Address) {
+        let current_admin = anti_abuse::get_admin(&env).unwrap();
+        current_admin.require_auth();
+
+        let last_update: u64 = env
+            .storage()
+            .instance()
+            .get(&anti_abuse::AntiAbuseKey::LastAdminUpdate)
+            .unwrap_or(0);
+        let current_time = env.ledger().timestamp();
+        if current_time < last_update + ADMIN_UPDATE_TIMELOCK {
+            panic!("TimeLock");
+        }
+
+        env.storage()
+            .instance()
+            .set(&anti_abuse::AntiAbuseKey::Admin, &new_admin);
+        env.storage()
+            .instance()
+            .set(&anti_abuse::AntiAbuseKey::LastAdminUpdate, &current_time);
+
+        emit_update_admin(
+            &env,
+            UpdateAdminEvent {
+                admin: current_admin,
+                new_admin,
+                timestamp: current_time,
+            },
+        );
+    }
+
+    /// Update Authorized Payout Key
+    ///
+    /// # Arguments
+    /// * `new_admin` - New Authorized Payout Key address
+    /// Admin Require Auth
+    pub fn update_authorized_payout_key(
+        env: Env,
+        program_id: String,
+        authorized_payout_key: Address,
+    ) {
+        let current_admin = anti_abuse::get_admin(&env).unwrap();
+        current_admin.require_auth();
+
+        let program_key = DataKey::Program(program_id.clone());
+        let mut program_data = Self::get_program_info(env.clone(), program_id);
+        program_data.authorized_payout_key = authorized_payout_key.clone();
+        env.storage().instance().set(&program_key, &program_data);
+
+        emit_update_authorized_key(
+            &env,
+            UpdateAuthorizedKeyEvent {
+                old_authorized_payout_key: program_data.authorized_payout_key,
+                new_authorized_payout_key: authorized_payout_key,
+                timestamp: env.ledger().timestamp(),
+            },
         );
     }
 }
@@ -3192,13 +3309,31 @@ mod test {
         let backend = Address::generate(&env);
         let token = Address::generate(&env);
 
-        client.initialize_program(&String::from_str(&env, "P1"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P1"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
         assert_eq!(client.get_program_count(), 1);
 
-        client.initialize_program(&String::from_str(&env, "P2"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P2"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
         assert_eq!(client.get_program_count(), 2);
 
-        client.initialize_program(&String::from_str(&env, "P3"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P3"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
         assert_eq!(client.get_program_count(), 3);
     }
 
@@ -3222,12 +3357,24 @@ mod test {
         let backend = Address::generate(&env);
         let token = Address::generate(&env);
 
-        client.initialize_program(&String::from_str(&env, "P1"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P1"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
 
         // Advance time by 30s (less than 60s cooldown)
         env.ledger().with_mut(|li| li.timestamp += 30);
 
-        client.initialize_program(&String::from_str(&env, "P2"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P2"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
     }
 
     #[test]
@@ -3246,9 +3393,27 @@ mod test {
         let backend = Address::generate(&env);
         let token = Address::generate(&env);
 
-        client.initialize_program(&String::from_str(&env, "P1"), &backend, &token, &backend, &None);
-        client.initialize_program(&String::from_str(&env, "P2"), &backend, &token, &backend, &None);
-        client.initialize_program(&String::from_str(&env, "P3"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P1"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
+        client.initialize_program(
+            &String::from_str(&env, "P2"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
+        client.initialize_program(
+            &String::from_str(&env, "P3"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
         // Should panic
     }
 
@@ -3269,8 +3434,20 @@ mod test {
 
         client.set_whitelist(&backend, &true);
 
-        client.initialize_program(&String::from_str(&env, "P1"), &backend, &token, &backend, &None);
-        client.initialize_program(&String::from_str(&env, "P2"), &backend, &token, &backend, &None);
+        client.initialize_program(
+            &String::from_str(&env, "P1"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
+        client.initialize_program(
+            &String::from_str(&env, "P2"),
+            &backend,
+            &token,
+            &backend,
+            &None,
+        );
         // Should work because whitelisted
     }
 
@@ -3290,5 +3467,91 @@ mod test {
         assert_eq!(config.window_size, 7200);
         assert_eq!(config.max_operations, 5);
         assert_eq!(config.cooldown_period, 120);
+    }
+
+    #[test]
+    fn test_update_admin() {
+        let env = Env::default();
+        env.mock_all_auths();
+        env.ledger().set_timestamp(1000);
+        let contract_id = env.register_contract(None, ProgramEscrowContract);
+        let client = ProgramEscrowContractClient::new(&env, &contract_id);
+
+        let admin = Address::generate(&env);
+        client.set_admin(&admin);
+        client.update_rate_limit_config(&3600, &1, &60); // 1 op max
+
+        let backend = Address::generate(&env);
+        let token = Address::generate(&env);
+
+        client.set_whitelist(&backend, &true);
+
+        client.initialize_program(&String::from_str(&env, "P1"), &backend, &token);
+
+        env.ledger().set_timestamp(1 * 24 * 60 * 60 + 1);
+        let new_admin = Address::generate(&env);
+
+        client.update_admin(&new_admin);
+        let new_saved_admin = client.get_admin().unwrap();
+
+        assert_eq!(new_saved_admin, new_admin);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_update_admin_timelock() {
+        let env = Env::default();
+        env.mock_all_auths();
+        env.ledger().set_timestamp(1000);
+        let contract_id = env.register_contract(None, ProgramEscrowContract);
+        let client = ProgramEscrowContractClient::new(&env, &contract_id);
+
+        let admin = Address::generate(&env);
+        client.set_admin(&admin);
+        client.update_rate_limit_config(&3600, &1, &60); // 1 op max
+
+        let backend = Address::generate(&env);
+        let token = Address::generate(&env);
+
+        client.set_whitelist(&backend, &true);
+
+        client.initialize_program(&String::from_str(&env, "P1"), &backend, &token);
+
+        env.ledger().set_timestamp(1 * 24 * 60 * 60 - 1);
+        let new_admin = Address::generate(&env);
+
+        client.update_admin(&new_admin);
+        let new_saved_admin = client.get_admin().unwrap();
+
+        assert_eq!(new_saved_admin, new_admin);
+    }
+
+    #[test]
+    fn test_update_authorized_payout_key() {
+        let env = Env::default();
+        env.mock_all_auths();
+        env.ledger().set_timestamp(1000);
+        let contract_id = env.register_contract(None, ProgramEscrowContract);
+        let client = ProgramEscrowContractClient::new(&env, &contract_id);
+
+        let admin = Address::generate(&env);
+        client.set_admin(&admin);
+        client.update_rate_limit_config(&3600, &1, &60); // 1 op max
+
+        let backend = Address::generate(&env);
+        let token = Address::generate(&env);
+
+        client.set_whitelist(&backend, &true);
+
+        let prog1 = String::from_str(&env, "P1");
+        client.initialize_program(&prog1, &backend, &token);
+
+        let new_authorized_payout_key = Address::generate(&env);
+        client.update_authorized_payout_key(&prog1, &new_authorized_payout_key);
+
+        let info1 = client.get_program_info(&prog1);
+
+        assert_eq!(info1.program_id, prog1);
+        assert_eq!(info1.authorized_payout_key, new_authorized_payout_key);
     }
 }
