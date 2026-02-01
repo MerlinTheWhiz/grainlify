@@ -9,6 +9,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 soroban-sdk = "22.0.8"
+grainlify-interfaces = { path = "../interfaces" }
 
 [dev-dependencies]
 soroban-sdk = { version = "22.0.8", features = ["testutils"] }
