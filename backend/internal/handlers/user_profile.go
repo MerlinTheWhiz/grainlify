@@ -949,7 +949,8 @@ LIMIT 10
 			})
 		}
 
-		// Calculate rank position
+		// Calculate rank position: rank over full leaderboard, then select this user's position.
+		// (Filtering by user before ROW_NUMBER() would make every user appear as 1st.)
 		var rankPosition *int
 		err = h.db.Pool.QueryRow(c.Context(), `
 WITH ranked_contributors AS (
@@ -978,11 +979,12 @@ WITH ranked_contributors AS (
     INNER JOIN projects p ON pr.project_id = p.id
     WHERE pr.author_login IS NOT NULL AND pr.author_login != '' AND p.status = 'verified'
   ) ac
+),
+ranked AS (
+  SELECT login, ROW_NUMBER() OVER (ORDER BY contribution_count DESC, login ASC) as rank_position
+  FROM ranked_contributors
 )
-SELECT 
-  ROW_NUMBER() OVER (ORDER BY contribution_count DESC, login ASC) as rank_position
-FROM ranked_contributors
-WHERE LOWER(login) = LOWER($1)
+SELECT rank_position FROM ranked WHERE LOWER(login) = LOWER($1)
 `, *githubLogin).Scan(&rankPosition)
 		if err != nil {
 			// User not in ranking, that's okay

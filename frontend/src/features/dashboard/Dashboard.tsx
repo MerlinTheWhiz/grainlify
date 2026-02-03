@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Search,
   Bell,
@@ -68,6 +68,7 @@ import { SettingsTabType } from "../settings/types";
 export function Dashboard() {
   const { userRole, logout, login } = useAuth();
   const { theme, setThemeFromAnimation } = useTheme();
+  const location = useLocation();
   const { ref: themeToggleRef, toggleSwitchTheme } = useModeAnimation({
     isDarkMode: theme === "dark",
     onDarkModeChange: (isDark) => setThemeFromAnimation(isDark),
@@ -99,8 +100,31 @@ export function Dashboard() {
     "contributor" | "maintainer" | "admin"
   >("contributor");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [viewingUserId, setViewingUserId] = useState<string | null>(null);
-  const [viewingUserLogin, setViewingUserLogin] = useState<string | null>(null);
+  // Initialize viewing user from URL so profile page gets correct user on first render (avoids race with own profile fetch)
+  const [viewingUserId, setViewingUserId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    const userParam = params.get("user");
+    const tabParam = params.get("tab") || params.get("page");
+    if (tabParam === "profile" && userParam) {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (uuidRegex.test(userParam)) return userParam;
+      return null;
+    }
+    return null;
+  });
+  const [viewingUserLogin, setViewingUserLogin] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    const userParam = params.get("user");
+    const tabParam = params.get("tab") || params.get("page");
+    if (tabParam === "profile" && userParam) {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(userParam)) return userParam;
+      return null;
+    }
+    return null;
+  });
   const [settingsInitialTab, setSettingsInitialTab] =
     useState<SettingsTabType>("profile");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -139,8 +163,9 @@ export function Dashboard() {
   >(null);
 
   // Check URL params for viewing other users' profiles (tab=profile or page=profile)
+  // Re-run when location.search changes so profile user is correct after navigation or reload
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
     const userParam = params.get("user");
     const tabParam = params.get("tab") || params.get("page");
 
@@ -156,8 +181,11 @@ export function Dashboard() {
         setViewingUserLogin(userParam);
         setViewingUserId(null);
       }
+    } else if (tabParam === "profile" && !userParam) {
+      setViewingUserId(null);
+      setViewingUserLogin(null);
     }
-  }, []);
+  }, [location.search]);
 
   // Deep link: open specific issue when URL has tab=browse&project=...&issue=... (e.g. "review their application" link)
   useEffect(() => {
@@ -173,10 +201,15 @@ export function Dashboard() {
   }, []);
 
   // *******************************
-  // Keep URL in sync with tab and (when viewing an issue) project + issue for shareable / "review their application" links
+  // Keep URL in sync with tab, profile user, and (when viewing an issue) project + issue for shareable links
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     params.set("tab", currentPage);
+    if (currentPage === "profile" && (viewingUserId || viewingUserLogin)) {
+      params.set("user", viewingUserId || viewingUserLogin || "");
+    } else if (currentPage === "profile") {
+      params.delete("user");
+    }
     if (selectedProjectId) params.set("project", selectedProjectId);
     else if (params.get("project")) { /* keep from URL until deep-link effect sets state */ }
     else params.delete("project");
@@ -187,7 +220,7 @@ export function Dashboard() {
     window.history.replaceState({}, "", newUrl);
 
     localStorage.setItem("dashboardTab", currentPage);
-  }, [currentPage, selectedProjectId, selectedIssue]);
+  }, [currentPage, selectedProjectId, selectedIssue, viewingUserId, viewingUserLogin]);
 
   // Example tab list
   const tabs = [
@@ -222,6 +255,11 @@ export function Dashboard() {
     setSelectedEcosystemLogoUrl(null);
     setSelectedEventId(null);
     setSelectedEventName(null);
+    // When switching to profile tab (e.g. "Public Profile" click), show own profile, not last viewed user
+    if (page === "profile") {
+      setViewingUserId(null);
+      setViewingUserLogin(null);
+    }
   };
 
   const handleLogout = () => {

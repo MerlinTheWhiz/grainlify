@@ -718,8 +718,8 @@ Only applications submitted via the apply link above will be considered. Please 
           </button>
         </div>
 
-        {/* Issues List */}
-        <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-custom">
+        {/* Issues List - height fits ~5 cards so 5 show at a time without scrolling; more issues scroll */}
+        <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-custom min-h-0 max-h-[calc(5*7.5rem+4*0.75rem)]">
           {isLoadingIssues ? (
             <div className="space-y-3">
               {[...Array(8)].map((_, idx) => (
@@ -785,7 +785,7 @@ Only applications submitted via the apply link above will be considered. Please 
                       setSelectedIssue(issueForCard);
                       setSelectedIssueFromAPI(issue);
                     }}
-                    showTags={true}
+                    showTags={false}
                   />
                 );
               })}

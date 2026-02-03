@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, ChevronDown, Award, Briefcase, GitPullRequest, FolderGit2, Trophy, Github, Code, Globe, Sparkles, TrendingUp, Star, Users, GitFork, DollarSign, GitMerge, Calendar, ChevronRight, Filter, Circle, Eye, Crown, Link, ArrowLeft, Medal, LucideIcon } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useTheme } from '../../../shared/contexts/ThemeContext';
@@ -77,43 +77,63 @@ export function ProfilePage({ viewingUserId, viewingUserLogin, onBack, onIssueCl
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedMonths, setExpandedMonths] = useState<{ [key: string]: boolean }>({});
 
+  // Ref to avoid applying stale fetch results when the viewed user changes mid-request
+  const viewingRef = useRef({ viewingUserId, viewingUserLogin });
+  viewingRef.current = { viewingUserId, viewingUserLogin };
+
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  // Fetch profile data
+  const isSameView = (uid: string | null | undefined, login: string | null | undefined) =>
+    (uid === viewingRef.current.viewingUserId && login === viewingRef.current.viewingUserLogin) ||
+    (uid == null && login == null && viewingRef.current.viewingUserId == null && viewingRef.current.viewingUserLogin == null);
+
+  // Fetch profile data for the viewed user (or own profile when viewingUserId/viewingUserLogin are null)
   useEffect(() => {
+    const isViewingOther = !!(viewingUserId || viewingUserLogin);
+    const requestedUserId = viewingUserId;
+    const requestedLogin = viewingUserLogin;
+    if (isViewingOther) {
+      setProfileData(null);
+      setViewingUser(null);
+    } else {
+      // Viewing own profile: clear viewingUser so name/avatar use user?.github, not last viewed user
+      setViewingUser(null);
+    }
     const fetchProfile = async () => {
       setIsLoadingProfile(true);
       try {
         let data;
-        if (viewingUserId || viewingUserLogin) {
-          // Fetch public profile for another user
-          data = await getPublicProfile(viewingUserId || undefined, viewingUserLogin || undefined);
+        if (isViewingOther) {
+          data = await getPublicProfile(requestedUserId || undefined, requestedLogin || undefined);
+          if (!isSameView(requestedUserId, requestedLogin)) return;
           setViewingUser({
             login: data.login,
             avatar_url: data.avatar_url || `https://github.com/${data.login}.png?size=200`
           });
         } else {
-          // Fetch own profile
           data = await getUserProfile();
+          if (!isSameView(requestedUserId, requestedLogin)) return;
         }
         setProfileData(data);
-        setIsLoadingProfile(false);
       } catch (error) {
-        console.error('Failed to fetch profile:', error);
-        // Keep loading state true to show skeleton forever when backend is down
-        // Don't set isLoadingProfile to false - keep showing skeleton
+        if (isSameView(requestedUserId, requestedLogin)) console.error('Failed to fetch profile:', error);
+      } finally {
+        if (isSameView(requestedUserId, requestedLogin)) setIsLoadingProfile(false);
       }
     };
     fetchProfile();
   }, [viewingUserId, viewingUserLogin]);
 
-  // Fetch user's contributed projects
+  // Fetch user's contributed projects (for viewed user or self)
   useEffect(() => {
+    const requestedUserId = viewingUserId;
+    const requestedLogin = viewingUserLogin;
+    if (requestedUserId || requestedLogin) setProjects([]);
     const fetchProjects = async () => {
       setIsLoadingProjects(true);
       try {
-        const data = await getProjectsContributed(viewingUserId || undefined, viewingUserLogin || undefined);
-        // Limit to 3 and map to Project format
+        const data = await getProjectsContributed(requestedUserId || undefined, requestedLogin || undefined);
+        if (!isSameView(requestedUserId, requestedLogin)) return;
         const contributedProjects = data
           .slice(0, 3)
           .map((p: any) => ({
@@ -122,33 +142,36 @@ export function ProfilePage({ viewingUserId, viewingUserLogin, onBack, onIssueCl
             status: p.status,
             ecosystem_name: p.ecosystem_name,
             language: p.language,
-            owner_avatar_url: undefined, // Will be fetched from GitHub if needed
+            owner_avatar_url: undefined,
             stars_count: 0,
             forks_count: 0,
             contributors_count: 0,
           }));
         setProjects(contributedProjects);
-        setIsLoadingProjects(false);
       } catch (error) {
-        console.error('Failed to fetch projects:', error);
-        setIsLoadingProjects(false)
-        // Keep loading state true to show skeleton forever when backend is down
+        if (isSameView(requestedUserId, requestedLogin)) console.error('Failed to fetch projects:', error);
+      } finally {
+        if (isSameView(requestedUserId, requestedLogin)) setIsLoadingProjects(false);
       }
     };
     fetchProjects();
   }, [viewingUserId, viewingUserLogin]);
 
-  // Fetch contribution calendar
+  // Fetch contribution calendar (for viewed user or self)
   useEffect(() => {
+    const requestedUserId = viewingUserId;
+    const requestedLogin = viewingUserLogin;
+    if (requestedUserId || requestedLogin) setContributionCalendar([]);
     const fetchCalendar = async () => {
       setIsLoadingCalendar(true);
       try {
-        const data = await getProfileCalendar(viewingUserId || undefined, viewingUserLogin || undefined);
+        const data = await getProfileCalendar(requestedUserId || undefined, requestedLogin || undefined);
+        if (!isSameView(requestedUserId, requestedLogin)) return;
         setContributionCalendar(data.calendar || []);
-        setIsLoadingCalendar(false);
       } catch (error) {
-        console.error('Failed to fetch calendar:', error);
-        // Keep loading state true to show skeleton forever when backend is down
+        if (isSameView(requestedUserId, requestedLogin)) console.error('Failed to fetch calendar:', error);
+      } finally {
+        if (isSameView(requestedUserId, requestedLogin)) setIsLoadingCalendar(false);
       }
     };
     fetchCalendar();
@@ -156,27 +179,28 @@ export function ProfilePage({ viewingUserId, viewingUserLogin, onBack, onIssueCl
 
   // Fetch contribution activity
   useEffect(() => {
+    const requestedUserId = viewingUserId;
+    const requestedLogin = viewingUserLogin;
+    if (requestedUserId || requestedLogin) setContributionActivity([]);
     const fetchActivity = async () => {
       setIsLoadingActivity(true);
       try {
-        const data = await getProfileActivity(100, 0, viewingUserId || undefined, viewingUserLogin || undefined);
+        const data = await getProfileActivity(100, 0, requestedUserId || undefined, requestedLogin || undefined);
+        if (!isSameView(requestedUserId, requestedLogin)) return;
         setContributionActivity(data.activities || []);
-        // Initialize expanded months based on activity data
         const monthsSet = new Set<string>();
         data.activities?.forEach((activity: any) => {
-          if (activity.month_year) {
-            monthsSet.add(activity.month_year);
-          }
+          if (activity.month_year) monthsSet.add(activity.month_year);
         });
         const monthsObj: { [key: string]: boolean } = {};
         Array.from(monthsSet).forEach((month, idx) => {
-          monthsObj[month] = idx === 0; // Expand first month by default
+          monthsObj[month] = idx === 0;
         });
         setExpandedMonths(monthsObj);
-        setIsLoadingActivity(false);
       } catch (error) {
-        console.error('Failed to fetch activity:', error);
-        // Keep loading state true to show skeleton forever when backend is down
+        if (isSameView(requestedUserId, requestedLogin)) console.error('Failed to fetch activity:', error);
+      } finally {
+        if (isSameView(requestedUserId, requestedLogin)) setIsLoadingActivity(false);
       }
     };
     fetchActivity();
