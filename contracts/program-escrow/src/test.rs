@@ -962,3 +962,16 @@ fn test_payout_record_integrity() {
     assert_eq!(records.get(3).unwrap().recipient, recipient1);
     assert_eq!(records.get(3).unwrap().amount, 15_000_000_000);
 }
+
+// =============================================================================
+// TESTS FOR MULTI-TENANT ISOLATION
+// =============================================================================
+
+// Note: Comprehensive multi-tenant isolation tests are implemented in lib.rs
+// using the ProgramEscrowContractClient for proper integration testing.
+// The tests verify:
+// - Funds and balance isolation between programs
+// - Payout history isolation
+// - Release schedule isolation
+// - Release history isolation
+// - Analytics isolation concepts (for future program-specific analytics)
