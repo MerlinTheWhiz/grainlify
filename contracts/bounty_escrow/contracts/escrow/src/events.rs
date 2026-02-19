@@ -351,6 +351,20 @@ pub fn emit_batch_funds_released(env: &Env, event: BatchFundsReleased) {
 }
 
 #[contracttype]
+#[derive(Clone, Debug)]
+pub struct ApprovalAdded {
+    pub bounty_id: u64,
+    pub contributor: Address,
+    pub approver: Address,
+    pub timestamp: u64,
+}
+
+pub fn emit_approval_added(env: &Env, event: ApprovalAdded) {
+    let topics = (symbol_short!("approval"), event.bounty_id);
+    env.events().publish(topics, event.clone());
+}
+
+#[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ClaimCreated {
     pub bounty_id: u64, // use program_id+schedule_id equivalent in program-escrow
