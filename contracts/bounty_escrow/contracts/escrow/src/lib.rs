@@ -3,6 +3,9 @@ mod events;
 
 mod test_bounty_escrow;
 
+#[cfg(test)]
+mod test_rbac;
+
 use events::{
     emit_batch_funds_locked, emit_batch_funds_released, emit_bounty_initialized, emit_funds_locked,
     emit_funds_refunded, emit_funds_released, BatchFundsLocked, BatchFundsReleased,
@@ -366,6 +369,10 @@ pub enum Error {
     /// Returned when refund is attempted without admin approval
     RefundNotApproved = 17,
     FundsPaused = 18,
+    /// Returned when lock amount is below the configured policy minimum (Issue #62)
+    AmountBelowMinimum = 19,
+    /// Returned when lock amount is above the configured policy maximum (Issue #62)
+    AmountAboveMaximum = 20,
 }
 
 #[contracttype]
@@ -406,6 +413,7 @@ pub enum DataKey {
     PendingClaim(u64),    // bounty_id -> ClaimRecord
     ClaimWindow,          // u64 seconds (global config)
     PauseFlags,           // PauseFlags struct
+    AmountPolicy, // Option<(i128, i128)> — (min_amount, max_amount) set by set_amount_policy
 }
 
 #[contracttype]
@@ -847,6 +855,22 @@ impl BountyEscrowContract {
             return Err(Error::BountyExists);
         }
 
+        // Enforce min/max amount policy if one has been configured (Issue #62).
+        // When no policy is set this block is skipped entirely, preserving
+        // backward-compatible behaviour for callers that never call set_amount_policy.
+        if let Some((min_amount, max_amount)) = env
+            .storage()
+            .instance()
+            .get::<DataKey, (i128, i128)>(&DataKey::AmountPolicy)
+        {
+            if amount < min_amount {
+                return Err(Error::AmountBelowMinimum);
+            }
+            if amount > max_amount {
+                return Err(Error::AmountAboveMaximum);
+            }
+        }
+
         let token_addr: Address = env.storage().instance().get(&DataKey::Token).unwrap();
         let client = token::Client::new(&env, &token_addr);
 
@@ -1278,9 +1302,10 @@ impl BountyEscrowContract {
             .persistent()
             .set(&DataKey::Escrow(bounty_id), &escrow);
 
-        emit_funds_released(
+        events::emit_funds_released(
             &env,
-            FundsReleased { version: EVENT_VERSION_V2,
+            FundsReleased {
+                version: EVENT_VERSION_V2,
                 bounty_id,
                 amount: payout_amount,
                 recipient: contributor.clone(),
@@ -1572,6 +1597,43 @@ impl BountyEscrowContract {
         index.len()
     }
 
+    /// Set the minimum and maximum allowed lock amount (admin only).
+    ///
+    /// Once set, any call to lock_funds with an amount outside [min_amount, max_amount]
+    /// will be rejected with AmountBelowMinimum or AmountAboveMaximum respectively.
+    /// The policy can be updated at any time by the admin; new limits take effect
+    /// immediately for subsequent lock_funds calls.
+    ///
+    /// Passing min_amount == max_amount restricts locking to a single exact value.
+    /// min_amount must not exceed max_amount — the call panics if this invariant
+    /// is violated.
+    pub fn set_amount_policy(
+        env: Env,
+        caller: Address,
+        min_amount: i128,
+        max_amount: i128,
+    ) -> Result<(), Error> {
+        if !env.storage().instance().has(&DataKey::Admin) {
+            return Err(Error::NotInitialized);
+        }
+        let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
+        if caller != admin {
+            return Err(Error::Unauthorized);
+        }
+        admin.require_auth();
+
+        if min_amount > max_amount {
+            panic!("invalid policy: min_amount cannot exceed max_amount");
+        }
+
+        // Persist the policy so lock_funds can enforce it on every subsequent call.
+        env.storage()
+            .instance()
+            .set(&DataKey::AmountPolicy, &(min_amount, max_amount));
+
+        Ok(())
+    }
+
     /// Get escrow IDs by status
     pub fn get_escrow_ids_by_status(
         env: Env,
@@ -1609,6 +1671,36 @@ impl BountyEscrowContract {
             }
         }
         results
+    }
+
+    pub fn set_anti_abuse_admin(env: Env, admin: Address) -> Result<(), Error> {
+        let current: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .ok_or(Error::NotInitialized)?;
+        current.require_auth();
+        anti_abuse::set_admin(&env, admin);
+        Ok(())
+    }
+
+    pub fn get_anti_abuse_admin(env: Env) -> Option<Address> {
+        anti_abuse::get_admin(&env)
+    }
+
+    pub fn set_whitelist(
+        env: Env,
+        whitelisted_address: Address,
+        whitelisted: bool,
+    ) -> Result<(), Error> {
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .ok_or(Error::NotInitialized)?;
+        admin.require_auth();
+        anti_abuse::set_whitelist(&env, whitelisted_address, whitelisted);
+        Ok(())
     }
 
     /// Retrieves the refund history for a specific bounty.
@@ -1954,8 +2046,15 @@ impl BountyEscrowContract {
 #[cfg(test)]
 mod test;
 #[cfg(test)]
+mod test_analytics_monitoring;
+#[cfg(test)]
 mod test_auto_refund_permissions;
+#[cfg(test)]
+mod test_dispute_resolution;
+mod test_expiration_and_dispute;
+#[cfg(test)]
+mod test_granular_pause;
 #[cfg(test)]
 mod test_pause;
 #[cfg(test)]
-mod test_upgrade_scenarios;
+mod test_query_filters;
