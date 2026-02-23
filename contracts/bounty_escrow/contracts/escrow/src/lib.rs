@@ -373,8 +373,8 @@ pub enum Error {
     /// Returned when lock amount is above the configured policy maximum (Issue #62)
     AmountAboveMaximum = 20,
     /// Returned when refund is blocked by a pending claim/dispute
-    ClaimPending = 21,
-    NotPaused = 22,
+    NotPaused = 21,
+    ClaimPending = 22,
 }
 
 #[contracttype]

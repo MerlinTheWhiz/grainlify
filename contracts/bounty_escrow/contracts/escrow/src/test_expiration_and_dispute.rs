@@ -93,7 +93,7 @@ fn test_pending_claim_blocks_refund() {
     // Verify refund is BLOCKED because claim is pending
     let res = setup.escrow.try_refund(&bounty_id);
     assert!(res.is_err());
-    // Error::ClaimPending is variant #21
+    // Error::ClaimPending is variant #22
     assert_eq!(res.unwrap_err().unwrap(), Error::ClaimPending);
 
     // Verify funds were NOT refunded
