@@ -16,4 +16,4 @@ Cargo.lock
 .DS_Store
 
 
-/contracts/program-escrow/test_snapshots
+program-escrow/test_snapshots/test/
