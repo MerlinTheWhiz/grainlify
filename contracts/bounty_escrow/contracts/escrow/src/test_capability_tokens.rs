@@ -120,10 +120,13 @@ fn test_issue_and_use_release_capability() {
     assert_eq!(after_use.remaining_amount, 200);
     assert_eq!(after_use.remaining_uses, 1);
 
-    let too_large =
-        setup
-            .client
-            .try_release_with_capability(&1, &setup.contributor, &300, &setup.delegate, &capability_id);
+    let too_large = setup.client.try_release_with_capability(
+        &1,
+        &setup.contributor,
+        &300,
+        &setup.delegate,
+        &capability_id,
+    );
     assert_eq!(
         too_large.unwrap_err().unwrap(),
         Error::CapabilityAmountExceeded
@@ -149,7 +152,8 @@ fn test_claim_with_capability() {
         &1,
     );
 
-    setup.client
+    setup
+        .client
         .claim_with_capability(&2, &setup.delegate, &capability_id);
 
     let escrow = setup.client.get_escrow_info(&2);
