@@ -1,4 +1,5 @@
 #![cfg(test)]
+#![allow(unused)]
 
 //! Backwards Compatibility Tests
 //!
