@@ -34,7 +34,22 @@ jobs:
           targets: wasm32v1-none
 
       - name: Install Stellar CLI
-        uses: stellar/stellar-cli@v22.5.0
+        run: |
+          VERSION="22.5.0"
+          ARCH="$(uname -m)"
+          case "$ARCH" in
+            arm64|aarch64) TARGET="aarch64-apple-darwin" ;;
+            x86_64) TARGET="x86_64-apple-darwin" ;;
+            *) echo "Unsupported macOS architecture: $ARCH" && exit 1 ;;
+          esac
+          URL="https://github.com/stellar/stellar-cli/releases/download/v${VERSION}/stellar-cli-${VERSION}-${TARGET}.tar.gz"
+          curl -fL "$URL" -o stellar-cli.tar.gz
+          tar -xzf stellar-cli.tar.gz
+          mkdir -p "$HOME/.local/bin"
+          mv stellar "$HOME/.local/bin/stellar"
+          chmod +x "$HOME/.local/bin/stellar"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/stellar" --version
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v4
