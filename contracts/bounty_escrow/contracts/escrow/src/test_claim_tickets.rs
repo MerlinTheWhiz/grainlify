@@ -13,7 +13,7 @@ mod test_claim_tickets {
     fn setup() -> (Env, Address, Address, Address) {
         let env = Env::default();
         env.mock_all_auths();
-        
+
         let admin = Address::random(&env);
         let token = Address::random(&env);
         let user = Address::random(&env);
@@ -48,7 +48,7 @@ mod test_claim_tickets {
     fn test_issue_claim_ticket_success() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200; // 2 hours from now
@@ -74,7 +74,8 @@ mod test_claim_tickets {
         // Verify escrow is still in Locked state
         let escrow = contract.get_escrow_info(env, bounty_id).unwrap();
         assert_eq!(
-            escrow.status, EscrowStatus::Locked,
+            escrow.status,
+            EscrowStatus::Locked,
             "Bounty should remain Locked after ticket issuance"
         );
     }
@@ -83,7 +84,7 @@ mod test_claim_tickets {
     fn test_issue_multiple_tickets_for_same_bounty() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 5000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -124,18 +125,13 @@ mod test_claim_tickets {
     fn test_issue_ticket_not_found_bounty() {
         let (env, _admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 999u64; // Non-existent bounty
         let amount = 500i128;
         let ticket_expiry = env.ledger().timestamp() + 3600;
 
-        let result = contract.issue_claim_ticket(
-            env,
-            bounty_id,
-            beneficiary,
-            amount,
-            ticket_expiry,
-        );
+        let result =
+            contract.issue_claim_ticket(env, bounty_id, beneficiary, amount, ticket_expiry);
 
         assert!(
             matches!(result, Err(Error::BountyNotFound)),
@@ -147,7 +143,7 @@ mod test_claim_tickets {
     fn test_issue_ticket_invalid_amount_zero() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -173,7 +169,7 @@ mod test_claim_tickets {
     fn test_issue_ticket_amount_exceeds_escrow() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -199,7 +195,7 @@ mod test_claim_tickets {
     fn test_issue_ticket_expired_deadline() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -225,7 +221,7 @@ mod test_claim_tickets {
     fn test_issue_ticket_not_admin() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -235,13 +231,8 @@ mod test_claim_tickets {
 
         // Try to issue ticket as non-admin user
         let attacker = Address::random(&env);
-        let result = contract.issue_claim_ticket(
-            env,
-            bounty_id,
-            beneficiary,
-            500i128,
-            ticket_expiry,
-        );
+        let result =
+            contract.issue_claim_ticket(env, bounty_id, beneficiary, 500i128, ticket_expiry);
 
         // Note: With mock_all_auths(), we can't easily test Unauthorized.
         // The test just ensures the function works correctly when admin calls it.
@@ -256,7 +247,7 @@ mod test_claim_tickets {
     fn test_claim_with_ticket_success() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -285,7 +276,8 @@ mod test_claim_tickets {
             .get_escrow_info(env, bounty_id)
             .expect("Escrow should exist");
         assert_eq!(
-            escrow.status, EscrowStatus::Released,
+            escrow.status,
+            EscrowStatus::Released,
             "Escrow should be marked as Released"
         );
     }
@@ -294,7 +286,7 @@ mod test_claim_tickets {
     fn test_claim_with_ticket_not_found() {
         let (env, _admin, _token, _beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let nonexistent_ticket = 999u64;
         let result = contract.claim_with_ticket(env, nonexistent_ticket);
 
@@ -312,7 +304,7 @@ mod test_claim_tickets {
     fn test_replay_prevention_same_beneficiary() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -346,7 +338,7 @@ mod test_claim_tickets {
     fn test_replay_prevention_ticket_marked_used() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -371,17 +363,14 @@ mod test_claim_tickets {
         let ticket = contract
             .get_claim_ticket(env, ticket_id)
             .expect("Ticket should exist");
-        assert!(
-            ticket.used,
-            "Ticket should be marked as used after claim"
-        );
+        assert!(ticket.used, "Ticket should be marked as used after claim");
     }
 
     #[test]
     fn test_deny_claim_after_first_successful_claim() {
         let (env, admin, token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -402,10 +391,7 @@ mod test_claim_tickets {
 
         // First claim
         let first_claim = contract.claim_with_ticket(env.clone(), ticket_id);
-        assert!(
-            first_claim.is_ok(),
-            "First claim should succeed"
-        );
+        assert!(first_claim.is_ok(), "First claim should succeed");
 
         // Attempt second claim with same ticket - should be denied
         let second_claim = contract.claim_with_ticket(env, ticket_id);
@@ -423,7 +409,7 @@ mod test_claim_tickets {
     fn test_claim_before_expiry() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -455,7 +441,7 @@ mod test_claim_tickets {
     fn test_claim_after_expiry() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let base_time = env.ledger().timestamp();
         let bounty_id = 1u64;
         let amount = 1000i128;
@@ -488,7 +474,7 @@ mod test_claim_tickets {
     fn test_claim_exactly_at_expiry_boundary() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let base_time = env.ledger().timestamp();
         let bounty_id = 1u64;
         let amount = 1000i128;
@@ -525,7 +511,7 @@ mod test_claim_tickets {
     fn test_get_claim_ticket_details() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let ticket_amount = 500i128;
@@ -550,10 +536,7 @@ mod test_claim_tickets {
 
         assert_eq!(ticket.ticket_id, ticket_id, "Ticket ID should match");
         assert_eq!(ticket.bounty_id, bounty_id, "Bounty ID should match");
-        assert_eq!(
-            ticket.beneficiary, beneficiary,
-            "Beneficiary should match"
-        );
+        assert_eq!(ticket.beneficiary, beneficiary, "Beneficiary should match");
         assert_eq!(ticket.amount, ticket_amount, "Amount should match");
         assert_eq!(ticket.expires_at, ticket_expiry, "Expiry should match");
         assert!(!ticket.used, "Ticket should not be used initially");
@@ -563,7 +546,7 @@ mod test_claim_tickets {
     fn test_get_nonexistent_ticket() {
         let (env, _admin, _token, _beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let result = contract.get_claim_ticket(env, 999u64);
         assert!(
             matches!(result, Err(Error::TicketNotFound)),
@@ -575,7 +558,7 @@ mod test_claim_tickets {
     fn test_verify_claim_ticket_valid() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -584,28 +567,24 @@ mod test_claim_tickets {
         create_locked_bounty(&env, bounty_id, admin, amount, deadline);
 
         let ticket_id = contract
-            .issue_claim_ticket(
-                env.clone(),
-                bounty_id,
-                beneficiary,
-                amount,
-                ticket_expiry,
-            )
+            .issue_claim_ticket(env.clone(), bounty_id, beneficiary, amount, ticket_expiry)
             .unwrap();
 
-        let (is_valid, is_expired, already_used) =
-            contract.verify_claim_ticket(env, ticket_id);
+        let (is_valid, is_expired, already_used) = contract.verify_claim_ticket(env, ticket_id);
 
         assert!(is_valid, "Valid ticket should return is_valid=true");
         assert!(!is_expired, "Valid ticket should return is_expired=false");
-        assert!(!already_used, "Valid ticket should return already_used=false");
+        assert!(
+            !already_used,
+            "Valid ticket should return already_used=false"
+        );
     }
 
     #[test]
     fn test_verify_claim_ticket_expired() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let base_time = env.ledger().timestamp();
         let bounty_id = 1u64;
         let amount = 1000i128;
@@ -615,31 +594,27 @@ mod test_claim_tickets {
         create_locked_bounty(&env, bounty_id, admin, amount, deadline);
 
         let ticket_id = contract
-            .issue_claim_ticket(
-                env.clone(),
-                bounty_id,
-                beneficiary,
-                amount,
-                ticket_expiry,
-            )
+            .issue_claim_ticket(env.clone(), bounty_id, beneficiary, amount, ticket_expiry)
             .unwrap();
 
         // Advance past expiry
         env.ledger().set_timestamp(base_time + 3601);
 
-        let (is_valid, is_expired, already_used) =
-            contract.verify_claim_ticket(env, ticket_id);
+        let (is_valid, is_expired, already_used) = contract.verify_claim_ticket(env, ticket_id);
 
         assert!(!is_valid, "Expired ticket should return is_valid=false");
         assert!(is_expired, "Expired ticket should return is_expired=true");
-        assert!(!already_used, "Expired ticket should return already_used=false");
+        assert!(
+            !already_used,
+            "Expired ticket should return already_used=false"
+        );
     }
 
     #[test]
     fn test_verify_claim_ticket_used() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -648,20 +623,13 @@ mod test_claim_tickets {
         create_locked_bounty(&env, bounty_id, admin, amount, deadline);
 
         let ticket_id = contract
-            .issue_claim_ticket(
-                env.clone(),
-                bounty_id,
-                beneficiary,
-                amount,
-                ticket_expiry,
-            )
+            .issue_claim_ticket(env.clone(), bounty_id, beneficiary, amount, ticket_expiry)
             .unwrap();
 
         // Claim the ticket
         contract.claim_with_ticket(env.clone(), ticket_id).unwrap();
 
-        let (is_valid, is_expired, already_used) =
-            contract.verify_claim_ticket(env, ticket_id);
+        let (is_valid, is_expired, already_used) = contract.verify_claim_ticket(env, ticket_id);
 
         assert!(!is_valid, "Used ticket should return is_valid=false");
         assert!(!is_expired, "Used ticket should return is_expired=false");
@@ -672,9 +640,8 @@ mod test_claim_tickets {
     fn test_verify_nonexistent_ticket() {
         let (env, _admin, _token, _beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
-        let (is_valid, is_expired, already_used) =
-            contract.verify_claim_ticket(env, 999u64);
+
+        let (is_valid, is_expired, already_used) = contract.verify_claim_ticket(env, 999u64);
 
         assert!(
             !is_valid && !is_expired && !already_used,
@@ -686,7 +653,7 @@ mod test_claim_tickets {
     fn test_get_beneficiary_tickets() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let start_time = env.ledger().timestamp();
         let ticket_expiry = start_time + 3600;
 
@@ -710,11 +677,7 @@ mod test_claim_tickets {
         // Query beneficiary tickets
         let tickets = contract.get_beneficiary_tickets(env.clone(), beneficiary, 0, 10);
 
-        assert_eq!(
-            tickets.len(),
-            3,
-            "Beneficiary should have 3 tickets"
-        );
+        assert_eq!(tickets.len(), 3, "Beneficiary should have 3 tickets");
         assert_eq!(
             tickets.get(0).unwrap(),
             1u64,
@@ -736,7 +699,7 @@ mod test_claim_tickets {
     fn test_get_beneficiary_tickets_pagination() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let start_time = env.ledger().timestamp();
         let ticket_expiry = start_time + 3600;
 
@@ -776,7 +739,7 @@ mod test_claim_tickets {
     fn test_claim_wrong_beneficiary() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -811,7 +774,7 @@ mod test_claim_tickets {
     fn test_full_bounty_workflow_with_claim_ticket() {
         let (env, admin, _token, beneficiary) = setup();
         let contract = BountyEscrowContract;
-        
+
         let bounty_id = 1u64;
         let amount = 1000i128;
         let deadline = env.ledger().timestamp() + 7200;
@@ -819,10 +782,11 @@ mod test_claim_tickets {
 
         // 1. Create locked bounty
         create_locked_bounty(&env, bounty_id, admin, amount, deadline);
-        
+
         let escrow = contract.get_escrow_info(env.clone(), bounty_id).unwrap();
         assert_eq!(
-            escrow.status, EscrowStatus::Locked,
+            escrow.status,
+            EscrowStatus::Locked,
             "Bounty should start in Locked state"
         );
 
@@ -852,17 +816,15 @@ mod test_claim_tickets {
         // 5. Verify escrow is now Released
         let escrow = contract.get_escrow_info(env.clone(), bounty_id).unwrap();
         assert_eq!(
-            escrow.status, EscrowStatus::Released,
+            escrow.status,
+            EscrowStatus::Released,
             "Bounty should be Released after claim"
         );
 
         // 6. Verify ticket is marked as used
         let (is_valid, is_expired, already_used) =
             contract.verify_claim_ticket(env.clone(), ticket_id);
-        assert!(
-            !is_valid && already_used,
-            "Used ticket should not be valid"
-        );
+        assert!(!is_valid && already_used, "Used ticket should not be valid");
 
         // 7. Attempt replay - should fail
         let replay_result = contract.claim_with_ticket(env, ticket_id);
@@ -877,7 +839,7 @@ mod test_claim_tickets {
         let (env, admin, _token, beneficiary1) = setup();
         let contract = BountyEscrowContract;
         let beneficiary2 = Address::random(&env);
-        
+
         let bounty_id = 1u64;
         let total_amount = 5000i128;
         let share1 = 3000i128;
@@ -909,7 +871,10 @@ mod test_claim_tickets {
             )
             .unwrap();
 
-        assert_ne!(ticket_id_1, ticket_id_2, "Tickets should have different IDs");
+        assert_ne!(
+            ticket_id_1, ticket_id_2,
+            "Tickets should have different IDs"
+        );
 
         // Both can claim their portions
         assert!(

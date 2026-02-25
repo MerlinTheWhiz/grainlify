@@ -5,18 +5,19 @@ mod invariants;
 #[cfg(test)]
 mod test_metadata;
 
+#[cfg(test)]
+mod test_claim_tickets;
+#[cfg(test)]
 mod test_cross_contract_interface;
 #[cfg(test)]
 mod test_rbac;
-#[cfg(test)]
-mod test_claim_tickets;
 mod traits;
 
 use events::{
     emit_batch_funds_locked, emit_batch_funds_released, emit_bounty_initialized, emit_funds_locked,
-    emit_funds_refunded, emit_funds_released, emit_ticket_issued, emit_ticket_claimed,
+    emit_funds_refunded, emit_funds_released, emit_ticket_claimed, emit_ticket_issued,
     BatchFundsLocked, BatchFundsReleased, BountyEscrowInitialized, ClaimCancelled, ClaimCreated,
-    ClaimExecuted, FundsLocked, FundsRefunded, FundsReleased, TicketIssued, TicketClaimed,
+    ClaimExecuted, FundsLocked, FundsRefunded, FundsReleased, TicketClaimed, TicketIssued,
     EVENT_VERSION_V2,
 };
 use soroban_sdk::{
@@ -440,14 +441,14 @@ pub enum DataKey {
     RefundApproval(u64),     // bounty_id -> RefundApproval
     ReentrancyGuard,
     MultisigConfig,
-    ReleaseApproval(u64), // bounty_id -> ReleaseApproval
-    PendingClaim(u64),    // bounty_id -> ClaimRecord
-    ClaimWindow,          // u64 seconds (global config)
-    PauseFlags,           // PauseFlags struct
-    AmountPolicy, // Option<(i128, i128)> — (min_amount, max_amount) set by set_amount_policy
-    ClaimTicket(u64),         // ticket_id -> ClaimTicket
-    ClaimTicketIndex,         // Vec<u64> of all ticket_ids
-    TicketCounter,            // u64 counter for generating unique ticket_ids
+    ReleaseApproval(u64),   // bounty_id -> ReleaseApproval
+    PendingClaim(u64),      // bounty_id -> ClaimRecord
+    ClaimWindow,            // u64 seconds (global config)
+    PauseFlags,             // PauseFlags struct
+    AmountPolicy,           // Option<(i128, i128)> — (min_amount, max_amount) set by set_amount_policy
+    ClaimTicket(u64),       // ticket_id -> ClaimTicket
+    ClaimTicketIndex,       // Vec<u64> of all ticket_ids
+    TicketCounter,          // u64 counter for generating unique ticket_ids
     BeneficiaryTickets(Address), // Address -> Vec<u64> of ticket_ids for beneficiary
 }
 
@@ -2298,7 +2299,7 @@ impl BountyEscrowContract {
     }
 
     /// Issue a single-use claim ticket to a bounty winner (admin only)
-    /// 
+    ///
     /// This creates a ticket that the beneficiary can use to claim their reward exactly once.
     /// Tickets are bound to a specific address, amount, and expiry time.
     ///
