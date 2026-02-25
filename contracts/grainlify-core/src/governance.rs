@@ -493,5 +493,5 @@ mod test {
         let status = client.finalize_proposal(&proposal_id);
         assert_eq!(status, ProposalStatus::Approved);
     }
-    */
+    *
 }
