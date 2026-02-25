@@ -2158,6 +2158,8 @@ mod test_auto_refund_permissions;
 #[cfg(test)]
 mod test_bounty_escrow;
 #[cfg(test)]
+mod test_compatibility;
+#[cfg(test)]
 mod test_dispute_resolution;
 mod test_expiration_and_dispute;
 #[cfg(test)]
