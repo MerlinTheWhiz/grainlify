@@ -4,6 +4,9 @@
 
 use soroban_sdk::{contract, contracterror, contractimpl, contracttype, token, Address, Env};
 
+mod identity;
+pub use identity::*;
+
 #[contracterror]
 #[derive(Clone, Debug, PartialEq)]
 #[repr(u32)]
@@ -16,6 +19,14 @@ pub enum Error {
     DeadlineNotPassed = 6,
     Unauthorized = 7,
     InsufficientBalance = 8,
+    // Identity-related errors
+    InvalidSignature = 100,
+    ClaimExpired = 101,
+    UnauthorizedIssuer = 102,
+    InvalidClaimFormat = 103,
+    TransactionExceedsLimit = 104,
+    InvalidRiskScore = 105,
+    InvalidTier = 106,
 }
 
 #[contracttype]
@@ -41,6 +52,11 @@ pub enum DataKey {
     Admin,
     Token,
     Escrow(u64),
+    // Identity-related storage keys
+    AddressIdentity(Address),
+    AuthorizedIssuer(Address),
+    TierLimits,
+    RiskThresholds,
 }
 
 #[contract]
