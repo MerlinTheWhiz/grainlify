@@ -12,6 +12,8 @@ mod reentrancy_guard;
 mod test_cross_contract_interface;
 #[cfg(test)]
 mod test_rbac;
+#[cfg(test)]
+mod test_multi_token_fees;
 mod traits;
 
 use events::{
