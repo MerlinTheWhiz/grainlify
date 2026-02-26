@@ -2394,13 +2394,16 @@ impl BountyEscrowContract {
             return Err(Error::EscrowFrozen);
         }
         // Check depositor address-level freeze (Issue #578)
-        let escrow_for_freeze: Escrow = env
+        // Only applicable to non-anonymous escrows; anon escrows have no stored address.
+        // Also guard against missing bounty — existence is validated further below.
+        if let Some(escrow_for_freeze) = env
             .storage()
             .persistent()
-            .get(&DataKey::Escrow(bounty_id))
-            .unwrap();
-        if Self::is_address_frozen(&env, &escrow_for_freeze.depositor) {
-            return Err(Error::AddressFrozen);
+            .get::<DataKey, Escrow>(&DataKey::Escrow(bounty_id))
+        {
+            if Self::is_address_frozen(&env, &escrow_for_freeze.depositor) {
+                return Err(Error::AddressFrozen);
+            }
         }
 
         // Block direct release while an active dispute (pending claim) exists.
@@ -3130,13 +3133,14 @@ impl BountyEscrowContract {
         if Self::is_escrow_frozen(&env, bounty_id) {
             return Err(Error::EscrowFrozen);
         }
-        let escrow_for_freeze: Escrow = env
+        if let Some(escrow_for_freeze) = env
             .storage()
             .persistent()
-            .get(&DataKey::Escrow(bounty_id))
-            .unwrap();
-        if Self::is_address_frozen(&env, &escrow_for_freeze.depositor) {
-            return Err(Error::AddressFrozen);
+            .get::<DataKey, Escrow>(&DataKey::Escrow(bounty_id))
+        {
+            if Self::is_address_frozen(&env, &escrow_for_freeze.depositor) {
+                return Err(Error::AddressFrozen);
+            }
         }
 
         // GUARD: acquire reentrancy lock
@@ -4562,6 +4566,15 @@ impl BountyEscrowContract {
         // Validate all items before processing (all-or-nothing approach)
         let mut total_amount: i128 = 0;
         for item in items.iter() {
+            // Existence check MUST come first — everything else depends on it
+            if !env
+                .storage()
+                .persistent()
+                .has(&DataKey::Escrow(item.bounty_id))
+            {
+                return Err(Error::BountyNotFound);
+            }
+
             if Self::is_escrow_locked(&env, item.bounty_id) {
                 return Err(Error::EscrowLocked);
             }
@@ -4569,6 +4582,7 @@ impl BountyEscrowContract {
             if Self::is_escrow_frozen(&env, item.bounty_id) {
                 return Err(Error::EscrowFrozen);
             }
+            // Check depositor address-level freeze — safe now that existence is confirmed
             let escrow_for_freeze: Escrow = env
                 .storage()
                 .persistent()
@@ -4576,13 +4590,6 @@ impl BountyEscrowContract {
                 .unwrap();
             if Self::is_address_frozen(&env, &escrow_for_freeze.depositor) {
                 return Err(Error::AddressFrozen);
-            }
-            if !env
-                .storage()
-                .persistent()
-                .has(&DataKey::Escrow(item.bounty_id))
-            {
-                return Err(Error::BountyNotFound);
             }
 
             let escrow: Escrow = env

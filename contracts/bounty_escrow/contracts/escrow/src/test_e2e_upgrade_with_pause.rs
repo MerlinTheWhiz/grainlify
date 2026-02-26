@@ -13,7 +13,8 @@ use soroban_sdk::{
 
 // No lifetime needed: returns only the Address; clients are created on demand.
 fn setup_token(env: &Env, admin: &Address) -> Address {
-    env.register_stellar_asset_contract_v2(admin.clone()).address()
+    env.register_stellar_asset_contract_v2(admin.clone())
+        .address()
 }
 
 // No lifetime on the struct: token clients are created on demand from self.env.
@@ -42,8 +43,7 @@ impl TestContext {
         // the Env. We extend to 'static here because both env and contract_id
         // are owned by Self and will outlive any borrow of self.
         let client = BountyEscrowContractClient::new(&env, &contract_id);
-        let client: BountyEscrowContractClient<'static> =
-            unsafe { core::mem::transmute(client) };
+        let client: BountyEscrowContractClient<'static> = unsafe { core::mem::transmute(client) };
 
         client.init(&admin, &token_addr);
 
@@ -214,7 +214,8 @@ fn test_e2e_upgrade_with_high_value_bounties() {
     let ctx = TestContext::new();
     let high_value = 100_000_000i128;
 
-    ctx.token_admin_client().mint(&ctx.depositor, &(high_value * 3i128));
+    ctx.token_admin_client()
+        .mint(&ctx.depositor, &(high_value * 3i128));
     ctx.lock_bounty(11, high_value);
     ctx.lock_bounty(12, high_value);
     ctx.lock_bounty(13, high_value);
